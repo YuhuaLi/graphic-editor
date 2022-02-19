@@ -1,0 +1,171 @@
+<div class="toolbar" role="banner">
+  <div class="toolbar-left">
+    <a><i class="iconfont icon-back"></i></a>
+  </div>
+  <div class="toolbar-right">
+    <lib-zoom-box [ngModel]="zoom" (ngModelChange)="zoomPage($event)"></lib-zoom-box>
+  </div>
+</div>
+<div class="content">
+  <div class="left-side">
+    <div class="left-side-panel">
+      <div class="panel-header">
+        <i class="nav-icon iconfont icon-sucaiku"></i>
+        <div class="header-title">页面</div>
+      </div>
+      <div class="panel-body">
+        <ul class="page-list">
+          <li class="page-list-item"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="left-side-panel">
+      <div class="panel-header">
+        <i class="nav-icon iconfont icon-sucaiku"></i>
+        <div class="header-title">元素</div>
+      </div>
+      <div class="panel-body">
+        <ul class="widget-list">
+          <li
+            [ngClass]="{
+              active: !!widget.instance.status,
+              'widget-hover': widget.instance.isHover
+            }"
+            class="widget-list-item"
+            *ngFor="let widget of widgets"
+            (click)="selectWidget($event, widget)"
+            (mouseenter)="widget.instance.setHighlight(true)"
+            (mouseleave)="widget.instance.setHighlight(false)"
+          >
+            <i class="iconfont {{ widget.instance.widget.icon }}"></i>
+            <span class="widget-name">{{ widget.instance.widget.name }}</span>
+            <span
+              class="actions"
+              [ngClass]="{
+                show: widget.instance.isLocked || widget.instance.isHidden
+              }"
+            >
+              <i
+                [ngClass]="{
+                  'icon-lock-fill': widget.instance.isLocked,
+                  'icon-unlock-fill': !widget.instance.isLocked
+                }"
+                class="iconfont action"
+                (click)="togleWidgetLocked($event, widget)"
+              ></i>
+              <i
+                [ngClass]="{
+                  'icon-eye1': widget.instance.isHidden,
+                  'icon-eye': !widget.instance.isHidden
+                }"
+                class="iconfont action"
+                (click)="toggleWidgetHidden($event, widget)"
+              ></i>
+              <i
+                class="iconfont icon-delete action"
+                (click)="deleteWidget(widget)"
+              ></i>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="viewport">
+    <span class="back-origin"></span>
+    <lib-ruler
+      class="ruler h-ruler"
+      [placement]="'horizontal'"
+      [offset]="scrollLeft"
+      [zoom]="zoom"
+    ></lib-ruler>
+    <lib-ruler
+      class="ruler v-ruler"
+      [placement]="'vertical'"
+      [offset]="scrollTop"
+      [zoom]="zoom"
+    ></lib-ruler>
+    <div #grid class="main-viewport" (scroll)="onViewportScroll($event)">
+      <svg
+        [attr.width]="currentPage.style.width * zoom"
+        [attr.height]="currentPage.style.height * zoom"
+        xmlns="http://www.w3.org/2000/svg"
+        [ngStyle]="{ transform: 'scale(' + zoom + ')' }"
+      >
+        <defs>
+          <pattern
+            id="smallGrid"
+            width="10"
+            height="10"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 10 0 L 0 0 0 10"
+              fill="none"
+              stroke="rgba(207, 207, 207, 0.3)"
+              stroke-width="1"
+            ></path>
+          </pattern>
+          <pattern
+            id="grid"
+            width="50"
+            height="50"
+            patternUnits="userSpaceOnUse"
+          >
+            <rect width="50" height="50" fill="url(#smallGrid)"></rect>
+            <path
+              d="M 50 0 L 0 0 0 50"
+              fill="none"
+              stroke="rgba(186, 186, 186, 0.5)"
+              stroke-width="1"
+            ></path>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)"></rect>
+      </svg>
+      <div
+        id="comp-area"
+        class="comp-area"
+        [ngStyle]="{
+          'width.px': currentPage.style.width,
+          'height.px': currentPage.style.height,
+          transform: 'scale(' + zoom + ')'
+        }"
+        (mousedown)="clearSelectedWidget($event)"
+        (drop)="onCompAreaDrop($event)"
+        (dragover)="$event.preventDefault()"
+      >
+        <ng-template #compArea></ng-template>
+      </div>
+    </div>
+    <div class="tools">
+      <div class="tools-list">
+        <ng-container *ngFor="let btn of toolBtns">
+          <span
+            class="tool-btn"
+            [ngClass]="{ active: btn.isActive }"
+            (click)="onToolBtnClick(btn)"
+          >
+            <a class="iconfont {{ btn.icon }}"></a>
+          </span>
+        </ng-container>
+        <div class="tool-container">
+          <ng-template #toolContainer></ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="right-side">
+    <div class="right-side-panel">
+      <lib-page-setting
+        [page]="currentPage"
+        *ngIf="!selectedWidgets.length"
+      ></lib-page-setting>
+      <lib-widget-setting
+        [ref]="selectedWidgets[0]"
+        *ngIf="selectedWidgets.length"
+      ></lib-widget-setting>
+    </div>
+  </div>
+</div>

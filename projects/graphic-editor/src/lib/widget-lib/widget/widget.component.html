@@ -1,0 +1,75 @@
+<div
+  class="widget-wrapper"
+  [ngClass]="{
+    selected: !!status,
+    highlight: isHighlight,
+    locked: isLocked,
+    hidden: isHidden,
+    dev: !mode
+  }"
+  [ngStyle]="{
+    'top.px': style.top,
+    'left.px': style.left,
+    'width.px': style.width,
+    'height.px': style.height,
+    'z-index': style.index
+  }"
+  (mousedown)="onMouseDown($event)"
+  (mouseenter)="isHover = true"
+  (mouseleave)="isHover = false"
+>
+  <div class="widget">
+    <ng-template></ng-template>
+  </div>
+
+  <div
+    class="selection-border"
+    [ngStyle]="{
+      'width.px': style.width,
+      'height.px': style.height
+    }"
+  >
+    <ng-container *ngIf="isSelected">
+      <div
+        class="top resize-line"
+        (mousedown)="onResizeStart($event, DIRECTION.Top)"
+      >
+        <span class="line"></span>
+      </div>
+      <div
+        class="left resize-line"
+        (mousedown)="onResizeStart($event, DIRECTION.Left)"
+      >
+        <span class="line"></span>
+      </div>
+      <div
+        class="bottom resize-line"
+        (mousedown)="onResizeStart($event, DIRECTION.Bottom)"
+      >
+        <span class="line"></span>
+      </div>
+      <div
+        class="right resize-line"
+        (mousedown)="onResizeStart($event, DIRECTION.Right)"
+      >
+        <span class="line"></span>
+      </div>
+      <div
+        class="top-left resize-handler"
+        (mousedown)="onResizeStart($event, DIRECTION.TopLeft)"
+      ></div>
+      <div
+        class="top-right resize-handler"
+        (mousedown)="onResizeStart($event, DIRECTION.TopRight)"
+      ></div>
+      <div
+        class="bottom-left resize-handler"
+        (mousedown)="onResizeStart($event, DIRECTION.BottomLeft)"
+      ></div>
+      <div
+        class="bottom-right resize-handler"
+        (mousedown)="onResizeStart($event, DIRECTION.BottomRight)"
+      ></div>
+    </ng-container>
+  </div>
+</div>

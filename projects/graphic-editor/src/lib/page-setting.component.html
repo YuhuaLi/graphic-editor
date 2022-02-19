@@ -1,0 +1,25 @@
+<div class="header">
+  <ol class="nav">
+    <li
+      *ngFor="let item of navItems"
+      class="nav-item"
+      [ngClass]="{ active: item.isActive }"
+      (click)="onNavItemClick(item)"
+    >
+      <span class="nav-label">{{ item.name }}</span>
+      <span class="nav-underline"></span>
+    </li>
+  </ol>
+</div>
+<div class="general-panel">
+  <div class="general-row">
+    <label class="general-input">
+      <span>W</span>
+      <input type="number" [(ngModel)]="page.style.width" />
+    </label>
+    <label class="general-input">
+      <span>H</span>
+      <input type="number" [(ngModel)]="page.style.height" />
+    </label>
+  </div>
+</div>

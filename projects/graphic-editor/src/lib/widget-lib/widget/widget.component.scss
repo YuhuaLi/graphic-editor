@@ -1,0 +1,181 @@
+:host {
+  user-select: none;
+  position: relative;
+
+  .widget-wrapper {
+    position: absolute;
+
+    &.dev {
+      &.selected,
+      &:hover,
+      &.highlight {
+        border: 1px solid #1684fc;
+        transform: translate(-1px, -1px);
+      }
+
+      &.locked,
+      &.hidden {
+        pointer-events: none;
+
+        .resize-handler,
+        .resize-line {
+          pointer-events: none;
+        }
+      }
+
+      &.locked {
+        border-color: #bbbbbb;
+        .resize-handler,
+        .resize-line .line {
+          background-color: #bbbbbb !important;
+          border-color: #bbbbbb !important;
+        }
+      }
+
+      &.hidden .widget {
+        visibility: hidden;
+      }
+
+      &.highlight .selection-border {
+        background-color: #1684fc4d;
+      }
+
+      .selection-border {
+        position: absolute;
+        pointer-events: none;
+        top: 0;
+        left: 0;
+        visibility: visible;
+
+        .resize-line,
+        .resize-handler {
+          pointer-events: auto;
+          position: absolute;
+        }
+
+        .resize-line {
+          .line {
+            display: block;
+            background-color: #1684fc;
+          }
+
+          &.top,
+          &.bottom {
+            .line {
+              width: 100%;
+              height: 1px;
+            }
+          }
+
+          &.left,
+          &.right {
+            .line {
+              width: 1px;
+              height: 100%;
+            }
+          }
+
+          &.top {
+            top: -2px;
+            left: 3px;
+            right: 3px;
+            height: 1px;
+            padding: 2px 0;
+            cursor: n-resize;
+          }
+
+          &.left {
+            top: 3px;
+            left: -2px;
+            bottom: 3px;
+            width: 1px;
+            padding: 0 2px;
+            cursor: w-resize;
+          }
+
+          &.bottom {
+            bottom: -2px;
+            left: 3px;
+            right: 3px;
+            height: 1px;
+            padding: 2px 0;
+            cursor: s-resize;
+          }
+
+          &.right {
+            top: 3px;
+            right: -2px;
+            bottom: 3px;
+            width: 1px;
+            padding: 0 2px;
+            cursor: e-resize;
+          }
+        }
+
+        .resize-handler {
+          background-color: #fff;
+          &.top-left {
+            left: -4px;
+            top: -4px;
+            width: 6px;
+            height: 6px;
+            border: 1px solid #1684fc;
+            cursor: nw-resize;
+          }
+
+          &.top-right {
+            right: -4px;
+            top: -4px;
+            width: 6px;
+            height: 6px;
+            border: 1px solid #1684fc;
+            cursor: ne-resize;
+          }
+
+          &.bottom-left {
+            left: -4px;
+            bottom: -4px;
+            width: 6px;
+            height: 6px;
+            border: 1px solid #1684fc;
+            cursor: sw-resize;
+          }
+
+          &.bottom-right {
+            right: -4px;
+            bottom: -4px;
+            width: 6px;
+            height: 6px;
+            border: 1px solid #1684fc;
+            cursor: se-resize;
+          }
+        }
+      }
+
+      ::ng-deep {
+        button {
+          pointer-events: none;
+        }
+
+        lib-widget-text > textarea {
+          pointer-events: auto;
+        }
+      }
+    }
+
+    .widget {
+      white-space: pre-line;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      user-select: none;
+      pointer-events: none;
+    }
+  }
+
+  // .highlight {
+  //   width: 100%;
+  //   height: 100%;
+  //   background-color: #1684fc4d;
+  // }
+}

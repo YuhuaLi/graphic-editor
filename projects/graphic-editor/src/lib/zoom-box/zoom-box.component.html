@@ -1,0 +1,43 @@
+<div class="wrapper">
+  <div
+    class="zoom-box"
+    [ngClass]="{ showMenu: showMenu }"
+    (click)="toggleMenu($event)"
+  >
+    <p>{{ zoomText }}</p>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="zoom-arrow"
+      viewBox="0 0 10 10"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M1.293 4.293a1 1 0 011.414 0L4.83 6.414l2.12-2.121a1 1 0 011.415 1.414L5.536 8.536a1 1 0 01-1.415 0L1.293 5.707a1 1 0 010-1.414z"
+      ></path>
+    </svg>
+  </div>
+  <div *ngIf="showMenu" class="menu">
+    <div class="zoom-input">
+      <label class="general-input" [ngClass]="{ error: !i_zoom.validity.valid  }">
+        <input #i_zoom name="zoom" type="text" [ngModel]="zoomText" (change)="onZoomChange($event)" (click)="$event.stopPropagation()" />
+      </label>
+    </div>
+    <div class="divider"></div>
+    <div class="zoom-menu-item" (click)="zoomIn($event)">
+      <p>放大</p>
+      <div>
+        <kbd>Ctrl</kbd>
+        <kbd>+</kbd>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="zoom-menu-item" (click)="zoomOut($event)">
+      <p>缩小</p>
+      <div>
+        <kbd>Ctrl</kbd>
+        <kbd>-</kbd>
+      </div>
+    </div>
+  </div>
+</div>

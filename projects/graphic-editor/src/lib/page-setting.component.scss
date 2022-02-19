@@ -1,0 +1,118 @@
+:host {
+  color: #b8bcbf;
+  font-size: 12px;
+
+  .header {
+    display: flex;
+    flex-shrink: 0;
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 12px;
+    border-bottom: 1px solid #4f5052;
+
+    .nav {
+      display: flex;
+      list-style: none;
+
+      .nav-item {
+        position: relative;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        color: #999999;
+        padding: 0px 3px;
+        transition: all 0.2s ease-out 0s;
+        cursor: pointer;
+
+        .nav-label {
+          position: relative;
+          height: 100%;
+          padding: 0px 3px;
+          display: flex;
+          -webkit-box-align: center;
+          align-items: center;
+          -webkit-box-pack: center;
+          justify-content: center;
+        }
+
+        &:not(:first-child) {
+          margin-left: 10px;
+        }
+
+        &.active {
+          color: #f2f4f5;
+          font-weight: 600;
+
+          .nav-underline {
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+            width: 100%;
+            border-bottom: 2px solid #f2f4f5;
+          }
+        }
+      }
+    }
+  }
+
+  .name-body {
+    padding: 10px 14px;
+    width: 230px;
+    color: rgb(242, 244, 245);
+    font-weight: 600;
+    border-bottom: 1px solid rgb(79, 80, 82);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .general-panel {
+    padding: 10px 10px;
+  }
+
+  .general-row {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    flex-wrap: wrap;
+
+    .general-input {
+      display: flex;
+      flex: 0 0 66px;
+      align-items: center;
+      border: 1px solid transparent;
+      height: 26px;
+      padding: 0px 3px 0px 5px;
+
+      &:hover {
+        border-color: #454647;
+        outline: rgb(22, 132, 252) solid 1px;
+        outline-offset: -2px;
+      }
+
+      &:focus-within {
+        border-color: #1684fc;
+      }
+
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
+
+      span {
+        width: 16px;
+      }
+
+      input {
+        color: rgb(242, 244, 245);
+        width: 100%;
+        height: 100%;
+        margin-left: 5px;
+        transition: all 0.2s ease-out 0s;
+        cursor: default;
+        background: none;
+        border: none;
+        outline: none;
+      }
+    }
+  }
+}

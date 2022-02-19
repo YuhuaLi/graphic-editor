@@ -1,0 +1,26 @@
+<!-- <div
+  #textView
+  autofocus
+  class="rich-text"
+  [attr.contenteditable]="contenteditable || null"
+  (dblclick)="onDblClick($event)"
+  (mousedown)="contenteditable && $event.stopPropagation()"
+>
+  <span *ngFor="let line of lines">{{ line }}</span>
+</div> -->
+
+<textarea
+  class="rich-text"
+  [ngStyle]="{
+    'font-size.px': widgetData.setting?.fontSize || 16,
+    'font-weight': widgetData.setting?.bold ? 'bold' : 'normal',
+    'font-style': widgetData.setting?.italic ? 'italic' : 'unset',
+    'text-decoration': widgetData.setting?.underline ? 'underline' : 'unset'
+  }"
+  [attr.readonly]="readonly || null"
+  (dblclick)="onDblClick($event)"
+  [ngModel]="widgetData.setting?.text"
+  (ngModelChange)="onTextChange($event)"
+  (mousedown)="!readonly && $event.stopPropagation()"
+  placeholder="双击编辑文本"
+></textarea>
