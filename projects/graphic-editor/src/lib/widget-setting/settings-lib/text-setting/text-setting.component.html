@@ -1,0 +1,52 @@
+<div class="font-group">
+  <label class="general-input">
+    <input
+      type="text"
+      [ngModel]="ref.instance?.widgetData?.setting?.text"
+      (ngModelChange)="onTextChange($event)"
+    />
+  </label>
+</div>
+<div class="font-group">
+  <div class="actions">
+    <label
+      class="general-input"
+      [ngClass]="{ error: !fontSize.validity.valid }"
+    >
+      <input
+        #fontSize
+        name="fontSize"
+        type="number"
+        min="12"
+        max="72"
+        [value]="ref.instance?.widgetData?.setting?.fontSize"
+        (change)="onFontSizeChange($event)"
+      />
+    </label>
+    <label class="general-input color-picker">
+      <input
+        type="color"
+        [value]="ref.instance?.widgetData?.setting?.color"
+        (change)="onColorChange($event)"
+      />
+    </label>
+    <a
+      class="action"
+      [class.active]="ref.instance?.widgetData?.setting?.bold"
+      (click)="toggleBold()"
+      ><i class="iconfont icon-text"></i
+    ></a>
+    <a
+      class="action"
+      [class.active]="ref.instance?.widgetData?.setting?.italic"
+      (click)="toggleItalic()"
+      ><i class="iconfont icon-text"></i
+    ></a>
+    <a
+      class="action"
+      [class.active]="ref.instance?.widgetData?.setting?.underline"
+      (click)="toggleUnderline()"
+      ><i class="iconfont icon-text"></i
+    ></a>
+  </div>
+</div>

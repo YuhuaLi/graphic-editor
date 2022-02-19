@@ -1,0 +1,49 @@
+:host {
+  .setting-panel {
+    border-top: 1px solid #4f5052;
+    padding: 0 14px;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgb(242, 244, 245);
+      padding: 10px 0;
+      font-size: 12px;
+
+      .title {
+        font-weight: 600;
+      }
+
+      .action {
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out 0s;
+      }
+
+      .svg-icon {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+    }
+
+    .body {
+      transition: all 200ms ease-in-out 0s;
+      overflow: hidden;
+      padding: 0 0 10px 0;
+      box-sizing: border-box;
+    }
+
+    &.collapsed {
+      .header .action {
+        transform: rotate(180deg);
+        transform-origin: center;
+      }
+
+      .body {
+        height: 0px;
+        padding-bottom: 0;
+      }
+    }
+  }
+}

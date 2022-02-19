@@ -125,6 +125,46 @@
           }
         }
       }
+    },
+    "graphic-editor": {
+      "projectType": "library",
+      "root": "projects/graphic-editor",
+      "sourceRoot": "projects/graphic-editor/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/graphic-editor/tsconfig.lib.json",
+            "project": "projects/graphic-editor/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/graphic-editor/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/graphic-editor/src/test.ts",
+            "tsConfig": "projects/graphic-editor/tsconfig.spec.json",
+            "karmaConfig": "projects/graphic-editor/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/graphic-editor/tsconfig.lib.json",
+              "projects/graphic-editor/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "graphic-editor-app"

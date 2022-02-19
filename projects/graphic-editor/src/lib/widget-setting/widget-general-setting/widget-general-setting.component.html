@@ -1,0 +1,55 @@
+<div class="widget-item">
+  <div class="widget-name">{{ ref.instance.widget.name }}</div>
+  <div class="actions">
+    <a class="action" (click)="togleWidgetLocked()">
+      <i
+        [ngClass]="{
+          'icon-lock-fill': ref.instance.isLocked,
+          'icon-unlock-fill': !ref.instance.isLocked
+        }"
+        class="iconfont"
+      ></i>
+    </a>
+    <a class="action" (click)="toggleWidgetHidden()">
+      <i
+        [ngClass]="{
+          'icon-eye1': ref.instance.isHidden,
+          'icon-eye': !ref.instance.isHidden
+        }"
+        class="iconfont"
+      ></i>
+    </a>
+  </div>
+</div>
+
+<div class="setting-panel">
+  <div class="general-row">
+    <label class="general-input">
+      <span>X</span>
+      <input type="number" [(ngModel)]="ref.instance.style.left" />
+    </label>
+    <label class="general-input">
+      <span>Y</span>
+      <input type="number" [(ngModel)]="ref.instance.style.top" />
+    </label>
+  </div>
+  <div class="general-row">
+    <label class="general-input">
+      <span>W</span>
+      <input type="number" [(ngModel)]="ref.instance.style.width" />
+    </label>
+    <label class="general-input">
+      <span>H</span>
+      <input type="number" [(ngModel)]="ref.instance.style.height" />
+    </label>
+    <span class="action" title="锁定宽高比例" (click)="ref.instance.toggleLockedScale()">
+      <i
+        [ngClass]="{
+          'icon-lock-fill': ref.instance.isLockedScale,
+          'icon-unlock-fill': !ref.instance.isLockedScale
+        }"
+        class="iconfont"
+      ></i>
+    </span>
+  </div>
+</div>

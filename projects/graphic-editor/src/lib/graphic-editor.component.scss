@@ -1,0 +1,315 @@
+:host {
+  box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: rgb(54, 55, 56);
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: white;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #333;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #808080;
+  }
+
+  .toolbar {
+    z-index: 2000;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(37, 38, 38);
+    box-shadow: rgb(79 80 82) 0px 1px 0px;
+    color: white;
+    padding: 0 8px;
+
+    img {
+      margin: 0 16px;
+    }
+
+    #twitter-logo {
+      height: 40px;
+      margin: 0 16px;
+    }
+
+    #twitter-logo:hover {
+      opacity: 0.8;
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .content {
+    display: flex;
+    flex: 1;
+
+    .left-side {
+      background-color: rgb(37, 38, 38);
+      display: flex;
+      flex-direction: column;
+
+      .left-side-panel {
+        width: 209px;
+        border-right: 1px solid #b8bcbf;
+        flex: 1;
+        border-bottom: 1px solid #363738;
+        max-height: 50%;
+
+        .panel-header {
+          display: flex;
+          -webkit-box-align: center;
+          align-items: center;
+          flex-shrink: 0;
+          height: 32px;
+          padding: 0px 8px;
+          border-bottom: 1px solid #363738;
+
+          .header-title {
+            max-width: 130px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 12px;
+            font-weight: 500;
+            color: #f2f4f5;
+            user-select: none;
+          }
+
+          .nav-icon {
+            width: 13px;
+            height: 12px;
+            margin-right: 10px;
+            color: #999999;
+            fill: currentColor;
+          }
+        }
+
+        .panel-body {
+          overflow-y: auto;
+          height: calc(100% - 35px);
+
+          .widget-list {
+            list-style: none;
+
+            .widget-list-item {
+              display: flex;
+              align-items: center;
+              height: 32px;
+              color: #f2f4f5;
+              padding: 0 4px 0 19px;
+              font-size: 12px;
+              cursor: pointer;
+
+              .widget-name {
+                padding-left: 6px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                flex: 1;
+              }
+
+              &.active {
+                background-color: #1684fc40;
+              }
+
+              &.widget-hover,
+              &:hover {
+                &:not(.active) {
+                  background-color: #363738;
+                }
+              }
+
+              &:hover .actions {
+                display: flex;
+
+                .action {
+                  visibility: visible;
+                }
+              }
+
+              .actions {
+                padding-left: 6px;
+                display: none;
+
+                &.show {
+                  display: flex;
+                }
+
+                .action {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  width: 20px;
+                  height: 20px;
+                  margin-right: 6px;
+                  color: #b8bcbf;
+                  visibility: hidden;
+
+                  &.icon-lock-fill {
+                    visibility: visible;
+                  }
+
+                  &.icon-eye1 {
+                    visibility: visible;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .viewport {
+      flex: auto;
+      position: relative;
+      background-color: #151515;
+      transform: scale(1);
+
+      .back-origin {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        top: 0;
+        left: 0;
+        background-color: inherit;
+        z-index: 100;
+      }
+
+      .ruler {
+        position: absolute;
+        background-color: inherit;
+        z-index: 1000;
+
+        &.h-ruler {
+          width: calc(100% - 16px);
+          height: 16px;
+          left: 16px;
+          top: 0;
+        }
+
+        &.v-ruler {
+          width: 16px;
+          height: calc(100% - 16px);
+          left: 0;
+          top: 16px;
+        }
+      }
+
+      .main-viewport {
+        position: relative;
+        overflow: auto;
+        width: 100%;
+        height: 100%;
+        // background-color: white;
+      }
+
+      .main-viewport > svg,
+      .comp-area {
+        transform-origin: 0 0;
+        position: absolute;
+        left: 16px;
+        top: 16px;
+      }
+
+      .main-viewport > svg {
+        background-color: white;
+      }
+
+      .tools {
+        position: fixed;
+        top: 32px;
+        right: 14px;
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+
+        .tools-list {
+          color: white;
+          background-color: #252626;
+          width: 32px;
+          font-size: 18px;
+          border-radius: 3px;
+
+          .tool-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            height: 36px;
+            transition: background-color 0.2s ease-out 0s;
+            position: relative;
+            border-bottom: 1px solid transparent;
+
+            &:hover {
+              background-color: #454647;
+            }
+
+            &.active {
+              background-color: #1684fc;
+              &:not(:last-child) {
+                border-bottom-color: rgb(79, 80, 82);
+              }
+            }
+          }
+
+          .tool-container {
+            position: absolute;
+            top: 0;
+            right: 33px;
+            background-color: inherit;
+            width: 250px;
+          }
+        }
+      }
+    }
+
+    .right-side {
+      background-color: #252626;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+
+      .right-side-panel {
+        width: 230px;
+        border-left: 1px solid #b8bcbf;
+        flex: 1;
+      }
+    }
+  }
+}
+
+// 添加class.operation处理mousemove导致的样式闪烁
+:host.operation ::ng-deep {
+  .widget-wrapper:not(.selected) {
+    border: none !important;
+    transform: none !important;
+  }
+  .left-side .left-side-panel .panel-body .widget-list .widget-list-item {
+    &.widget-hover,
+    &:hover {
+      &:not(.active) {
+        background-color: inherit !important;
+      }
+    }
+  }
+}
+
+// 添加class.dragging拖拽时子元素干扰问题
+:host.dragging ::ng-deep {
+  .widget-wrapper {
+    pointer-events: none !important;
+  }
+}

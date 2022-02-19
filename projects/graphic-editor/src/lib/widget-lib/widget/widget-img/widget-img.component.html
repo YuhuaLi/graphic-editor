@@ -1,0 +1,24 @@
+<span class="svg-wrapper"
+  ><svg
+    *ngIf="!widgetData.setting?.imgSrc"
+    xmlns="http://www.w3.org/2000/svg"
+    class="svg-icon icon"
+    viewBox="0 0 32 32"
+    style="width: 24px; height: 22px"
+  >
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M23 10H10v12h13V10zM10 8a2 2 0 00-2 2v12a2 2 0 002 2h13a2 2 0 002-2V10a2 2 0 00-2-2H10z"
+      fill="#333"
+    ></path>
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M17.216 16.327a2 2 0 012.538-.152l4.834 3.516-1.176 1.618-4.835-3.516-6.397 5.94-1.36-1.466 6.396-5.94z"
+      fill="#333"
+    ></path>
+    <path d="M15 13.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" fill="#333"></path>
+  </svg>
+</span>
+<img *ngIf="widgetData.setting?.imgSrc" [src]="widgetData.setting?.imgSrc" style="width: 100%; height: 100%" />

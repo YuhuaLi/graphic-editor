@@ -1,0 +1,22 @@
+<div class="setting-panel" [ngClass]="{ collapsed: collapse }">
+  <div class="header">
+    <p class="title">{{ setting.name }}</p>
+    <a class="action" (click)="toggleCollapse()">
+      <svg
+        class="svg-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        class="svg-icon icon"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M5.354 7.646a.5.5 0 01.707 0l3.889 3.89 3.889-3.89a.5.5 0 11.707.708l-4.243 4.242a.5.5 0 01-.707 0L5.354 8.354a.5.5 0 010-.708z"
+        ></path>
+      </svg>
+    </a>
+  </div>
+  <div class="body">
+    <ng-template #render></ng-template>
+  </div>
+</div>

@@ -1,0 +1,104 @@
+:host {
+  color: #b8bcbf;
+  font-size: 12px;
+
+  .iconfont {
+    font-size: 12px;
+  }
+
+  .widget-item {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0px 14px;
+    // border-bottom: 1px solid #4f5052;
+
+    .widget-name {
+      flex: 1 1 0%;
+      border: 1px solid transparent;
+      margin-right: 14px;
+      cursor: text;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+
+      .action {
+        margin-left: 6px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .setting-panel {
+    border-top: 1px solid #4f5052;
+    padding: 10px 10px;
+  }
+
+  .general-row {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    flex-wrap: wrap;
+
+    .general-input {
+      display: flex;
+      flex: 0 0 66px;
+      align-items: center;
+      border: 1px solid transparent;
+      height: 26px;
+      padding: 0px 3px 0px 5px;
+
+      &:hover {
+        border-color: #454647;
+        outline: rgb(22, 132, 252) solid 1px;
+        outline-offset: -2px;
+      }
+
+      &:focus-within {
+        border-color: #1684fc;
+      }
+
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
+
+      span {
+        width: 16px;
+      }
+
+      input {
+        color: rgb(242, 244, 245);
+        width: 100%;
+        height: 100%;
+        margin-left: 5px;
+        transition: all 0.2s ease-out 0s;
+        cursor: default;
+        background: none;
+        border: none;
+        outline: none;
+      }
+    }
+
+    .action {
+      cursor: pointer;
+
+      .iconfont {
+        height: 18px;
+        width: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .icon-lock-fill {
+        background-color: #454647;
+      }
+    }
+  }
+}

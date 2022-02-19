@@ -1,0 +1,19 @@
+<div class="header">
+  <ol class="nav">
+    <li
+      *ngFor="let item of navItems"
+      class="nav-item"
+      [ngClass]="{ active: item.isActive }"
+      (click)="onNavItemClick(item)"
+    >
+      <span class="nav-label">{{ item.name }}</span>
+      <span class="nav-underline"></span>
+    </li>
+  </ol>
+</div>
+<lib-widget-general-setting [ref]="ref"></lib-widget-general-setting>
+<lib-widget-setting-item
+  *ngFor="let setting of ref.instance.widget.settings"
+  [setting]="setting"
+  [ref]="ref"
+></lib-widget-setting-item>

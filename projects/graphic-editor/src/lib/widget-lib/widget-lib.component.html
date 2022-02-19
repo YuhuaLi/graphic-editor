@@ -1,0 +1,48 @@
+<div class="pannel-header">
+  <div class="header">
+    <i class="nav-icon iconfont icon-sucaiku"></i>
+    <div class="header-title">组件库</div>
+  </div>
+  <div class="header-search">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="search-icon"
+      viewBox="0 0 15 15"
+    >
+      <path
+        d="M1.828 1.828a6 6 0 019.134 7.72l3.594 3.594-1.414 1.414-3.594-3.594a6.002 6.002 0 01-7.72-9.134zM8.9 3.243a4 4 0 10-5.656 5.656 4 4 0 005.656-5.656z"
+      ></path>
+    </svg>
+    <input
+      class="search-input"
+      type="text"
+      placeholder="关键字搜索…"
+      value=""
+      [formControl]="inputControl"
+    />
+  </div>
+</div>
+<ol class="nav">
+  <li
+    *ngFor="let item of navItems"
+    class="nav-item"
+    [ngClass]="{ active: item.isActive }"
+    (click)="onNavItemClick(item)"
+  >
+    <span class="nav-label">{{ item.name }}</span>
+  </li>
+</ol>
+<ul class="widget-list">
+  <li
+    *ngFor="let widget of widgetList"
+    draggable="true"
+    (dragstart)="onWidgetDragStart($event, widget)"
+    (dragend)="onWidgetDragEnd($event)"
+    class="widget-item"
+  >
+    <div class="widget-icon-wrapper">
+      <i class="iconfont {{ widget.icon }}"></i>
+    </div>
+    <span class="widget-name">{{ widget.name }}</span>
+  </li>
+</ul>
