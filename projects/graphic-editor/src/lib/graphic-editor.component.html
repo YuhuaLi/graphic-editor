@@ -3,7 +3,10 @@
     <a><i class="iconfont icon-back"></i></a>
   </div>
   <div class="toolbar-right">
-    <lib-zoom-box [ngModel]="zoom" (ngModelChange)="zoomPage($event)"></lib-zoom-box>
+    <lib-zoom-box
+      [ngModel]="zoom"
+      (ngModelChange)="zoomPage($event)"
+    ></lib-zoom-box>
   </div>
 </div>
 <div class="content">
@@ -86,10 +89,15 @@
       [offset]="scrollTop"
       [zoom]="zoom"
     ></lib-ruler>
-    <div #grid class="main-viewport" (scroll)="onViewportScroll($event)">
+    <div
+      #grid
+      class="main-viewport"
+      (scroll)="onViewportScroll($event)"
+      (wheel)="onWheel($event)"
+    >
       <svg
-        [attr.width]="currentPage.style.width * zoom"
-        [attr.height]="currentPage.style.height * zoom"
+        [attr.width]="currentPage.style.width"
+        [attr.height]="currentPage.style.height"
         xmlns="http://www.w3.org/2000/svg"
         [ngStyle]="{ transform: 'scale(' + zoom + ')' }"
       >
@@ -125,6 +133,7 @@
         <rect width="100%" height="100%" fill="url(#grid)"></rect>
       </svg>
       <div
+        #compArea
         id="comp-area"
         class="comp-area"
         [ngStyle]="{
@@ -132,12 +141,21 @@
           'height.px': currentPage.style.height,
           transform: 'scale(' + zoom + ')'
         }"
-        (mousedown)="clearSelectedWidget($event)"
+        (mousedown)="onMouseDown($event)"
         (drop)="onCompAreaDrop($event)"
         (dragover)="$event.preventDefault()"
       >
-        <ng-template #compArea></ng-template>
+        <ng-template #compAreaContainer></ng-template>
       </div>
+      <canvas
+        [ngStyle]="{
+          'width.px': currentPage.style.width,
+          'height.px': currentPage.style.height,
+          transform: 'scale(' + zoom + ')'
+        }"
+        class="sectionArea"
+        #sectionArea
+      ></canvas>
     </div>
     <div class="tools">
       <div class="tools-list">

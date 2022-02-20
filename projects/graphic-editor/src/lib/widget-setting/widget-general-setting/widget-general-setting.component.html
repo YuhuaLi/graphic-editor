@@ -26,21 +26,21 @@
   <div class="general-row">
     <label class="general-input">
       <span>X</span>
-      <input type="number" [(ngModel)]="ref.instance.style.left" />
+      <input type="number" [(ngModel)]="ref.instance.x" />
     </label>
     <label class="general-input">
       <span>Y</span>
-      <input type="number" [(ngModel)]="ref.instance.style.top" />
+      <input type="number" [(ngModel)]="ref.instance.y" />
     </label>
   </div>
   <div class="general-row">
     <label class="general-input">
       <span>W</span>
-      <input type="number" [(ngModel)]="ref.instance.style.width" />
+      <input type="number" [(ngModel)]="ref.instance.width" (ngModelChange)="onWidthChange($event)" />
     </label>
     <label class="general-input">
       <span>H</span>
-      <input type="number" [(ngModel)]="ref.instance.style.height" />
+      <input type="number" [(ngModel)]="ref.instance.height" (ngModelChange)="onHeightChange($event)" />
     </label>
     <span class="action" title="锁定宽高比例" (click)="ref.instance.toggleLockedScale()">
       <i

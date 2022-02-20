@@ -15,9 +15,7 @@ export class PageSettingComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    console.log(this.page);
-  }
+  ngOnInit(): void {}
 
   onNavItemClick(navItem: NavButton): void {
     this.navItems.forEach((item) => (item.isActive = item === navItem));

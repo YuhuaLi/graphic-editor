@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
@@ -23,7 +24,10 @@ export class RulerComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('cv', { static: true }) canvas!: ElementRef;
 
   gap = 10;
+  dpr = window.devicePixelRatio || 1;
   resizeObserver: ResizeObserver | null = null;
+
+  ctx!: CanvasRenderingContext2D;
 
   constructor() {}
 
@@ -31,6 +35,8 @@ export class RulerComponent implements OnInit, OnChanges, OnDestroy {
     this.initCanvas();
     this.draw();
     this.resizeObserver = new ResizeObserver((entries: any) => {
+      this.dpr = window.devicePixelRatio;
+      this.initCanvas();
       this.draw();
     });
 
@@ -38,10 +44,10 @@ export class RulerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.offset) {
+    if (changes.offset && !changes.offset.firstChange) {
       this.draw();
     }
-    if (changes.zoom) {
+    if (changes.zoom && !changes.zoom.firstChange) {
       this.gap = changes.zoom.currentValue * 10;
       this.draw();
     }
@@ -56,9 +62,7 @@ export class RulerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   drawVerticalRuler(): void {
-    const ctx = this.canvas.nativeElement.getContext(
-      '2d'
-    ) as CanvasRenderingContext2D;
+    const ctx = this.ctx;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
     ctx.strokeStyle = '#999';
@@ -91,7 +95,7 @@ export class RulerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   drawHorizontalRuler(): void {
-    const ctx = this.canvas.nativeElement.getContext('2d');
+    const ctx = this.ctx;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
     ctx.strokeStyle = '#999';
@@ -121,10 +125,14 @@ export class RulerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   initCanvas(): void {
-    const width = this.canvas.nativeElement.offsetWidth;
-    const height = this.canvas.nativeElement.offsetHeight;
+    const width = this.canvas.nativeElement.offsetWidth * this.dpr;
+    const height = this.canvas.nativeElement.offsetHeight * this.dpr;
     this.canvas.nativeElement.width = width;
     this.canvas.nativeElement.height = height;
+    this.ctx = this.canvas.nativeElement.getContext(
+      '2d'
+    ) as CanvasRenderingContext2D;
+    this.ctx.scale(this.dpr, this.dpr);
   }
 
   ngOnDestroy(): void {

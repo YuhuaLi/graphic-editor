@@ -62,6 +62,34 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.status === WidgetStatus.Select;
   }
 
+  get x(): number {
+    return this.style.left;
+  }
+  set x(val: number) {
+    this.style.left = val;
+  }
+
+  get y(): number {
+    return this.style.top;
+  }
+  set y(val: number) {
+    this.style.top = val;
+  }
+
+  get width(): number {
+    return this.style.width;
+  }
+  set width(val: number) {
+    this.style.width = val;
+  }
+
+  get height(): number {
+    return this.style.height;
+  }
+  set height(val: number) {
+    this.style.height = val;
+  }
+
   alive = true;
   /** 是否鼠标hover部件 */
   isHover = false;
@@ -73,15 +101,22 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
   isHidden = false;
   /** 锁定宽高比 */
   isLockedScale = false;
+  /** 锁定宽高比时的比例 */
+  lockedScale = 0;
   /** 当前部件状态 */
   status = WidgetStatus.None;
   /** 临时鼠标坐标位置，用于拖拽缩放 */
   tempMousePos: Coordinate = { x: 0, y: 0 };
+  /** offsetX和clientX偏差 */
+  offsetX = 0;
+  /** offsetY和clientY偏差 */
+  offsetY = 0;
 
   timeoutId: any;
   DIRECTION = Direction;
   /** raf条件变量 */
   isTicking = false;
+  rafId: number | null = null;
 
   onWidgetMove = (event: MouseEvent): void => {
     event.preventDefault();
@@ -92,15 +127,21 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
     if (!this.isTicking) {
-      const x = Math.round((event.clientX - this.tempMousePos.x) / this.zoom);
-      const y = Math.round((event.clientY - this.tempMousePos.y) / this.zoom);
-      this.tempMousePos.x = event.clientX;
-      this.tempMousePos.y = event.clientY;
-      window.requestAnimationFrame(() => {
+      this.rafId = window.requestAnimationFrame(() => {
         if (this.status === WidgetStatus.Drag) {
-          this.style.left = (this.style.left || 0) + x;
-          this.style.top = (this.style.top || 0) + y;
+          const x = Math.round(
+            (event.clientX - this.tempMousePos.x) / this.zoom
+          );
+          const y = Math.round(
+            (event.clientY - this.tempMousePos.y) / this.zoom
+          );
+          this.tempMousePos.x = event.clientX;
+          this.tempMousePos.y = event.clientY;
+          this.x = (this.x || 0) + x;
+          this.y = (this.y || 0) + y;
         } else {
+          const x = Math.round((event.clientX - this.offsetX) / this.zoom);
+          const y = Math.round((event.clientY - this.offsetY) / this.zoom);
           this.resize(x, y);
         }
         this.isTicking = false;
@@ -126,6 +167,11 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
       // 缩放
       document.removeEventListener('mousemove', this.onWidgetMove);
       this.setStatus(WidgetStatus.Select);
+    }
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+      this.isTicking = false;
     }
     this.timeoutId = null;
     this.renderer2.removeStyle(document.body, 'cursor');
@@ -170,6 +216,12 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.widgetData = component.instance.widgetData;
     }
+    const { x, y } =
+      this.elementRef.nativeElement.firstElementChild.getBoundingClientRect();
+    this.offsetX =
+      x - this.elementRef.nativeElement.firstElementChild.offsetLeft;
+    this.offsetY =
+      y - this.elementRef.nativeElement.firstElementChild.offsetTop;
     this.cdr.detectChanges();
   }
 
@@ -200,6 +252,7 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isLocked) {
       return;
     }
+
     this.tempMousePos = { x: event.clientX, y: event.clientY };
     this.selectWidget.emit(event); // 清除其他选中
     this.renderer2.addClass(
@@ -245,16 +298,14 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   resize(x: number, y: number): void {
-    if (this.isLockedScale) {
-      const scale = this.style.width / this.style.height;
-      if (Math.abs(x) > Math.abs(y)) {
-        y = Math.round(x / scale);
-      } else {
-        x = Math.round(y * scale);
-      }
-    }
     this.resizeWidth(x);
     this.resizeHeight(y);
+
+    // if (Math.abs(x) > Math.abs(y)) {
+    //   y = Math.round(x / scale);
+    // } else {
+    //   x = Math.round(y * scale);
+    // }
   }
 
   resizeWidth(x: number): void {
@@ -262,23 +313,43 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
       case WidgetStatus.ResizeLeft:
       case WidgetStatus.ResizeTopLeft:
       case WidgetStatus.ResizeBottomLeft:
-        if (x > this.style.width) {
-          this.tempMousePos.x -= x - this.style.width;
-          this.style.left = this.style.left + this.style.width;
-          this.style.width = 0;
+        // if (
+        //   !this.width &&
+        //   this.tempMousePos.x - this.offsetX >= this.x + this.width
+        // ) {
+        //   break;
+        // }
+        // if (x > this.width) {
+        //   this.x += this.width;
+        //   // this.tempMousePos.x = this.x;
+        //   this.width = 0;
+        // } else {
+        //   this.x += +x;
+        //   this.width = this.width - x;
+        // }
+        if (x > this.x + this.width) {
+          this.x += this.width;
         } else {
-          this.style.left = this.style.left + x;
-          this.style.width = this.style.width - x;
+          this.width = this.x + this.width - x;
+          this.x = x;
         }
         break;
       case WidgetStatus.ResizeRight:
       case WidgetStatus.ResizeTopRight:
       case WidgetStatus.ResizeBottomRight:
-        if (x < -1 * this.style.width) {
-          this.tempMousePos.x -= this.style.width + x;
-          this.style.width = 0;
+        // if (!this.width && this.tempMousePos.x - this.offsetX <= this.x) {
+        //   break;
+        // }
+        // if (x < -1 * this.width) {
+        //   // this.tempMousePos.x = this.x;
+        //   this.width = 0;
+        // } else {
+        //   this.width += x;
+        // }
+        if (x < this.x) {
+          this.width = 0;
         } else {
-          this.style.width = this.style.width + x;
+          this.width = x - this.x;
         }
         break;
     }
@@ -289,23 +360,43 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
       case WidgetStatus.ResizeTop:
       case WidgetStatus.ResizeTopLeft:
       case WidgetStatus.ResizeTopRight:
-        if (y > this.style.height) {
-          this.tempMousePos.y -= y - this.style.height;
-          this.style.top = this.style.top + this.style.height;
-          this.style.height = 0;
+        // if (
+        //   !this.height &&
+        //   this.tempMousePos.y - this.offsetY >= this.y + this.height
+        // ) {
+        //   break;
+        // }
+        // if (y > this.height) {
+        //   this.y += this.height;
+        //   // this.tempMousePos.y = this.y;
+        //   this.height = 0;
+        // } else {
+        //   this.y += y;
+        //   this.height -= y;
+        // }
+        if (y > this.y + this.height) {
+          this.y += this.height;
         } else {
-          this.style.top = this.style.top + y;
-          this.style.height = this.style.height - y;
+          this.height = this.y + this.height - y;
+          this.y = y;
         }
         break;
       case WidgetStatus.ResizeBottom:
       case WidgetStatus.ResizeBottomLeft:
       case WidgetStatus.ResizeBottomRight:
-        if (y < -1 * this.style.height) {
-          this.tempMousePos.y -= this.style.height + y;
-          this.style.height = 0;
+        // if (!this.height && this.tempMousePos.y - this.offsetY <= this.y) {
+        //   break;
+        // }
+        // if (y < -1 * this.height) {
+        //   // this.tempMousePos.y = this.y;
+        //   this.height = 0;
+        // } else {
+        //   this.height += y;
+        // }
+        if (y < this.y) {
+          this.height = 0;
         } else {
-          this.style.height = this.style.height + y;
+          this.height = y - this.y;
         }
         break;
     }
@@ -342,6 +433,9 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleLockedScale(): void {
     this.isLockedScale = !this.isLockedScale;
+    if (this.isLockedScale) {
+      this.lockedScale = this.width / this.height;
+    }
   }
 
   setHighlight(highlight: boolean): void {

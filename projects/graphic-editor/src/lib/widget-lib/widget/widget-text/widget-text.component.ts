@@ -48,7 +48,6 @@ export class WidgetTextComponent
       .onStatusChange()
       .pipe(takeWhile(() => this.alive))
       .subscribe((status) => {
-        console.log(status);
         if (status !== WidgetStatus.Select) {
           this.readonly = true;
         }
