@@ -351,10 +351,10 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  resizeWithScale(x: number, y: number, scale: number): void {
+  resizeWithScale(dx: number, dy: number, scale: number): void {
     switch (this.status) {
       case WidgetStatus.ResizeBottomLeft: {
-        this.height = Math.max(y - this.y, 0);
+        this.height = Math.max(this.height + dy, 0);
         // this.y = y - this.height;
         const nx = this.x + this.width - Math.round(this.height * scale);
         this.width = Math.max(this.x + this.width - nx, 0);
@@ -362,14 +362,14 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case WidgetStatus.ResizeBottomRight: {
-        this.height = Math.max(y - this.y, 0);
+        this.height = Math.max(this.height + dy, 0);
         this.width = Math.round(this.height * scale);
         break;
       }
       case WidgetStatus.ResizeTopLeft: {
         const bottom = this.y + this.height;
-        this.height = Math.max(bottom - y, 0);
-        this.y = Math.min(y, bottom);
+        this.height = Math.max(bottom - this.y - dy, 0);
+        this.y = Math.min(this.y + dy, bottom);
         const nx = this.x + this.width - Math.round(this.height * scale);
         this.width = Math.max(this.x + this.width - nx, 0);
         this.x = nx;
@@ -377,22 +377,22 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       case WidgetStatus.ResizeTopRight: {
         const bottom = this.y + this.height;
-        this.height = Math.max(bottom - y, 0);
-        this.y = Math.min(y, bottom);
+        this.height = Math.max(bottom - this.y - dy, 0);
+        this.y = Math.min(this.y + dy, bottom);
         this.width = Math.round(this.height * scale);
         break;
       }
       case WidgetStatus.ResizeTop: {
         const bottom = this.y + this.height;
-        this.height = Math.max(bottom - y, 0);
-        this.y = Math.min(bottom, y);
+        this.height = Math.max(this.height - dy, 0);
+        this.y = Math.min(bottom, this.y + dy);
         const nw = Math.round(this.height * scale);
         this.x += (this.width - nw) / 2;
         this.width = nw;
         break;
       }
       case WidgetStatus.ResizeBottom: {
-        this.height = Math.max(y - this.y, 0);
+        this.height = Math.max(this.height + dy, 0);
         const nw = Math.round(this.height * scale);
         this.x += (this.width - nw) / 2;
         this.width = nw;
@@ -400,15 +400,15 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       case WidgetStatus.ResizeLeft: {
         const right = this.x + this.width;
-        this.width = Math.max(right - x, 0);
-        this.x = Math.min(x, right);
+        this.width = Math.max(this.width - dx, 0);
+        this.x = Math.min(this.x + dx, right);
         const nh = Math.round(this.width / scale);
         this.y += (this.height - nh) / 2;
         this.height = nh;
         break;
       }
       case WidgetStatus.ResizeRight: {
-        this.width = Math.max(x - this.x, 0);
+        this.width = Math.max(this.width + dx, 0);
         const nh = Math.round(this.width / scale);
         this.y += (this.height - nh) / 2;
         this.height = nh;
