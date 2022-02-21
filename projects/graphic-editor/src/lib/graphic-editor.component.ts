@@ -231,13 +231,14 @@ export class GraphicEditorComponent
     this.scrollTop = (event.target as HTMLElement).scrollTop;
   }
 
-  onWheel(event: WheelEvent): void {
+  onWheel(event: WheelEvent): void | boolean {
     if (event.ctrlKey) {
       if (event.deltaY < 0) {
         this.zoomIn();
       } else {
         this.zoomOut();
       }
+      return false;
     }
   }
 

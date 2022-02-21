@@ -5,12 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {
   GraphicEditorModule,
-  WIDGET_LIST,
 } from 'projects/graphic-editor/src/public-api';
 import { EditorComponent } from './editor/editor.component';
 import { WidgetTextComponent } from 'projects/graphic-editor/src/lib/widget-lib/widget/widget-text/widget-text.component';
 import { WidgetCategory } from 'projects/graphic-editor/src/lib/model';
 import { TestComponent } from './test/test.component';
+import { WIDGET_LIST } from 'projects/graphic-editor/src/lib/injection-token';
 
 const arr = [
   {

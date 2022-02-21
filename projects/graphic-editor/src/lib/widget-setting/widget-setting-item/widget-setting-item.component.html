@@ -1,6 +1,6 @@
 <div class="setting-panel" [ngClass]="{ collapsed: collapse }">
-  <div class="header">
-    <p class="title">{{ setting.name }}</p>
+  <div *ngIf="widgetSetting?.name" class="header">
+    <p class="title">{{ widgetSetting?.name }}</p>
     <a class="action" (click)="toggleCollapse()">
       <svg
         class="svg-icon"

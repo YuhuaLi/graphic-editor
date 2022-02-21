@@ -322,14 +322,3 @@
     }
   }
 }
-
-// 添加class.dragging拖拽时子元素干扰问题
-// :host.dragging ::ng-deep {
-//   .widget-wrapper {
-//     pointer-events: none !important;
-
-//     * {
-//       pointer-events: none !important;
-//     }
-//   }
-// }

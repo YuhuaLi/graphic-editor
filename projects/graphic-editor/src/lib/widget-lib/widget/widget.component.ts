@@ -17,7 +17,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { takeWhile } from 'rxjs/operators';
+import { takeWhile, throwIfEmpty } from 'rxjs/operators';
 import { CLICK_JUDGE_TIME } from '../../const';
 import {
   Coordinate,
@@ -107,10 +107,6 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
   status = WidgetStatus.None;
   /** 临时鼠标坐标位置，用于拖拽缩放 */
   tempMousePos: Coordinate = { x: 0, y: 0 };
-  /** offsetX和clientX偏差 */
-  offsetX = 0;
-  /** offsetY和clientY偏差 */
-  offsetY = 0;
 
   timeoutId: any;
   DIRECTION = Direction;
@@ -118,7 +114,7 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
   isTicking = false;
   rafId: number | null = null;
 
-  onWidgetMove = (event: MouseEvent): void => {
+  onMouseMove = (event: MouseEvent): void => {
     event.preventDefault();
     if (
       this.status === WidgetStatus.Select ||
@@ -128,21 +124,19 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     if (!this.isTicking) {
       this.rafId = window.requestAnimationFrame(() => {
+        const dx = Math.round(
+          (event.clientX - this.tempMousePos.x) / this.zoom
+        );
+        const dy = Math.round(
+          (event.clientY - this.tempMousePos.y) / this.zoom
+        );
+        this.tempMousePos.x = event.clientX;
+        this.tempMousePos.y = event.clientY;
         if (this.status === WidgetStatus.Drag) {
-          const x = Math.round(
-            (event.clientX - this.tempMousePos.x) / this.zoom
-          );
-          const y = Math.round(
-            (event.clientY - this.tempMousePos.y) / this.zoom
-          );
-          this.tempMousePos.x = event.clientX;
-          this.tempMousePos.y = event.clientY;
-          this.x = (this.x || 0) + x;
-          this.y = (this.y || 0) + y;
+          this.x = (this.x || 0) + dx;
+          this.y = (this.y || 0) + dy;
         } else {
-          const x = Math.round((event.clientX - this.offsetX) / this.zoom);
-          const y = Math.round((event.clientY - this.offsetY) / this.zoom);
-          this.resize(x, y);
+          this.resize(dx, dy);
         }
         this.isTicking = false;
         // this.cdr.detectChanges();
@@ -161,11 +155,11 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
         clearTimeout(this.timeoutId);
       }
     } else if (this.status === WidgetStatus.Drag) {
-      document.removeEventListener('mousemove', this.onWidgetMove);
+      document.removeEventListener('mousemove', this.onMouseMove);
       this.setStatus(WidgetStatus.Select);
     } else {
       // 缩放
-      document.removeEventListener('mousemove', this.onWidgetMove);
+      document.removeEventListener('mousemove', this.onMouseMove);
       this.setStatus(WidgetStatus.Select);
     }
     if (this.rafId) {
@@ -216,12 +210,6 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.widgetData = component.instance.widgetData;
     }
-    const { x, y } =
-      this.elementRef.nativeElement.firstElementChild.getBoundingClientRect();
-    this.offsetX =
-      x - this.elementRef.nativeElement.firstElementChild.offsetLeft;
-    this.offsetY =
-      y - this.elementRef.nativeElement.firstElementChild.offsetTop;
     this.cdr.detectChanges();
   }
 
@@ -232,15 +220,17 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     event.stopPropagation();
     this.tempMousePos = { x: event.clientX, y: event.clientY };
     this.setSelected(event.ctrlKey);
-    this.timeoutId = setTimeout(() => {
-      this.setStatus(WidgetStatus.Drag);
-      this.renderer2.setStyle(document.body, 'cursor', 'move');
-      this.renderer2.addClass(
-        document.body.querySelector('lib-graphic-editor'),
-        'operation'
-      );
-      document.addEventListener('mousemove', this.onWidgetMove);
-    }, CLICK_JUDGE_TIME);
+    if (!this.isLocked) {
+      this.timeoutId = setTimeout(() => {
+        this.setStatus(WidgetStatus.Drag);
+        this.renderer2.setStyle(document.body, 'cursor', 'move');
+        this.renderer2.addClass(
+          document.body.querySelector('lib-graphic-editor'),
+          'operation'
+        );
+        document.addEventListener('mousemove', this.onMouseMove);
+      }, CLICK_JUDGE_TIME);
+    }
     document.addEventListener('mouseup', this.onMouseUp);
   }
 
@@ -254,6 +244,7 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.tempMousePos = { x: event.clientX, y: event.clientY };
+    console.log('start', this.tempMousePos);
     this.selectWidget.emit(event); // 清除其他选中
     this.renderer2.addClass(
       document.body.querySelector('lib-graphic-editor'),
@@ -293,112 +284,136 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
         this.renderer2.setStyle(document.body, 'cursor', 'se-resize');
         break;
     }
-    document.addEventListener('mousemove', this.onWidgetMove);
+    document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseUp);
   }
 
-  resize(x: number, y: number): void {
-    this.resizeWidth(x);
-    this.resizeHeight(y);
-
-    // if (Math.abs(x) > Math.abs(y)) {
-    //   y = Math.round(x / scale);
-    // } else {
-    //   x = Math.round(y * scale);
-    // }
+  resize(dx: number, dy: number): void {
+    if (!this.isLockedScale) {
+      this.resizeWidth(dx);
+      this.resizeHeight(dy);
+    } else {
+      this.resizeWithScale(dx, dy, this.lockedScale);
+    }
   }
 
-  resizeWidth(x: number): void {
+  resizeWidth(dx: number): void {
     switch (this.status) {
       case WidgetStatus.ResizeLeft:
       case WidgetStatus.ResizeTopLeft:
       case WidgetStatus.ResizeBottomLeft:
-        // if (
-        //   !this.width &&
-        //   this.tempMousePos.x - this.offsetX >= this.x + this.width
-        // ) {
-        //   break;
-        // }
-        // if (x > this.width) {
-        //   this.x += this.width;
-        //   // this.tempMousePos.x = this.x;
-        //   this.width = 0;
-        // } else {
-        //   this.x += +x;
-        //   this.width = this.width - x;
-        // }
-        if (x > this.x + this.width) {
-          this.x += this.width;
+        if (dx < this.width) {
+          this.x += dx;
+          this.width -= dx;
         } else {
-          this.width = this.x + this.width - x;
-          this.x = x;
+          this.x += this.width;
+          this.tempMousePos.x -= (dx - this.width) * this.zoom;
+          this.width = 0;
         }
         break;
       case WidgetStatus.ResizeRight:
       case WidgetStatus.ResizeTopRight:
       case WidgetStatus.ResizeBottomRight:
-        // if (!this.width && this.tempMousePos.x - this.offsetX <= this.x) {
-        //   break;
-        // }
-        // if (x < -1 * this.width) {
-        //   // this.tempMousePos.x = this.x;
-        //   this.width = 0;
-        // } else {
-        //   this.width += x;
-        // }
-        if (x < this.x) {
-          this.width = 0;
+        if (dx > -1 * this.width) {
+          this.width += dx;
         } else {
-          this.width = x - this.x;
+          this.tempMousePos.x -= (this.width + dx) * this.zoom;
+          this.width = 0;
         }
         break;
     }
   }
 
-  resizeHeight(y: number): void {
+  resizeHeight(dy: number): void {
     switch (this.status) {
       case WidgetStatus.ResizeTop:
       case WidgetStatus.ResizeTopLeft:
       case WidgetStatus.ResizeTopRight:
-        // if (
-        //   !this.height &&
-        //   this.tempMousePos.y - this.offsetY >= this.y + this.height
-        // ) {
-        //   break;
-        // }
-        // if (y > this.height) {
-        //   this.y += this.height;
-        //   // this.tempMousePos.y = this.y;
-        //   this.height = 0;
-        // } else {
-        //   this.y += y;
-        //   this.height -= y;
-        // }
-        if (y > this.y + this.height) {
-          this.y += this.height;
+        if (dy < this.height) {
+          this.y += dy;
+          this.height -= dy;
         } else {
-          this.height = this.y + this.height - y;
-          this.y = y;
+          this.y += this.height;
+          this.tempMousePos.y -= (dy - this.height) * this.zoom;
+          this.height = 0;
         }
         break;
       case WidgetStatus.ResizeBottom:
       case WidgetStatus.ResizeBottomLeft:
       case WidgetStatus.ResizeBottomRight:
-        // if (!this.height && this.tempMousePos.y - this.offsetY <= this.y) {
-        //   break;
-        // }
-        // if (y < -1 * this.height) {
-        //   // this.tempMousePos.y = this.y;
-        //   this.height = 0;
-        // } else {
-        //   this.height += y;
-        // }
-        if (y < this.y) {
-          this.height = 0;
+        if (dy > -1 * this.height) {
+          this.height += dy;
         } else {
-          this.height = y - this.y;
+          this.tempMousePos.y -= (this.height + dy) * this.zoom;
+          this.height = 0;
         }
         break;
+    }
+  }
+
+  resizeWithScale(x: number, y: number, scale: number): void {
+    switch (this.status) {
+      case WidgetStatus.ResizeBottomLeft: {
+        this.height = Math.max(y - this.y, 0);
+        // this.y = y - this.height;
+        const nx = this.x + this.width - Math.round(this.height * scale);
+        this.width = Math.max(this.x + this.width - nx, 0);
+        this.x = nx;
+        break;
+      }
+      case WidgetStatus.ResizeBottomRight: {
+        this.height = Math.max(y - this.y, 0);
+        this.width = Math.round(this.height * scale);
+        break;
+      }
+      case WidgetStatus.ResizeTopLeft: {
+        const bottom = this.y + this.height;
+        this.height = Math.max(bottom - y, 0);
+        this.y = Math.min(y, bottom);
+        const nx = this.x + this.width - Math.round(this.height * scale);
+        this.width = Math.max(this.x + this.width - nx, 0);
+        this.x = nx;
+        break;
+      }
+      case WidgetStatus.ResizeTopRight: {
+        const bottom = this.y + this.height;
+        this.height = Math.max(bottom - y, 0);
+        this.y = Math.min(y, bottom);
+        this.width = Math.round(this.height * scale);
+        break;
+      }
+      case WidgetStatus.ResizeTop: {
+        const bottom = this.y + this.height;
+        this.height = Math.max(bottom - y, 0);
+        this.y = Math.min(bottom, y);
+        const nw = Math.round(this.height * scale);
+        this.x += (this.width - nw) / 2;
+        this.width = nw;
+        break;
+      }
+      case WidgetStatus.ResizeBottom: {
+        this.height = Math.max(y - this.y, 0);
+        const nw = Math.round(this.height * scale);
+        this.x += (this.width - nw) / 2;
+        this.width = nw;
+        break;
+      }
+      case WidgetStatus.ResizeLeft: {
+        const right = this.x + this.width;
+        this.width = Math.max(right - x, 0);
+        this.x = Math.min(x, right);
+        const nh = Math.round(this.width / scale);
+        this.y += (this.height - nh) / 2;
+        this.height = nh;
+        break;
+      }
+      case WidgetStatus.ResizeRight: {
+        this.width = Math.max(x - this.x, 0);
+        const nh = Math.round(this.width / scale);
+        this.y += (this.height - nh) / 2;
+        this.height = nh;
+        break;
+      }
     }
   }
 

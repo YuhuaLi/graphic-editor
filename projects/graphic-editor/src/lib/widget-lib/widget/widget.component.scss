@@ -25,10 +25,16 @@
 
       &.locked {
         border-color: #bbbbbb;
+
         .resize-handler,
         .resize-line .line {
           background-color: #bbbbbb !important;
           border-color: #bbbbbb !important;
+        }
+
+        .resize-line,
+        .resize-handler {
+          pointer-events: none !important;
         }
       }
 
@@ -56,58 +62,50 @@
         .resize-line {
           .line {
             display: block;
-            background-color: #1684fc;
+            // background-color: #1684fc;
           }
 
           &.top,
           &.bottom {
             .line {
               width: 100%;
-              height: 1px;
+              height: 5px;
             }
           }
 
           &.left,
           &.right {
             .line {
-              width: 1px;
+              width: 5px;
               height: 100%;
             }
           }
 
           &.top {
-            top: -2px;
+            top: -3px;
             left: 3px;
             right: 3px;
-            height: 1px;
-            padding: 2px 0;
             cursor: n-resize;
           }
 
           &.left {
             top: 3px;
-            left: -2px;
+            left: -3px;
             bottom: 3px;
-            width: 1px;
-            padding: 0 2px;
             cursor: w-resize;
           }
 
           &.bottom {
-            bottom: -2px;
+            bottom: -3px;
             left: 3px;
             right: 3px;
-            height: 1px;
-            padding: 2px 0;
             cursor: s-resize;
           }
 
           &.right {
             top: 3px;
-            right: -2px;
+            right: -3px;
             bottom: 3px;
-            width: 1px;
-            padding: 0 2px;
             cursor: e-resize;
           }
         }
@@ -117,8 +115,8 @@
           &.top-left {
             left: -4px;
             top: -4px;
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border: 1px solid #1684fc;
             cursor: nw-resize;
           }
@@ -126,8 +124,8 @@
           &.top-right {
             right: -4px;
             top: -4px;
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border: 1px solid #1684fc;
             cursor: ne-resize;
           }
@@ -135,8 +133,8 @@
           &.bottom-left {
             left: -4px;
             bottom: -4px;
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border: 1px solid #1684fc;
             cursor: sw-resize;
           }
@@ -144,8 +142,8 @@
           &.bottom-right {
             right: -4px;
             bottom: -4px;
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border: 1px solid #1684fc;
             cursor: se-resize;
           }

@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { WidgetSetting } from '../../model';
 import { WidgetComponent } from '../../widget-lib/widget/widget.component';
+import { WidgetSettingService } from '../widget-setting.service';
 
 @Component({
   selector: 'lib-widget-setting-item',
@@ -26,17 +27,26 @@ export class WidgetSettingItemComponent implements OnInit, AfterViewInit {
   @ViewChild('render', { read: ViewContainerRef }) render!: ViewContainerRef;
 
   collapse = false;
+  widgetSetting: Exclude<WidgetSetting, string> | null = null;
 
   constructor(
     private resolver: ComponentFactoryResolver,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private widgetSettingSrv: WidgetSettingService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.widgetSetting =
+      typeof this.setting === 'string'
+        ? this.widgetSettingSrv.getWidgetByType(this.setting)
+        : this.setting;
+  }
 
   ngAfterViewInit(): void {
     const factroy = this.resolver.resolveComponentFactory(
-      this.setting.component
+      typeof this.setting === 'string'
+        ? this.widgetSettingSrv.getWidgetByType(this.setting)?.component
+        : this.setting.component
     );
     const injector = Injector.create({
       providers: [

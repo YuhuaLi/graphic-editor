@@ -15,7 +15,8 @@
     'font-size.px': widgetData.setting?.fontSize || 16,
     'font-weight': widgetData.setting?.bold ? 'bold' : 'normal',
     'font-style': widgetData.setting?.italic ? 'italic' : 'unset',
-    'text-decoration': widgetData.setting?.underline ? 'underline' : 'unset'
+    'text-decoration': widgetData.setting?.underline ? 'underline' : 'unset',
+    color: widgetData.setting?.color || '#000'
   }"
   [attr.readonly]="readonly || null"
   (dblclick)="onDblClick($event)"

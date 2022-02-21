@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GraphicEditorComponent } from './graphic-editor.component';
-import { WIDGET_LIST } from './graphic-editor.service';
 import { Widget } from './model';
 import { RulerComponent } from './ruler/ruler.component';
 import { WidgetLibComponent } from './widget-lib/widget-lib.component';
@@ -17,6 +16,9 @@ import { WidgetGeneralSettingComponent } from './widget-setting/widget-general-s
 import { WidgetSettingItemComponent } from './widget-setting/widget-setting-item/widget-setting-item.component';
 import { TextSettingComponent } from './widget-setting/settings-lib/text-setting/text-setting.component';
 import { WidgetButtonComponent } from './widget-lib/widget/widget-button/widget-button.component';
+import { ImgSettingComponent } from './widget-setting/settings-lib/img-setting/img-setting.component';
+import { WIDGET_LIST } from './injection-token';
+import { WidgetSettingService } from './widget-setting/widget-setting.service';
 
 const WIDGET_COMPONENT = [
   WidgetComponent,
@@ -24,7 +26,7 @@ const WIDGET_COMPONENT = [
   WidgetImgComponent,
 ];
 
-const WIDGET_SETTING_COMPONENT = [TextSettingComponent];
+const WIDGET_SETTING_COMPONENT = [TextSettingComponent, ImgSettingComponent];
 
 @NgModule({
   declarations: [
@@ -43,7 +45,7 @@ const WIDGET_SETTING_COMPONENT = [TextSettingComponent];
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [GraphicEditorComponent],
   // entryComponents: [...WIDGET_COMPONENT],
-  providers: [WidgetLibService],
+  providers: [WidgetLibService, WidgetSettingService],
 })
 export class GraphicEditorModule {
   static forRoot(

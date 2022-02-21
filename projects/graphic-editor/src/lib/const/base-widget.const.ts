@@ -2,6 +2,7 @@ import { Widget, WidgetCategory } from '../model';
 import { WidgetButtonComponent } from '../widget-lib/widget/widget-button/widget-button.component';
 import { WidgetImgComponent } from '../widget-lib/widget/widget-img/widget-img.component';
 import { WidgetTextComponent } from '../widget-lib/widget/widget-text/widget-text.component';
+import { ImgSettingComponent } from '../widget-setting/settings-lib/img-setting/img-setting.component';
 import { TextSettingComponent } from '../widget-setting/settings-lib/text-setting/text-setting.component';
 
 export const BASE_WIDGET: Widget[] = [
@@ -13,12 +14,7 @@ export const BASE_WIDGET: Widget[] = [
     width: 100,
     height: 100,
     component: WidgetTextComponent,
-    settings: [
-      {
-        name: '文字',
-        component: TextSettingComponent,
-      },
-    ],
+    settings: ['text'],
   },
   {
     category: WidgetCategory.Basic,
@@ -28,6 +24,7 @@ export const BASE_WIDGET: Widget[] = [
     width: 100,
     height: 100,
     component: WidgetImgComponent,
+    settings: ['image'],
   },
   {
     category: WidgetCategory.Basic,

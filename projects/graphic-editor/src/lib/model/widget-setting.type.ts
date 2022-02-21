@@ -1,4 +1,7 @@
-export type WidgetSetting = {
-  name: string;
-  component: any;
-};
+export type WidgetSetting =
+  | {
+      type: string;
+      name?: string;
+      component: any;
+    }
+  | string;

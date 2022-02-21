@@ -1,7 +1,8 @@
 :host {
   .rich-text {
     outline: none;
-    border-color: transparent;
+    // border-color: transparent;
+    border: none;
     width: 100%;
     height: 100%;
     user-select: none;
