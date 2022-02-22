@@ -1,1 +1,19 @@
-<p>img-setting works!</p>
+<div class="wrapper">
+  <div
+    class="dropArea"
+    (drop)="onDrop($event)"
+    (dragover)="$event.preventDefault()"
+  >
+    <img
+      *ngIf="ref.instance.widgetData?.setting?.imgSrc"
+      class="thumbnail"
+      [src]="ref.instance.widgetData?.setting?.imgSrc"
+    />
+    <span class="placeholder">将图片拖拽到这里替换</span>
+    <label class="selectFile">
+      <input type="file" [(ngModel)]="uploadPath" (change)="onUploadImage($event)" accept="image/*" />
+      <button type="button">选择文件</button>
+    </label>
+  </div>
+  <span class="action" (click)="deleteImage()"><i class="iconfont icon-delete"></i></span>
+</div>

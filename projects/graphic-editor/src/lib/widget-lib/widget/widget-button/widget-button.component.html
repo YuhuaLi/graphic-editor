@@ -1,1 +1,25 @@
-<button class="button" type="button">{{ widgetData.setting?.btnText || '按钮' }}</button>
+<button
+  class="button"
+  type="button"
+  [style]="{
+    'background': !widgetData.setting?.background
+      ? 'none'
+      : widgetData.setting?.background?.color || '#005096',
+    'border-width.px': !widgetData.setting?.border
+      ? 'initial'
+      : widgetData.setting?.border?.width || 1,
+    'border-style': !widgetData.setting?.border
+      ? 'none'
+      : widgetData.setting.border?.style || 'solid',
+    'border-color': !widgetData.setting?.border
+      ? 'initial'
+      : widgetData.setting.border?.color || '#005096',
+    'font-size.px': widgetData.setting?.fontSize || 16,
+    'font-weight': widgetData.setting?.bold ? 'bold' : 'normal',
+    'font-style': widgetData.setting?.italic ? 'italic' : 'unset',
+    'text-decoration': widgetData.setting?.underline ? 'underline' : 'unset',
+    color: widgetData.setting?.color || '#000'
+  }"
+>
+  {{ widgetData.setting?.text || "按钮" }}
+</button>

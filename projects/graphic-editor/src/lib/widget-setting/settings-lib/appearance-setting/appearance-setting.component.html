@@ -1,0 +1,22 @@
+<div class="general-row">
+  <label><input class="general-input" type="checkbox" /></label>
+  <label class="general-input color-picker">
+    <input
+      type="color"
+      [value]="ref.instance?.widgetData?.setting?.background?.color"
+      (change)="onBackgroundColorChange($event)"
+    />
+  </label>
+  <span>填充色</span>
+</div>
+<div class="general-row">
+  <label class="general-input"><input type="checkbox" /></label>
+  <label class="general-input color-picker">
+    <input
+      type="color"
+      [value]="ref.instance?.widgetData?.setting?.border?.color"
+      (change)="onBorderColorChange($event)"
+    />
+  </label>
+  <span>描边</span>
+</div>

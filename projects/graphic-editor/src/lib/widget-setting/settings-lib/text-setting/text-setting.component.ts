@@ -5,8 +5,18 @@ import {
   Injector,
   OnInit,
 } from '@angular/core';
-import { TextWidgetData } from '../../../widget-lib/widget/widget-text/widget-text.component';
+import { WidgetData } from '../../../model';
+
 import { WidgetComponent } from '../../../widget-lib/widget/widget.component';
+
+export type TextSetting = {
+  text: string;
+  fontSize: number;
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  color: string;
+};
 
 @Component({
   selector: 'lib-text-setting',
@@ -14,7 +24,9 @@ import { WidgetComponent } from '../../../widget-lib/widget/widget.component';
   styleUrls: ['./text-setting.component.scss'],
 })
 export class TextSettingComponent implements OnInit {
-  constructor(public ref: ComponentRef<WidgetComponent>) {}
+  constructor(public ref: ComponentRef<WidgetComponent>) {
+    console.log(ref);
+  }
 
   ngOnInit(): void {}
 
@@ -30,56 +42,32 @@ export class TextSettingComponent implements OnInit {
     const fontSize = (event.target as HTMLInputElement).valueAsNumber;
     const isValid = (event.target as HTMLInputElement).validity.valid;
     if (this.ref.instance.widgetData && !isNaN(fontSize) && isValid) {
-      // this.ref.instance.widgetData.setting =
-      //   this.ref.instance.widgetData.setting || {};
-      // Object.assign(this.ref.instance.widgetData.setting, { fontSize });
-      (this.ref.instance.widgetData as TextWidgetData).setting.fontSize =
-        fontSize;
+      this.ref.instance.widgetData.setting.fontSize = fontSize;
     }
   }
 
   onColorChange(event: Event): void {
-    (this.ref.instance.widgetData as TextWidgetData).setting.color = (
+    (this.ref.instance.widgetData as WidgetData<TextSetting>).setting.color = (
       event.target as HTMLInputElement
     ).value;
   }
 
   toggleBold(): void {
-    (this.ref.instance.widgetData as TextWidgetData).setting.bold = !(
-      this.ref.instance.widgetData as TextWidgetData
+    (this.ref.instance.widgetData as WidgetData<TextSetting>).setting.bold = !(
+      this.ref.instance.widgetData as WidgetData<TextSetting>
     ).setting.bold;
-    // if (this.ref.instance.widgetData) {
-    //   this.ref.instance.widgetData.setting =
-    //     this.ref.instance.widgetData.setting || {};
-    //   Object.assign(this.ref.instance.widgetData.setting, {
-    //     bold: !this.ref.instance.widgetData?.setting?.bold,
-    //   });
-    // }
   }
 
   toggleItalic(): void {
-    (this.ref.instance.widgetData as TextWidgetData).setting.italic = !(
-      this.ref.instance.widgetData as TextWidgetData
-    ).setting.italic;
-    // if (this.ref.instance.widgetData) {
-    //   this.ref.instance.widgetData.setting =
-    //     this.ref.instance.widgetData.setting || {};
-    //   Object.assign(this.ref.instance.widgetData.setting, {
-    //     italic: !this.ref.instance.widgetData?.setting?.italic,
-    //   });
-    // }
+    (this.ref.instance.widgetData as WidgetData<TextSetting>).setting.italic =
+      !(this.ref.instance.widgetData as WidgetData<TextSetting>).setting.italic;
   }
 
   toggleUnderline(): void {
-    (this.ref.instance.widgetData as TextWidgetData).setting.underline = !(
-      this.ref.instance.widgetData as TextWidgetData
+    (
+      this.ref.instance.widgetData as WidgetData<TextSetting>
+    ).setting.underline = !(
+      this.ref.instance.widgetData as WidgetData<TextSetting>
     ).setting.underline;
-    // if (this.ref.instance.widgetData) {
-    //   this.ref.instance.widgetData.setting =
-    //     this.ref.instance.widgetData.setting || {};
-    //   Object.assign(this.ref.instance.widgetData.setting, {
-    //     underline: !this.ref.instance.widgetData?.setting?.underline,
-    //   });
-    // }
   }
 }

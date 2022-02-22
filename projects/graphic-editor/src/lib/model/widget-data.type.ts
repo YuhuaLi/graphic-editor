@@ -1,4 +1,4 @@
-export type WidgetData = {
-  setting?: any;
+export type WidgetData<T = any> = {
+  setting: T;
   data?: any;
 };

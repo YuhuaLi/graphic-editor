@@ -19,6 +19,7 @@ import { WidgetButtonComponent } from './widget-lib/widget/widget-button/widget-
 import { ImgSettingComponent } from './widget-setting/settings-lib/img-setting/img-setting.component';
 import { WIDGET_LIST } from './injection-token';
 import { WidgetSettingService } from './widget-setting/widget-setting.service';
+import { AppearanceSettingComponent } from './widget-setting/settings-lib/appearance-setting/appearance-setting.component';
 
 const WIDGET_COMPONENT = [
   WidgetComponent,
@@ -41,6 +42,7 @@ const WIDGET_SETTING_COMPONENT = [TextSettingComponent, ImgSettingComponent];
     ...WIDGET_COMPONENT,
     ...WIDGET_SETTING_COMPONENT,
     WidgetButtonComponent,
+    AppearanceSettingComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [GraphicEditorComponent],

@@ -42,7 +42,7 @@
       <span>H</span>
       <input type="number" [(ngModel)]="ref.instance.height" (ngModelChange)="onHeightChange($event)" />
     </label>
-    <span class="action" title="锁定宽高比例" (click)="ref.instance.toggleLockedScale()">
+    <span class="action" title="锁定宽高比例" (click)="toggleWidgetLockedScale()">
       <i
         [ngClass]="{
           'icon-lock-fill': ref.instance.isLockedScale,

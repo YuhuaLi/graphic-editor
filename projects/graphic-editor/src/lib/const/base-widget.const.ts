@@ -34,5 +34,6 @@ export const BASE_WIDGET: Widget[] = [
     width: 100,
     height: 30,
     component: WidgetButtonComponent,
+    settings: ['text', 'appearance'],
   },
 ];

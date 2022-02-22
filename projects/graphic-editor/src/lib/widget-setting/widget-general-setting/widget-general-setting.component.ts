@@ -23,6 +23,10 @@ export class WidgetGeneralSettingComponent implements OnInit {
     this.ref.instance.toggleHidden();
   }
 
+  toggleWidgetLockedScale(): void {
+    this.ref.instance.toggleLockedScale();
+  }
+
   onWidthChange(width: number): void {
     if (this.ref.instance.isLockedScale) {
       this.ref.instance.height = width / this.ref.instance.lockedScale;

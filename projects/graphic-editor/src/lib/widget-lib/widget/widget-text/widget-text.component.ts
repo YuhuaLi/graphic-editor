@@ -1,19 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
 import { WidgetData, WidgetStatus } from '../../../model';
+import { TextSetting } from '../../../widget-setting/settings-lib/text-setting/text-setting.component';
 import { BaseWidgetContent } from '../base-widget-content';
 import { WidgetService } from '../widget.service';
-
-export type TextWidgetData = Exclude<WidgetData, 'setting'> & {
-  setting: {
-    text: string;
-    fontSize: number;
-    bold: boolean;
-    italic: boolean;
-    underline: boolean;
-    color: string;
-  };
-};
 
 @Component({
   selector: 'lib-widget-text',
@@ -27,7 +17,7 @@ export class WidgetTextComponent
   alive = true;
 
   readonly = true;
-  widgetData: TextWidgetData = {
+  widgetData: WidgetData<TextSetting> = {
     setting: {
       text: '',
       fontSize: 16,

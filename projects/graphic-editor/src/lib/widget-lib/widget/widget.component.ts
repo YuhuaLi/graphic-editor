@@ -124,17 +124,13 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     if (!this.isTicking) {
       this.rafId = window.requestAnimationFrame(() => {
-        const dx = Math.round(
-          (event.clientX - this.tempMousePos.x) / this.zoom
-        );
-        const dy = Math.round(
-          (event.clientY - this.tempMousePos.y) / this.zoom
-        );
+        const dx = (event.clientX - this.tempMousePos.x) / this.zoom;
+        const dy = (event.clientY - this.tempMousePos.y) / this.zoom;
         this.tempMousePos.x = event.clientX;
         this.tempMousePos.y = event.clientY;
         if (this.status === WidgetStatus.Drag) {
-          this.x = (this.x || 0) + dx;
-          this.y = (this.y || 0) + dy;
+          this.x = Math.round((this.x || 0) + dx);
+          this.y = Math.round((this.y || 0) + dy);
         } else {
           this.resize(dx, dy);
         }
@@ -244,7 +240,6 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.tempMousePos = { x: event.clientX, y: event.clientY };
-    console.log('start', this.tempMousePos);
     this.selectWidget.emit(event); // 清除其他选中
     this.renderer2.addClass(
       document.body.querySelector('lib-graphic-editor'),
@@ -297,7 +292,8 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  resizeWidth(dx: number): void {
+  resizeWidth(x: number): void {
+    const dx = Math.round(x);
     switch (this.status) {
       case WidgetStatus.ResizeLeft:
       case WidgetStatus.ResizeTopLeft:
@@ -324,7 +320,8 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  resizeHeight(dy: number): void {
+  resizeHeight(y: number): void {
+    const dy = Math.round(y);
     switch (this.status) {
       case WidgetStatus.ResizeTop:
       case WidgetStatus.ResizeTopLeft:
@@ -351,10 +348,16 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  resizeWithScale(dx: number, dy: number, scale: number): void {
+  resizeWithScale(x: number, y: number, scale: number): void {
+    const dx = Math.round(x);
+    const dy = Math.round(y);
     switch (this.status) {
       case WidgetStatus.ResizeBottomLeft: {
+        if (y < -1 * this.height) {
+          this.tempMousePos.y -= (y + this.height) * this.zoom;
+        }
         this.height = Math.max(this.height + dy, 0);
+
         // this.y = y - this.height;
         const nx = this.x + this.width - Math.round(this.height * scale);
         this.width = Math.max(this.x + this.width - nx, 0);
@@ -362,11 +365,17 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case WidgetStatus.ResizeBottomRight: {
+        if (y < -1 * this.height) {
+          this.tempMousePos.y -= (y + this.height) * this.zoom;
+        }
         this.height = Math.max(this.height + dy, 0);
         this.width = Math.round(this.height * scale);
         break;
       }
       case WidgetStatus.ResizeTopLeft: {
+        if (y > this.height) {
+          this.tempMousePos.y += (this.height - y) * this.zoom;
+        }
         const bottom = this.y + this.height;
         this.height = Math.max(bottom - this.y - dy, 0);
         this.y = Math.min(this.y + dy, bottom);
@@ -376,6 +385,9 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case WidgetStatus.ResizeTopRight: {
+        if (y > this.height) {
+          this.tempMousePos.y += (this.height - y) * this.zoom;
+        }
         const bottom = this.y + this.height;
         this.height = Math.max(bottom - this.y - dy, 0);
         this.y = Math.min(this.y + dy, bottom);
@@ -383,6 +395,9 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case WidgetStatus.ResizeTop: {
+        if (y > this.height) {
+          this.tempMousePos.y += (this.height - y) * this.zoom;
+        }
         const bottom = this.y + this.height;
         this.height = Math.max(this.height - dy, 0);
         this.y = Math.min(bottom, this.y + dy);
@@ -392,6 +407,9 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case WidgetStatus.ResizeBottom: {
+        if (y < -1 * this.height) {
+          this.tempMousePos.y -= (y + this.height) * this.zoom;
+        }
         this.height = Math.max(this.height + dy, 0);
         const nw = Math.round(this.height * scale);
         this.x += (this.width - nw) / 2;
@@ -399,6 +417,9 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case WidgetStatus.ResizeLeft: {
+        if (x > this.width) {
+          this.tempMousePos.x += (this.width - x) * this.zoom;
+        }
         const right = this.x + this.width;
         this.width = Math.max(this.width - dx, 0);
         this.x = Math.min(this.x + dx, right);
@@ -408,6 +429,9 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case WidgetStatus.ResizeRight: {
+        if (x < -1 * this.width) {
+          this.tempMousePos.x -= (x + this.width) * this.zoom;
+        }
         this.width = Math.max(this.width + dx, 0);
         const nh = Math.round(this.width / scale);
         this.y += (this.height - nh) / 2;
@@ -447,6 +471,9 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleLockedScale(): void {
+    if (!this.isLockedScale && (!this.width || !this.height)) {
+      return;
+    }
     this.isLockedScale = !this.isLockedScale;
     if (this.isLockedScale) {
       this.lockedScale = this.width / this.height;
