@@ -1,5 +1,11 @@
 <div class="general-row">
-  <label><input class="general-input" type="checkbox" /></label>
+  <label
+    ><input
+      class="general-input"
+      type="checkbox"
+      [ngModel]="ref.instance?.widgetData?.setting?.background?.fill"
+      (change)="cancelBackgroundColor($event)"
+  /></label>
   <label class="general-input color-picker">
     <input
       type="color"
@@ -10,7 +16,12 @@
   <span>填充色</span>
 </div>
 <div class="general-row">
-  <label class="general-input"><input type="checkbox" /></label>
+  <label class="general-input"
+    ><input
+      type="checkbox"
+      [ngModel]="ref.instance?.widgetData?.setting?.border?.fill"
+      (change)="cancelBorderColor($event)"
+  /></label>
   <label class="general-input color-picker">
     <input
       type="color"

@@ -2,9 +2,10 @@ import { Component, ComponentRef, OnInit } from '@angular/core';
 import { WidgetComponent } from '../../../widget-lib/widget/widget.component';
 
 export type AppearanceSetting = {
-  background?: { color: string } | null;
+  background?: { fill: boolean; color: string } | null;
   radius: number | number[];
   border?: {
+    fill: boolean;
     color: string;
     style: string;
     width: number;
@@ -21,7 +22,39 @@ export class AppearanceSettingComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onBackgroundColorChange(event: Event): void {}
+  onBackgroundColorChange(event: Event): void {
+    if (this.ref.instance.widgetData) {
+      Object.assign(
+        (this.ref.instance.widgetData.setting as AppearanceSetting).background,
+        { color: (event.target as HTMLInputElement).value }
+      );
+    }
+  }
 
-  onBorderColorChange(event: Event): void {}
+  onBorderColorChange(event: Event): void {
+    if (this.ref.instance.widgetData) {
+      Object.assign(
+        (this.ref.instance.widgetData.setting as AppearanceSetting).border,
+        { color: (event.target as HTMLInputElement).value }
+      );
+    }
+  }
+
+  cancelBackgroundColor(event: Event): void {
+    if (this.ref.instance.widgetData) {
+      Object.assign(
+        (this.ref.instance.widgetData.setting as AppearanceSetting).background,
+        { fill: (event.target as HTMLInputElement).checked }
+      );
+    }
+  }
+
+  cancelBorderColor(event: Event): void {
+    if (this.ref.instance.widgetData) {
+      Object.assign(
+        (this.ref.instance.widgetData.setting as AppearanceSetting).border,
+        { fill: (event.target as HTMLInputElement).checked }
+      );
+    }
+  }
 }

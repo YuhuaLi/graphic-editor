@@ -2,16 +2,16 @@
   class="button"
   type="button"
   [style]="{
-    'background': !widgetData.setting?.background
+    background: !widgetData.setting?.background?.fill
       ? 'none'
       : widgetData.setting?.background?.color || '#005096',
-    'border-width.px': !widgetData.setting?.border
+    'border-width.px': !widgetData.setting?.border?.fill
       ? 'initial'
       : widgetData.setting?.border?.width || 1,
-    'border-style': !widgetData.setting?.border
+    'border-style': !widgetData.setting?.border?.fill
       ? 'none'
       : widgetData.setting.border?.style || 'solid',
-    'border-color': !widgetData.setting?.border
+    'border-color': !widgetData.setting?.border?.fill
       ? 'initial'
       : widgetData.setting.border?.color || '#005096',
     'font-size.px': widgetData.setting?.fontSize || 16,

@@ -24,9 +24,7 @@ export type TextSetting = {
   styleUrls: ['./text-setting.component.scss'],
 })
 export class TextSettingComponent implements OnInit {
-  constructor(public ref: ComponentRef<WidgetComponent>) {
-    console.log(ref);
-  }
+  constructor(public ref: ComponentRef<WidgetComponent>) {}
 
   ngOnInit(): void {}
 

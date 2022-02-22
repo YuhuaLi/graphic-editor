@@ -20,9 +20,10 @@ export class WidgetButtonComponent extends BaseWidgetContent implements OnInit {
       italic: false,
       underline: false,
       color: '#000000',
-      background: { color: '#efefef' },
+      background: { fill: true, color: '#efefef' },
       radius: 4,
       border: {
+        fill: true,
         color: '#efefef',
         style: 'solid',
         width: 1,
