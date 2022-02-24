@@ -8,8 +8,10 @@ export class WidgetSettingService {
   widgetSettingLib = BASE_WIDGET_SETTING;
 
   constructor(
-    @Optional() @Inject(WIDGET_SETTING_LIST) widgets?: WidgetSetting[]
-  ) {}
+    @Optional() @Inject(WIDGET_SETTING_LIST) settings?: WidgetSetting[]
+  ) {
+    this.widgetSettingLib.push(...(settings || []));
+  }
 
   getWidgetSettingLib(): WidgetSetting[] {
     return this.widgetSettingLib;

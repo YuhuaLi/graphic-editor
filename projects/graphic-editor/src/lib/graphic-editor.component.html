@@ -1,15 +1,21 @@
 <div class="toolbar" role="banner">
-  <div class="toolbar-left">
+  <div class="toolbar-left" (click)="back()">
     <a><i class="iconfont icon-back"></i></a>
   </div>
   <div class="toolbar-right">
+    <span class="toolbar-action" (click)="togglePreview()"
+      ><i class="iconfont icon-sucaiku"></i
+    ></span>
+    <span class="toolbar-action" (click)="save()"
+      ><i class="iconfont icon-sucaiku"></i
+    ></span>
     <lib-zoom-box
       [ngModel]="zoom"
       (ngModelChange)="zoomPage($event)"
     ></lib-zoom-box>
   </div>
 </div>
-<div class="content">
+<div [ngClass]="{ hidden: mode !== OPERATION_MODE.Development }" class="content">
   <div class="left-side">
     <div class="left-side-panel">
       <div class="panel-header">
@@ -186,4 +192,7 @@
       ></lib-widget-setting>
     </div>
   </div>
+</div>
+<div class="content" *ngIf="mode === OPERATION_MODE.Production">
+  <lib-graphic-view></lib-graphic-view>
 </div>

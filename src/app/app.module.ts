@@ -3,14 +3,15 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {
-  GraphicEditorModule,
-} from 'projects/graphic-editor/src/public-api';
+import { GraphicEditorModule } from 'projects/graphic-editor/src/public-api';
 import { EditorComponent } from './editor/editor.component';
 import { WidgetTextComponent } from 'projects/graphic-editor/src/lib/widget-lib/widget/widget-text/widget-text.component';
 import { WidgetCategory } from 'projects/graphic-editor/src/lib/model';
 import { TestComponent } from './test/test.component';
-import { WIDGET_LIST } from 'projects/graphic-editor/src/lib/injection-token';
+import {
+  WIDGET_LIST,
+  WIDGET_SETTING_LIST,
+} from 'projects/graphic-editor/src/lib/injection-token';
 
 const arr = [
   {
@@ -24,10 +25,20 @@ const arr = [
   },
 ];
 
+const arr1 = [
+  {
+    type: 'test',
+    component: TestComponent,
+  },
+];
+
 @NgModule({
   declarations: [AppComponent, EditorComponent, TestComponent],
   imports: [BrowserModule, AppRoutingModule, GraphicEditorModule],
-  providers: [{ provide: WIDGET_LIST, useValue: arr }],
+  providers: [
+    { provide: WIDGET_LIST, useValue: arr },
+    { provide: WIDGET_SETTING_LIST, useValue: arr1 },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

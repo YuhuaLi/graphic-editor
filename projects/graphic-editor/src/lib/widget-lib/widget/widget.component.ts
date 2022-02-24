@@ -9,10 +9,12 @@ import {
   HostBinding,
   Injector,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
   Renderer2,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -28,7 +30,6 @@ import {
   WidgetStatus,
   WidgetStyle,
 } from '../../model';
-import { IWidgetContent } from '../../model/widget-content.interface';
 import { BaseWidgetContent } from './base-widget-content';
 import { WidgetService } from './widget.service';
 
@@ -39,7 +40,9 @@ import { WidgetService } from './widget.service';
   providers: [WidgetService],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
+export class WidgetComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+{
   @ViewChild(TemplateRef, { read: ViewContainerRef })
   container!: ViewContainerRef;
 
@@ -110,9 +113,12 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
 
   timeoutId: any;
   DIRECTION = Direction;
+  OPERATION_MODE = OperationMode;
   /** raf条件变量 */
   isTicking = false;
   rafId: number | null = null;
+
+  contentRef?: ComponentRef<BaseWidgetContent>;
 
   onMouseMove = (event: MouseEvent): void => {
     event.preventDefault();
@@ -201,12 +207,20 @@ export class WidgetComponent implements OnInit, AfterViewInit, OnDestroy {
       0,
       injector
     ) as ComponentRef<BaseWidgetContent>;
+    component.instance.mode = this.mode;
+    this.contentRef = component;
     if (this.widgetData) {
       component.instance.setWidgetData(this.widgetData);
     } else {
       this.widgetData = component.instance.widgetData;
     }
     this.cdr.detectChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.contentRef && changes.contentRef.currentValue) {
+      this.contentRef.instance.mode = this.mode;
+    }
   }
 
   onMouseDown(event: MouseEvent): void {

@@ -14,6 +14,9 @@ export class WidgetSettingComponent implements OnInit {
     { type: 'widget-settings', name: '属性', isActive: true },
     { type: 'widget-events', name: '事件' },
   ];
+
+  navType = 'widget-settings';
+
   constructor() {}
 
   ngOnInit(): void {
@@ -21,5 +24,6 @@ export class WidgetSettingComponent implements OnInit {
 
   onNavItemClick(navItem: NavButton): void {
     this.navItems.forEach((item) => (item.isActive = item === navItem));
+    this.navType = navItem.type;
   }
 }

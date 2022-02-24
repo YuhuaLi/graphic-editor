@@ -1,11 +1,22 @@
 <div class="general-row">
-  <label
-    ><input
-      class="general-input"
+  <span class="general-label">圆角</span>
+  <label class="general-input">
+    <input
+      type="number"
+      [ngModel]="ref.instance?.widgetData?.setting?.radius"
+      (change)="onRadiusChange($event)"
+    />
+  </label>
+</div>
+<div class="general-row">
+  <label class="checkbox">
+    <input
       type="checkbox"
       [ngModel]="ref.instance?.widgetData?.setting?.background?.fill"
       (change)="cancelBackgroundColor($event)"
-  /></label>
+    />
+    <span></span>
+  </label>
   <label class="general-input color-picker">
     <input
       type="color"
@@ -16,12 +27,14 @@
   <span>填充色</span>
 </div>
 <div class="general-row">
-  <label class="general-input"
-    ><input
+  <label class="checkbox">
+    <input
       type="checkbox"
       [ngModel]="ref.instance?.widgetData?.setting?.border?.fill"
       (change)="cancelBorderColor($event)"
-  /></label>
+    />
+    <span></span>
+  </label>
   <label class="general-input color-picker">
     <input
       type="color"

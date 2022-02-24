@@ -20,6 +20,9 @@ import { ImgSettingComponent } from './widget-setting/settings-lib/img-setting/i
 import { WIDGET_LIST } from './injection-token';
 import { WidgetSettingService } from './widget-setting/widget-setting.service';
 import { AppearanceSettingComponent } from './widget-setting/settings-lib/appearance-setting/appearance-setting.component';
+import { PageEventListenerComponent } from './event-listener/page-event-listener/page-event-listener.component';
+import { WidgetEventListenerComponent } from './event-listener/widget-event-listener/widget-event-listener.component';
+import { GraphicViewComponent } from './graphic-view.component';
 
 const WIDGET_COMPONENT = [
   WidgetComponent,
@@ -43,6 +46,9 @@ const WIDGET_SETTING_COMPONENT = [TextSettingComponent, ImgSettingComponent];
     ...WIDGET_SETTING_COMPONENT,
     WidgetButtonComponent,
     AppearanceSettingComponent,
+    PageEventListenerComponent,
+    WidgetEventListenerComponent,
+    GraphicViewComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [GraphicEditorComponent],

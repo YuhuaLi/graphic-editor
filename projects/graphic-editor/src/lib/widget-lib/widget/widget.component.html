@@ -5,7 +5,7 @@
     highlight: isHighlight,
     locked: isLocked,
     hidden: isHidden,
-    dev: !mode
+    dev: mode === OPERATION_MODE.Development
   }"
   [ngStyle]="{
     'top.px': style.top,

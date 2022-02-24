@@ -49,12 +49,26 @@
     .toolbar-right {
       display: flex;
       align-items: center;
+
+      .toolbar-action {
+        margin: 0 5px;
+        padding: 3px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #454647;
+        }
+      }
     }
   }
 
   .content {
     display: flex;
     flex: 1;
+
+    &.hidden {
+      display: none;
+    }
 
     .left-side {
       background-color: rgb(37, 38, 38);

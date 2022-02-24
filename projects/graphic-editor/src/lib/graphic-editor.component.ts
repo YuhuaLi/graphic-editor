@@ -40,11 +40,12 @@ export class GraphicEditorComponent
   @ViewChild('compAreaContainer', { read: ViewContainerRef, static: false })
   compAreaContainer!: ViewContainerRef;
   @ViewChild('sectionArea', { read: ElementRef, static: true })
-  selectionArea!: ElementRef;
+  selectionArea?: ElementRef;
   @ViewChild('compArea', { static: true }) compArea!: ElementRef;
 
   alive = true;
 
+  OPERATION_MODE = OperationMode;
   compAreaClientBoundingRect: any;
   zoom = 1;
   scrollLeft = 0;
@@ -195,14 +196,16 @@ export class GraphicEditorComponent
   }
 
   initSelectionArea(): void {
-    this.selectionArea.nativeElement.width =
-      this.selectionArea.nativeElement.offsetWidth * this.zoom * this.dpr;
-    this.selectionArea.nativeElement.height =
-      this.selectionArea.nativeElement.offsetHeight * this.zoom * this.dpr;
-    this.selectionCtx = this.selectionArea.nativeElement.getContext('2d');
-    this.selectionCtx.fillStyle = '#1684fc4d';
-    this.selectionCtx.strokeStyle = '#1684fc';
-    this.selectionCtx.scale(this.dpr, this.dpr);
+    if (this.selectionArea) {
+      this.selectionArea.nativeElement.width =
+        this.selectionArea.nativeElement.offsetWidth * this.zoom * this.dpr;
+      this.selectionArea.nativeElement.height =
+        this.selectionArea.nativeElement.offsetHeight * this.zoom * this.dpr;
+      this.selectionCtx = this.selectionArea.nativeElement.getContext('2d');
+      this.selectionCtx.fillStyle = '#1684fc4d';
+      this.selectionCtx.strokeStyle = '#1684fc';
+      this.selectionCtx.scale(this.dpr, this.dpr);
+    }
   }
 
   drawSelectionArea(x: number, y: number, width: number, height: number): void {
@@ -218,12 +221,14 @@ export class GraphicEditorComponent
   }
 
   clearSelectionArea(): void {
-    this.selectionCtx.clearRect(
-      0,
-      0,
-      this.selectionArea.nativeElement.width,
-      this.selectionArea.nativeElement.height
-    );
+    if (this.selectionArea) {
+      this.selectionCtx.clearRect(
+        0,
+        0,
+        this.selectionArea.nativeElement.width,
+        this.selectionArea.nativeElement.height
+      );
+    }
   }
 
   onViewportScroll(event: Event): void {
@@ -297,6 +302,7 @@ export class GraphicEditorComponent
         comp.instance.setSelected();
         comp.instance.setZoom(this.zoom);
         this.widgets.unshift(comp);
+        this.currentPage.widgets.unshift(comp.instance.widget);
       }
     }
   }
@@ -371,6 +377,28 @@ export class GraphicEditorComponent
         break;
       }
     }
+  }
+
+  togglePreview(): void {
+    this.mode =
+      this.mode === OperationMode.Development
+        ? OperationMode.Production
+        : OperationMode.Development;
+  }
+
+  back(): void {
+    if (this.mode === OperationMode.Production) {
+      this.mode = OperationMode.Development;
+    }
+  }
+
+  save(): void {
+    console.log({
+      widgets: this.widgets.map((widget) => ({
+        type: widget.instance.widget.type,
+        widgetData: widget.instance.widgetData,
+      })),
+    });
   }
 
   // 通过两矩形中心距离判断是否相交

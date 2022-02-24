@@ -2,7 +2,7 @@ export enum OperationMode {
   /**
    * 开发
    */
-  Development = 0,
+  Development = 1,
 
   /**
    * 生产
