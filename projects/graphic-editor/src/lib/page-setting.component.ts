@@ -20,4 +20,8 @@ export class PageSettingComponent implements OnInit {
   onNavItemClick(navItem: NavButton): void {
     this.navItems.forEach((item) => (item.isActive = item === navItem));
   }
+
+  changePageAdaptive(event: Event): void {
+    this.page.style.adaptive = (event.target as HTMLInputElement).checked;
+  }
 }

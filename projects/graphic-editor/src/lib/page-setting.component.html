@@ -25,6 +25,14 @@
 </div>
 <div class="general-panel">
   <div class="general-row">
-    
+    <label class="checkbox">
+      <input
+        type="checkbox"
+        [ngModel]="page.style.adaptive"
+        (change)="changePageAdaptive($event)"
+      />
+      <span></span>
+    </label>
+    <span>自适应</span>
   </div>
 </div>

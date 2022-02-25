@@ -53,6 +53,7 @@ export class WidgetComponent
   @Input() zoom = 1;
 
   @Output() selectWidget = new EventEmitter<any>();
+  @Output() initialized = new EventEmitter<any>();
 
   widgetData?: WidgetData;
 
@@ -214,12 +215,24 @@ export class WidgetComponent
     } else {
       this.widgetData = component.instance.widgetData;
     }
+    this.initialized.emit({
+      type: this.widget.type,
+      style: this.style,
+      widgetData: this.widgetData,
+    });
     this.cdr.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.contentRef && changes.contentRef.currentValue) {
+    if (
+      changes.mode.currentValue &&
+      this.contentRef &&
+      changes.contentRef.currentValue
+    ) {
       this.contentRef.instance.mode = this.mode;
+    }
+    if (changes.style) {
+      this.cdr.detectChanges();
     }
   }
 

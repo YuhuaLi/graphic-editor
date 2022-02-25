@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
-import { WidgetData, WidgetStatus } from '../../../model';
+import { OperationMode, WidgetData, WidgetStatus } from '../../../model';
 import { TextSetting } from '../../../widget-setting/settings-lib/text-setting/text-setting.component';
 import { BaseWidgetContent } from '../base-widget-content';
 import { WidgetService } from '../widget.service';
@@ -15,6 +15,8 @@ export class WidgetTextComponent
   implements OnInit, OnDestroy
 {
   alive = true;
+  // contenteditable = false;
+  // lines = [];
 
   readonly = true;
   widgetData: WidgetData<TextSetting> = {
@@ -30,7 +32,6 @@ export class WidgetTextComponent
 
   constructor(private widgetSrv: WidgetService) {
     super();
-    console.log(this.widgetData);
   }
 
   ngOnInit(): void {
@@ -45,11 +46,15 @@ export class WidgetTextComponent
   }
 
   onDblClick(event: MouseEvent): void {
+    if (this.mode === OperationMode.Production) {
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     this.readonly = false;
     (event.target as HTMLTextAreaElement).focus();
     (event.target as HTMLTextAreaElement).select();
+    // this.contenteditable = true;
   }
 
   onTextChange(event: string): void {

@@ -6,6 +6,11 @@
     position: absolute;
 
     &.dev {
+      .widget {
+        pointer-events: none;
+        user-select: none;
+      }
+
       &.selected,
       &:hover,
       &.highlight {
@@ -151,10 +156,6 @@
       }
 
       ::ng-deep {
-        button {
-          pointer-events: none;
-        }
-
         lib-widget-text > textarea {
           pointer-events: auto;
         }
@@ -166,8 +167,6 @@
       overflow: hidden;
       width: 100%;
       height: 100%;
-      user-select: none;
-      pointer-events: none;
     }
   }
 

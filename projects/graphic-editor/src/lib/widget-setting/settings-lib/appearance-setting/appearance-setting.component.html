@@ -1,8 +1,10 @@
 <div class="general-row">
   <span class="general-label">圆角</span>
-  <label class="general-input">
+  <label class="general-input" [ngClass]="{ error: !radius.validity.valid }">
     <input
+      #radius
       type="number"
+      min="0"
       [ngModel]="ref.instance?.widgetData?.setting?.radius"
       (change)="onRadiusChange($event)"
     />

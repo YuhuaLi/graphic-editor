@@ -59,7 +59,10 @@ export class AppearanceSettingComponent implements OnInit {
   }
 
   onRadiusChange(event: Event): void {
-    if (this.ref.instance.widgetData) {
+    if (
+      this.ref.instance.widgetData &&
+      (event.target as HTMLInputElement).validity.valid
+    ) {
       (this.ref.instance.widgetData.setting as AppearanceSetting).radius = (
         event.target as HTMLInputElement
       ).valueAsNumber;

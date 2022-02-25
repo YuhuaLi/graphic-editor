@@ -71,8 +71,12 @@ export class GraphicEditorComponent
   get currentPage(): Page {
     return this.selectedPages[0];
   }
-
+  /** 鼠标点击标志，用于绘制选中区域 */
   isMouseDown = false;
+  /** resize左侧边栏标志 */
+  isResizeStart = false;
+  /** 左侧边栏宽度 */
+  leftWidth = 210;
   tempMousePos: Coordinate = { x: 0, y: 0 };
   selectionCtx!: CanvasRenderingContext2D;
   dpr = window.devicePixelRatio || 1;
@@ -80,6 +84,9 @@ export class GraphicEditorComponent
   isTicking = false;
 
   onKeydown = (event: KeyboardEvent): void => {
+    if (event.target !== document.body) {
+      return;
+    }
     switch (event.code) {
       case KeyboardCode.Delete:
         this.deleteWidget(...this.selectedWidgets);
@@ -123,30 +130,42 @@ export class GraphicEditorComponent
     }
   };
 
-  onMouseUp = (event: MouseEvent): void => {
-    this.isMouseDown = false;
-    this.clearSelectionArea();
-    let offsetX = event.offsetX;
-    let offsetY = event.offsetY;
-    if (event.target !== this.compArea.nativeElement) {
-      const { left, top } = this.compAreaClientBoundingRect;
-      offsetX = event.clientX - left + this.scrollLeft;
-      offsetY = event.clientY - top + this.scrollTop;
-    }
-    const x = offsetX > this.tempMousePos.x ? this.tempMousePos.x : offsetX;
-    const y = offsetY > this.tempMousePos.y ? this.tempMousePos.y : offsetY;
-    const width = Math.abs(offsetX - this.tempMousePos.x);
-    const height = Math.abs(offsetY - this.tempMousePos.y);
-    for (const widget of this.widgets) {
-      if (this.isWidgetInRect(widget.instance, x, y, width, height)) {
-        widget.instance.setSelected(true);
+  onSelectRangMouseUp = (event: MouseEvent): void => {
+    if (this.isMouseDown) {
+      this.isMouseDown = false;
+      this.clearSelectionArea();
+      let offsetX = event.offsetX;
+      let offsetY = event.offsetY;
+      if (event.target !== this.compArea.nativeElement) {
+        const { left, top } = this.compAreaClientBoundingRect;
+        offsetX = event.clientX - left + this.scrollLeft;
+        offsetY = event.clientY - top + this.scrollTop;
       }
+      const x = offsetX > this.tempMousePos.x ? this.tempMousePos.x : offsetX;
+      const y = offsetY > this.tempMousePos.y ? this.tempMousePos.y : offsetY;
+      const width = Math.abs(offsetX - this.tempMousePos.x);
+      const height = Math.abs(offsetY - this.tempMousePos.y);
+      for (const widget of this.widgets) {
+        if (this.isWidgetInRect(widget.instance, x, y, width, height)) {
+          widget.instance.setSelected(true);
+        }
+      }
+      this.renderer2.removeClass(this.ref.nativeElement, 'operation');
+      document.removeEventListener('mousemove', this.onSelectRangMouseUp);
+      document.removeEventListener('mouseup', this.onSelectRangMouseUp);
     }
-    this.renderer2.removeClass(this.ref.nativeElement, 'operation');
-    document.removeEventListener('mouseup', this.onMouseUp);
   };
 
-  onMouseMove = (event: MouseEvent): void => {
+  onResizeMouseUp = (event: MouseEvent): void => {
+    if (this.isResizeStart) {
+      this.leftWidth += event.pageX - this.tempMousePos.x;
+      this.isResizeStart = false;
+      document.removeEventListener('mousemove', this.onResizeMouseMove);
+      document.removeEventListener('mouseup', this.onResizeMouseUp);
+    }
+  };
+
+  onSelectRangMouseMove = (event: MouseEvent): void => {
     if (this.isMouseDown && !this.isTicking) {
       let x = event.offsetX;
       let y = event.offsetY;
@@ -167,6 +186,14 @@ export class GraphicEditorComponent
         this.isTicking = false;
       });
       this.isTicking = true;
+    }
+  };
+
+  onResizeMouseMove = (event: MouseEvent): void => {
+    if (this.isResizeStart) {
+      this.leftWidth += event.pageX - this.tempMousePos.x;
+      this.tempMousePos.x = event.pageX;
+      this.tempMousePos.y = event.pageY;
     }
   };
 
@@ -247,6 +274,16 @@ export class GraphicEditorComponent
     }
   }
 
+  onResizeLeftSideStart(event: MouseEvent): void {
+    this.tempMousePos = { x: event.pageX, y: event.pageY };
+    console.log(this.tempMousePos);
+    event.preventDefault();
+    event.stopPropagation();
+    this.isResizeStart = true;
+    document.addEventListener('mouseup', this.onResizeMouseUp);
+    document.addEventListener('mousemove', this.onResizeMouseMove);
+  }
+
   onToolBtnClick(event: NavButton): void {
     this.toolContainer.clear();
     if (event.isActive) {
@@ -299,10 +336,22 @@ export class GraphicEditorComponent
               this.selectedWidgets.splice(0, this.selectedWidgets.length, comp);
             }
           });
+        comp.instance.initialized
+          .pipe(takeWhile(() => this.alive))
+          .subscribe(({ type, style, widgetData }) => {
+            if (!this.currentPage.widgets) {
+              this.currentPage.widgets = [];
+            }
+            this.currentPage.widgets.unshift({
+              type,
+              style,
+              widgetData,
+            });
+          });
+
         comp.instance.setSelected();
         comp.instance.setZoom(this.zoom);
         this.widgets.unshift(comp);
-        this.currentPage.widgets.unshift(comp.instance.widget);
       }
     }
   }
@@ -335,7 +384,7 @@ export class GraphicEditorComponent
     ref.instance.toggleHidden();
   }
 
-  onMouseDown(event: MouseEvent): void {
+  onSelectRangeStart(event: MouseEvent): void {
     event.preventDefault();
     this.isMouseDown = true;
     this.tempMousePos.x = event.offsetX;
@@ -344,8 +393,8 @@ export class GraphicEditorComponent
     this.selectedWidgets.forEach((item) => item.instance.resetStatus());
     this.selectedWidgets.splice(0);
     this.renderer2.addClass(this.ref.nativeElement, 'operation');
-    document.addEventListener('mouseup', this.onMouseUp);
-    document.addEventListener('mousemove', this.onMouseMove);
+    document.addEventListener('mouseup', this.onSelectRangMouseUp);
+    document.addEventListener('mousemove', this.onSelectRangMouseMove);
   }
 
   zoomPage(event: number): void {
@@ -393,12 +442,14 @@ export class GraphicEditorComponent
   }
 
   save(): void {
-    console.log({
-      widgets: this.widgets.map((widget) => ({
-        type: widget.instance.widget.type,
-        widgetData: widget.instance.widgetData,
-      })),
-    });
+    console.log([
+      {
+        widgets: this.widgets.map((widget) => ({
+          type: widget.instance.widget.type,
+          widgetData: widget.instance.widgetData,
+        })),
+      },
+    ]);
   }
 
   // 通过两矩形中心距离判断是否相交

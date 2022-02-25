@@ -115,14 +115,56 @@
       }
 
       /*谷歌*/
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+      /*火狐*/
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
     }
-    /*火狐*/
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
+
+    label.checkbox {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: #4f5052 solid 1px;
+      position: relative;
+      cursor: pointer;
+      margin-right: 12px;
+      border-radius: 3px;
+
+      input[type="checkbox"] {
+        display: none;
+
+        &:checked + span {
+          background-color: #1684fc;
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+
+          &::before {
+            opacity: 1;
+            transform: all 0.5s;
+          }
+        }
+      }
+
+      input[type="checkbox"] + span::before {
+        display: inline-block;
+        content: " ";
+        width: 12px;
+        border: 2px solid #fff;
+        height: 4px;
+        border-top: none;
+        border-right: none;
+        transform: rotate(-45deg);
+        top: 3px;
+        left: 1px;
+        position: absolute;
+        opacity: 0;
+      }
     }
   }
 }

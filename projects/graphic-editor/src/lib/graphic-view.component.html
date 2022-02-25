@@ -1,1 +1,10 @@
-<p>graphic-view works!</p>
+<div
+  style="transform-origin: 0 0;"
+  [ngStyle]="{
+    'width.px': page?.style?.width,
+    'height.px': page?.style?.height,
+    transform: 'scale(' + zoomX + ',' + zoomY + ')'
+  }"
+>
+  <ng-template #container></ng-template>
+</div>

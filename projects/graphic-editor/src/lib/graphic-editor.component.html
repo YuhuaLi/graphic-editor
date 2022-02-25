@@ -1,13 +1,16 @@
 <div class="toolbar" role="banner">
   <div class="toolbar-left" (click)="back()">
-    <a><i class="iconfont icon-back"></i></a>
+    <span class="toolbar-action"><i class="iconfont icon-back"></i></span>
   </div>
-  <div class="toolbar-right">
+  <div
+    [ngClass]="{ hidden: mode !== OPERATION_MODE.Development }"
+    class="toolbar-right"
+  >
     <span class="toolbar-action" (click)="togglePreview()"
-      ><i class="iconfont icon-sucaiku"></i
+      ><i class="iconfont icon-preview"></i
     ></span>
     <span class="toolbar-action" (click)="save()"
-      ><i class="iconfont icon-sucaiku"></i
+      ><i class="iconfont icon-save"></i
     ></span>
     <lib-zoom-box
       [ngModel]="zoom"
@@ -15,8 +18,11 @@
     ></lib-zoom-box>
   </div>
 </div>
-<div [ngClass]="{ hidden: mode !== OPERATION_MODE.Development }" class="content">
-  <div class="left-side">
+<div
+  [ngClass]="{ hidden: mode !== OPERATION_MODE.Development }"
+  class="content"
+>
+  <div class="left-side" [ngStyle]="{ 'width.px': leftWidth }">
     <div class="left-side-panel">
       <div class="panel-header">
         <i class="nav-icon iconfont icon-sucaiku"></i>
@@ -79,6 +85,10 @@
         </ul>
       </div>
     </div>
+    <div
+      class="left-side-resize"
+      (mousedown)="onResizeLeftSideStart($event)"
+    ></div>
   </div>
 
   <div class="viewport">
@@ -147,7 +157,7 @@
           'height.px': currentPage.style.height,
           transform: 'scale(' + zoom + ')'
         }"
-        (mousedown)="onMouseDown($event)"
+        (mousedown)="onSelectRangeStart($event)"
         (drop)="onCompAreaDrop($event)"
         (dragover)="$event.preventDefault()"
       >
@@ -194,5 +204,5 @@
   </div>
 </div>
 <div class="content" *ngIf="mode === OPERATION_MODE.Production">
-  <lib-graphic-view></lib-graphic-view>
+  <lib-graphic-view [page]="currentPage"></lib-graphic-view>
 </div>

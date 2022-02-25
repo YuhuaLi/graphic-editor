@@ -4,7 +4,7 @@
   flex-direction: column;
   height: 100%;
   background-color: rgb(54, 55, 56);
-  overflow: hidden;
+  // overflow: hidden;
 
   ::-webkit-scrollbar {
     width: 8px;
@@ -31,6 +31,7 @@
     box-shadow: rgb(79 80 82) 0px 1px 0px;
     color: white;
     padding: 0 8px;
+    flex-shrink: 0;
 
     img {
       margin: 0 16px;
@@ -55,6 +56,10 @@
         padding: 3px;
         cursor: pointer;
 
+        .iconfont {
+          font-size: 20px;
+        }
+
         &:hover {
           background-color: #454647;
         }
@@ -62,23 +67,26 @@
     }
   }
 
+  .hidden {
+    display: none !important;
+  }
+
   .content {
     display: flex;
     flex: 1;
-
-    &.hidden {
-      display: none;
-    }
+    height: calc(100% - 48px);
+    overflow: auto;
 
     .left-side {
       background-color: rgb(37, 38, 38);
       display: flex;
       flex-direction: column;
       user-select: none;
+      position: relative;
+      border-right: 1px solid #b8bcbf;
 
       .left-side-panel {
-        width: 209px;
-        border-right: 1px solid #b8bcbf;
+        width: 100%;
         flex: 1;
         border-bottom: 1px solid #363738;
         max-height: 50%;
@@ -184,6 +192,19 @@
               }
             }
           }
+        }
+      }
+
+      .left-side-resize {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        cursor: col-resize;
+
+        &:hover {
+          background-color: #1684fc;
         }
       }
     }
