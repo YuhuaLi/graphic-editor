@@ -1,0 +1,23 @@
+:host {
+  .btn-wrapper {
+    display: flex;
+    margin: 12px;
+    font-size: 12px;
+
+    .create-btn {
+      height: 24px;
+      flex: 1 1 0%;
+      display: flex;
+      border-radius: 2px;
+      color: rgb(255, 255, 255);
+      background: rgb(22, 132, 252);
+      cursor: pointer;
+
+      span {
+        flex: 1 1 0%;
+        text-align: center;
+        line-height: 24px;
+      }
+    }
+  }
+}
