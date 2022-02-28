@@ -1,4 +1,4 @@
-import { WidgetSetting } from '../model';
+import { WidgetSetting } from '../type';
 import { AppearanceSettingComponent } from '../widget-setting/settings-lib/appearance-setting/appearance-setting.component';
 import { ImgSettingComponent } from '../widget-setting/settings-lib/img-setting/img-setting.component';
 import { TextSettingComponent } from '../widget-setting/settings-lib/text-setting/text-setting.component';

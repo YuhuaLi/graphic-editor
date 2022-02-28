@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GraphicEditorComponent } from './graphic-editor.component';
-import { Widget } from './model';
+import { Widget } from './type';
 import { RulerComponent } from './component/ruler/ruler.component';
 import { WidgetLibComponent } from './widget-lib/widget-lib.component';
 import { WidgetLibService } from './widget-lib/widget-lib.service';

@@ -1,4 +1,5 @@
-import { ActionType, EventType } from '.';
+import { ActionType, EventType } from '../enum';
+
 
 export type EventListener = {
   type?: EventType;

@@ -5,7 +5,7 @@ import {
   Injector,
   OnInit,
 } from '@angular/core';
-import { WidgetData } from '../../../model';
+import { WidgetData } from '../../../type';
 
 import { WidgetComponent } from '../../../widget-lib/widget/widget.component';
 

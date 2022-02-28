@@ -9,8 +9,8 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { Placement } from '../../model';
 import ResizeObserver from 'resize-observer-polyfill';
+import { Placement } from '../../enum';
 
 @Component({
   selector: 'lib-ruler',

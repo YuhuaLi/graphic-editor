@@ -1,4 +1,4 @@
-import { ActionType } from '../model';
+import { ActionType } from '../enum';
 
 export const ACTION_TYPE_LIST = [
   {

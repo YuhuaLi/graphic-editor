@@ -3,15 +3,10 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GraphicEditorModule } from 'projects/graphic-editor/src/public-api';
 import { EditorComponent } from './editor/editor.component';
-import { WidgetTextComponent } from 'projects/graphic-editor/src/lib/widget-lib/widget/widget-text/widget-text.component';
-import { WidgetCategory } from 'projects/graphic-editor/src/lib/model';
 import { TestComponent } from './test/test.component';
-import {
-  WIDGET_LIST,
-  WIDGET_SETTING_LIST,
-} from 'projects/graphic-editor/src/lib/injection-token';
+import { GraphicEditorModule, WidgetCategory, WIDGET_LIST, WIDGET_SETTING_LIST } from 'graphic-editor';
+
 
 const arr = [
   {

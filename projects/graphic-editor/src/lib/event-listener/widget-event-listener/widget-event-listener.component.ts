@@ -1,5 +1,5 @@
 import { Component, ComponentRef, Input, OnInit } from '@angular/core';
-import { EventType, EventListener } from '../../model';
+import { EventType } from '../../enum';
 import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 
 @Component({

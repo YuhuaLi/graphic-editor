@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { WIDGET_CATEGORY } from '../const';
-import { Widget, NavButton } from '../model';
+import { Widget, NavButton } from '../type';
 import { WidgetLibService } from './widget-lib.service';
 
 @Component({

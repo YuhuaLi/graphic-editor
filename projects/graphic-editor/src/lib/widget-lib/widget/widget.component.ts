@@ -22,17 +22,14 @@ import {
 import { fromEvent } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { CLICK_JUDGE_TIME } from '../../const';
+import { ActionType, Direction, OperationMode, WidgetStatus } from '../../enum';
 import {
-  ActionType,
   Coordinate,
-  Direction,
   OpenUrlType,
-  OperationMode,
   Widget,
   WidgetData,
-  WidgetStatus,
   WidgetStyle,
-} from '../../model';
+} from '../../type';
 import { BaseWidgetContent } from './base-widget-content';
 import { WidgetService } from './widget.service';
 

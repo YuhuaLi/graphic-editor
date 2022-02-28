@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { WidgetData, WidgetStatus } from '../../model';
+import { WidgetStatus } from '../../enum';
+import { WidgetData } from '../../type';
 
 @Injectable()
 export class WidgetService {

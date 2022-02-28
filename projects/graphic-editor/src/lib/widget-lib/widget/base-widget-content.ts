@@ -1,5 +1,6 @@
-import { OperationMode, WidgetData } from '../../model';
-import { IWidgetContent } from '../../model/widget-content.interface';
+import { OperationMode } from '../../enum';
+import { WidgetData } from '../../type';
+import { IWidgetContent } from '../../type/widget-content.interface';
 
 export abstract class BaseWidgetContent implements IWidgetContent {
   widgetData: WidgetData = { setting: null };

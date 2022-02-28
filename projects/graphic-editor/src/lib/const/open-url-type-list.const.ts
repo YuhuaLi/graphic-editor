@@ -1,4 +1,4 @@
-import { OpenUrlType } from '../model';
+import { OpenUrlType } from '../type';
 
 export const OPEN_URL_TYPE_LIST = [
   {

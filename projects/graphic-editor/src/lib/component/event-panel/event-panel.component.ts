@@ -4,7 +4,8 @@ import {
   EVENT_TYPE_LIST,
   OPEN_URL_TYPE_LIST,
 } from '../../const';
-import { ActionType, EventListener, OpenUrlType } from '../../model';
+import { ActionType } from '../../enum';
+import { EventListener, OpenUrlType } from '../../type';
 
 @Component({
   selector: 'lib-event-panel',

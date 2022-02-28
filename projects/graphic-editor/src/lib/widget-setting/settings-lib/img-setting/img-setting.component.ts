@@ -1,5 +1,5 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
-import { WidgetData } from '../../../model';
+import { WidgetData } from '../../../type';
 import { WidgetComponent } from '../../../widget-lib/widget/widget.component';
 
 export type ImgSetting = {

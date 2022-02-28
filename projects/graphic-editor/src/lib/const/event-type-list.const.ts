@@ -1,4 +1,5 @@
-import { EventType } from '../model';
+import { EventType } from '../enum';
+
 
 export const EVENT_TYPE_LIST = [
   {

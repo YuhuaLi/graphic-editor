@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NavButton, Page } from './model';
+import { NavButton, Page } from './type';
 
 @Component({
   selector: 'lib-page-setting',

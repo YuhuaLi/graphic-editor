@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { WidgetData } from '../../../model';
+import { WidgetData } from '../../../type';
 import { ImgSetting } from '../../../widget-setting/settings-lib/img-setting/img-setting.component';
 import { BaseWidgetContent } from '../base-widget-content';
 

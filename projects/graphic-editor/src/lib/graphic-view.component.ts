@@ -8,7 +8,8 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { OperationMode, Page, WidgetData, WidgetStyle } from './model';
+import { OperationMode } from './enum';
+import { Page, WidgetData, WidgetStyle } from './type';
 import { WidgetLibService } from './widget-lib/widget-lib.service';
 import { WidgetComponent } from './widget-lib/widget/widget.component';
 

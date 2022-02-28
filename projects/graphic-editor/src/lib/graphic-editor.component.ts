@@ -16,16 +16,15 @@ import {
 } from '@angular/core';
 import { WidgetLibComponent } from './widget-lib/widget-lib.component';
 import {
-  OperationMode,
   NavButton,
   Page,
-  KeyboardCode,
   Coordinate,
-} from './model';
+} from './type';
 import { WidgetLibService } from './widget-lib/widget-lib.service';
 import { WidgetComponent } from './widget-lib/widget/widget.component';
 import { takeWhile } from 'rxjs/operators';
 import { ZOOM_RANGE } from './const';
+import { KeyboardCode, OperationMode } from './enum';
 
 @Component({
   selector: 'lib-graphic-editor',

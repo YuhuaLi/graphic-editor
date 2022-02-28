@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WidgetData } from '../../../model';
+import { WidgetData } from '../../../type';
 import { AppearanceSetting } from '../../../widget-setting/settings-lib/appearance-setting/appearance-setting.component';
 import { TextSetting } from '../../../widget-setting/settings-lib/text-setting/text-setting.component';
 import { BaseWidgetContent } from '../base-widget-content';

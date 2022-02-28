@@ -1,4 +1,4 @@
-import { WidgetCategory } from '../model';
+import { WidgetCategory } from '../enum';
 
 export const WIDGET_CATEGORY: Map<string, string> = new Map([
   [WidgetCategory.Basic, '基本'],

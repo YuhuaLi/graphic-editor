@@ -1,5 +1,5 @@
 import { Component, ComponentRef, Input, OnInit } from '@angular/core';
-import { NavButton } from '../model';
+import { NavButton } from '../type';
 import { WidgetComponent } from '../widget-lib/widget/widget.component';
 
 @Component({

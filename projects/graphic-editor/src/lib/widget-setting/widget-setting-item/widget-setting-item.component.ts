@@ -4,14 +4,13 @@ import {
   Component,
   ComponentFactoryResolver,
   ComponentRef,
-  InjectionToken,
   Injector,
   Input,
   OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { WidgetSetting } from '../../model';
+import { WidgetSetting } from '../../type';
 import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 import { WidgetSettingService } from '../widget-setting.service';
 

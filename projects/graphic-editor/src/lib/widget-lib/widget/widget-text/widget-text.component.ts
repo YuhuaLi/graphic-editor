@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
-import { OperationMode, WidgetData, WidgetStatus } from '../../../model';
+import { OperationMode, WidgetStatus } from '../../../enum';
+import { WidgetData } from '../../../type';
 import { TextSetting } from '../../../widget-setting/settings-lib/text-setting/text-setting.component';
 import { BaseWidgetContent } from '../base-widget-content';
 import { WidgetService } from '../widget.service';

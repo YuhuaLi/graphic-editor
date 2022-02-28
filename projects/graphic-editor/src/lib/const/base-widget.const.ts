@@ -1,9 +1,8 @@
-import { Widget, WidgetCategory } from '../model';
+import { WidgetCategory } from '../enum';
+import { Widget } from '../type';
 import { WidgetButtonComponent } from '../widget-lib/widget/widget-button/widget-button.component';
 import { WidgetImgComponent } from '../widget-lib/widget/widget-img/widget-img.component';
 import { WidgetTextComponent } from '../widget-lib/widget/widget-text/widget-text.component';
-import { ImgSettingComponent } from '../widget-setting/settings-lib/img-setting/img-setting.component';
-import { TextSettingComponent } from '../widget-setting/settings-lib/text-setting/text-setting.component';
 
 export const BASE_WIDGET: Widget[] = [
   {

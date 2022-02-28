@@ -4,5 +4,8 @@
   "assets": ["./src/iconfont"],
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "resize-observer-polyfill"
+  ]
 }

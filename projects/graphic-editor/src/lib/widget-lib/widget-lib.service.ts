@@ -1,7 +1,7 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BASE_WIDGET } from '../const';
 import { WIDGET_LIST } from '../injection-token';
-import { Widget } from '../model';
+import { Widget } from '../type';
 
 @Injectable()
 export class WidgetLibService {

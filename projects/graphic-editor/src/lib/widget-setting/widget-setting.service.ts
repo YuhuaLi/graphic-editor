@@ -1,7 +1,7 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BASE_WIDGET_SETTING } from '../const';
 import { WIDGET_SETTING_LIST } from '../injection-token';
-import { WidgetSetting } from '../model';
+import { WidgetSetting } from '../type';
 
 @Injectable()
 export class WidgetSettingService {

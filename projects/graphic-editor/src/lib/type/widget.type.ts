@@ -1,6 +1,5 @@
 import { WidgetSetting } from '.';
-import { WidgetCategory } from './widget-category.enum';
-import { IWidgetContent } from './widget-content.interface';
+import { WidgetCategory } from '../enum';
 
 export type Widget = {
   /** 组件类别 */
