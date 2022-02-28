@@ -16,7 +16,7 @@
   <ul class="menu-content" *ngIf="isExpand">
     <li class="menu-item" *ngFor="let item of items" (click)="selectItem(item)">
       <span class="check-icon"
-        ><i *ngIf="item === selectedItem" class="iconfont icon-delete"></i
+        ><i *ngIf="item === selectedItem" class="iconfont icon-check"></i
       ></span>
       <span>{{ item.name }}</span>
     </li>
