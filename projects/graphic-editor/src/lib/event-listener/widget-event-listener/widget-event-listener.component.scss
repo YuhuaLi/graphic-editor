@@ -1,16 +1,20 @@
 :host {
   .btn-wrapper {
     display: flex;
-    margin: 12px;
+    padding: 12px;
     font-size: 12px;
+    background-color: #252626;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 
     .create-btn {
       height: 24px;
       flex: 1 1 0%;
       display: flex;
       border-radius: 2px;
-      color: rgb(255, 255, 255);
-      background: rgb(22, 132, 252);
+      color: #ffffff;
+      background: #1684fc;
       cursor: pointer;
 
       span {
@@ -19,5 +23,12 @@
         line-height: 24px;
       }
     }
+  }
+
+  .listener-list {
+    position: relative;
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
   }
 }

@@ -1,0 +1,64 @@
+:host {
+  color: #fff;
+  font-size: 12px;
+
+  .iconfont {
+    font-size: 12px;
+  }
+
+  .panel {
+    width: 212px;
+    background-color: #363738;
+    margin-bottom: 13px;
+    border-radius: 2px;
+    transition: all 0.2s ease-in-out 0s;
+
+    .header {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #4f5052;
+      height: 31px;
+      justify-content: space-between;
+      padding: 5px 7px 5px 10px;
+    }
+
+    .general-row {
+      display: flex;
+      align-items: center;
+      padding: 5px 7px 5px 10px;
+      flex-wrap: wrap;
+
+      span.label {
+        width: 56px;
+      }
+
+      .select {
+        width: 138px;
+        max-width: 138px;
+      }
+
+      .input {
+        width: 200px;
+        resize: none;
+        background-color: #363738;
+        border: 1px solid #454647;
+        outline: none;
+        color: #fff;
+
+        &:hover {
+          border-color: #1684fc;
+        }
+
+        &:focus {
+          background-color: #252626;
+          border-color: #1e98ea;
+          box-shadow: #1e98ea80 0px 0px 6px 0px;
+        }
+
+        &.error {
+          outline-color: #ff0000;
+        }
+      }
+    }
+  }
+}

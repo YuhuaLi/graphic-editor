@@ -37,7 +37,4 @@ export class WidgetButtonComponent extends BaseWidgetContent implements OnInit {
 
   ngOnInit(): void {}
 
-  alert(val: any) {
-    window.alert(val);
-  }
 }

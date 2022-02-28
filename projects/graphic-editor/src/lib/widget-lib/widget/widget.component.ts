@@ -19,11 +19,14 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { takeWhile, throwIfEmpty } from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 import { CLICK_JUDGE_TIME } from '../../const';
 import {
+  ActionType,
   Coordinate,
   Direction,
+  OpenUrlType,
   OperationMode,
   Widget,
   WidgetData,
@@ -188,33 +191,17 @@ export class WidgetComponent
   ) {}
 
   ngOnInit(): void {
-    this.widgetSrv
-      .onDataChange()
-      .pipe(takeWhile(() => this.alive))
-      .subscribe((data) => {
-        this.widgetData = data;
-      });
+    // this.widgetSrv
+    //   .onDataChange()
+    //   .pipe(takeWhile(() => this.alive))
+    //   .subscribe((data) => {
+    //     this.widgetData = data;
+    //   });
   }
 
   ngAfterViewInit(): void {
-    const factory = this.resolver.resolveComponentFactory(
-      this.widget.component
-    );
-    const injector = Injector.create({
-      providers: [{ provide: WidgetService, useValue: this.widgetSrv }],
-    });
-    const component = this.container.createComponent(
-      factory,
-      0,
-      injector
-    ) as ComponentRef<BaseWidgetContent>;
-    component.instance.mode = this.mode;
-    this.contentRef = component;
-    if (this.widgetData) {
-      component.instance.setWidgetData(this.widgetData);
-    } else {
-      this.widgetData = component.instance.widgetData;
-    }
+    this.createContentComponent();
+    this.initializeEvents();
     this.initialized.emit({
       type: this.widget.type,
       style: this.style,
@@ -233,6 +220,57 @@ export class WidgetComponent
     }
     if (changes.style) {
       this.cdr.detectChanges();
+    }
+  }
+
+  createContentComponent(): void {
+    const factory = this.resolver.resolveComponentFactory(
+      this.widget.component
+    );
+    const injector = Injector.create({
+      providers: [{ provide: WidgetService, useValue: this.widgetSrv }],
+    });
+    const component = this.container.createComponent(
+      factory,
+      0,
+      injector
+    ) as ComponentRef<BaseWidgetContent>;
+    component.instance.mode = this.mode;
+    this.contentRef = component;
+    if (this.widgetData) {
+      component.instance.setWidgetData(this.widgetData);
+    } else {
+      this.widgetData = component.instance.widgetData;
+    }
+  }
+
+  initializeEvents(): void {
+    if (
+      this.mode === OperationMode.Production &&
+      this.widgetData?.events?.length
+    ) {
+      for (const listener of this.widgetData.events) {
+        switch (listener.action) {
+          case ActionType.JumpUrl:
+            const url = listener.actionData?.jumpUrl.trimStart().trimEnd();
+            if (url && /^(http|https):\/\//.test(url)) {
+              fromEvent(
+                this.elementRef.nativeElement.firstElementChild,
+                listener.type as string
+              )
+                .pipe(takeWhile(() => this.alive))
+                .subscribe((event) => {
+                  if (
+                    listener.actionData.jumpTarget === OpenUrlType.CurrentWindow
+                  ) {
+                    window.location.href = url;
+                  } else {
+                    window.open(url, '_blank');
+                  }
+                });
+            }
+        }
+      }
     }
   }
 

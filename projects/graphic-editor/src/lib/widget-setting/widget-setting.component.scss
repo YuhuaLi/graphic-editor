@@ -53,6 +53,11 @@
     }
   }
 
+  .content {
+    height: calc(100% - 41px);
+    overflow: auto;
+  }
+
   .name-body {
     padding: 10px 14px;
     width: 230px;

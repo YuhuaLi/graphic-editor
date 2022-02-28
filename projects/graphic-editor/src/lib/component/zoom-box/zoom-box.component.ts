@@ -1,8 +1,8 @@
 import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { ZOOM_RANGE } from '../const';
-import { AbstractValueAccessor } from './abstractvalueaccessor';
+import { ZOOM_RANGE } from '../../const';
+
+import { AbstractValueAccessor } from '../abstractvalueaccessor';
 
 @Component({
   selector: 'lib-zoom-box',

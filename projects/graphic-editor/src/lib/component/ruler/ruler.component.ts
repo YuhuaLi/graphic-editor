@@ -9,7 +9,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { Placement } from '../model';
+import { Placement } from '../../model';
 import ResizeObserver from 'resize-observer-polyfill';
 
 @Component({

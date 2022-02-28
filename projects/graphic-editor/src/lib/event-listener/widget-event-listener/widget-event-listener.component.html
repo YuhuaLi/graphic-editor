@@ -1,5 +1,10 @@
 <div class="btn-wrapper">
-  <a class="create-btn">
+  <a class="create-btn" (click)="addEventListener($event)">
     <span>添加事件</span>
   </a>
+</div>
+<div class="listener-list">
+  <ng-container *ngFor="let listener of ref.instance.widgetData?.events">
+    <lib-event-panel [listener]="listener"></lib-event-panel>
+  </ng-container>
 </div>

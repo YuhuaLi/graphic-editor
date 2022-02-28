@@ -19,11 +19,11 @@ export class WidgetService {
     this.statusSubject$.next(status);
   }
 
-  onDataChange(): Observable<WidgetData> {
-    return this.dataSubject$.asObservable();
-  }
+  // onDataChange(): Observable<WidgetData> {
+  //   return this.dataSubject$.asObservable();
+  // }
 
-  changeData(data: WidgetData): void {
-    this.dataSubject$.next(data);
-  }
+  // changeData(data: WidgetData): void {
+  //   this.dataSubject$.next(data);
+  // }
 }

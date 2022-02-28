@@ -1,0 +1,44 @@
+<div class="panel">
+  <div class="header">
+    <span class="title">事件</span>
+    <span><i class="iconfont icon-delete"></i></span>
+  </div>
+  <div class="general-row">
+    <span class="label">类型</span>
+    <lib-menu
+      class="select"
+      [items]="eventTypeList"
+      [(ngModel)]="listener.type"
+    ></lib-menu>
+  </div>
+  <div class="general-row">
+    <span class="label">行为</span>
+    <lib-menu
+      class="select"
+      [items]="actionTypeList"
+      [(ngModel)]="listener.action"
+      (ngModelChange)="onActionChange($event)"
+    ></lib-menu>
+  </div>
+  <ng-container *ngIf="listener.action === actionType.JumpUrl">
+    <div class="general-row">
+      <span class="label">目标位置</span>
+      <lib-menu
+        class="select"
+        [items]="openUrlTypeList"
+        [(ngModel)]="listener.actionData.jumpTarget"
+      ></lib-menu>
+    </div>
+    <div class="general-row">
+      <span class="label">地址</span>
+    </div>
+    <div class="general-row">
+      <textarea
+        class="input"
+        rows="4"
+        placeholder="输入http或https协议地址"
+        [(ngModel)]="listener.actionData.jumpUrl"
+      ></textarea>
+    </div>
+  </ng-container>
+</div>

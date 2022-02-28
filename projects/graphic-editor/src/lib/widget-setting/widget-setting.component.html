@@ -11,14 +11,16 @@
     </li>
   </ol>
 </div>
-<ng-container *ngIf="navType === 'widget-settings'">
-  <lib-widget-general-setting [ref]="ref"></lib-widget-general-setting>
-  <lib-widget-setting-item
-    *ngFor="let setting of ref.instance.widget.settings"
-    [setting]="setting"
-    [ref]="ref"
-  ></lib-widget-setting-item>
-</ng-container>
-<ng-container *ngIf="navType === 'widget-events'">
-  <lib-widget-event-listener></lib-widget-event-listener>
-</ng-container>
+<div class="content">
+  <ng-container *ngIf="navType === 'widget-settings'">
+    <lib-widget-general-setting [ref]="ref"></lib-widget-general-setting>
+    <lib-widget-setting-item
+      *ngFor="let setting of ref.instance.widget.settings"
+      [setting]="setting"
+      [ref]="ref"
+    ></lib-widget-setting-item>
+  </ng-container>
+  <ng-container *ngIf="navType === 'widget-events'">
+    <lib-widget-event-listener [ref]="ref"></lib-widget-event-listener>
+  </ng-container>
+</div>

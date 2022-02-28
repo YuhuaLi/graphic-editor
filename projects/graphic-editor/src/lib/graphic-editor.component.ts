@@ -4,10 +4,12 @@ import {
   ComponentFactoryResolver,
   ComponentRef,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   Renderer2,
   ViewChild,
   ViewContainerRef,
@@ -34,6 +36,7 @@ export class GraphicEditorComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   @Input() mode: OperationMode = OperationMode.Development;
+  @Output() save = new EventEmitter<Page[]>();
 
   @ViewChild('toolContainer', { read: ViewContainerRef, static: false })
   toolContainer!: ViewContainerRef;
@@ -441,15 +444,18 @@ export class GraphicEditorComponent
     }
   }
 
-  save(): void {
+  saveProject(): void {
     console.log([
       {
+        style: this.currentPage.style,
         widgets: this.widgets.map((widget) => ({
           type: widget.instance.widget.type,
           widgetData: widget.instance.widgetData,
         })),
       },
     ]);
+    console.log(this.pages);
+    this.save.emit(this.pages);
   }
 
   // 通过两矩形中心距离判断是否相交

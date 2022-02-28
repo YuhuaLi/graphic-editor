@@ -6,21 +6,6 @@
   background-color: rgb(54, 55, 56);
   // overflow: hidden;
 
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    background-color: white;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: #333;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: #808080;
-  }
-
   .toolbar {
     z-index: 2000;
     height: 48px;
@@ -329,6 +314,8 @@
         width: 230px;
         border-left: 1px solid #b8bcbf;
         flex: 1;
+        height: 100%;
+        overflow: auto;
       }
     }
   }
@@ -355,5 +342,22 @@
     * {
       pointer-events: none !important;
     }
+  }
+}
+
+:host ::ng-deep {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: white;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #333;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #808080;
   }
 }

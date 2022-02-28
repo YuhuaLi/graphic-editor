@@ -3,14 +3,14 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GraphicEditorComponent } from './graphic-editor.component';
 import { Widget } from './model';
-import { RulerComponent } from './ruler/ruler.component';
+import { RulerComponent } from './component/ruler/ruler.component';
 import { WidgetLibComponent } from './widget-lib/widget-lib.component';
 import { WidgetLibService } from './widget-lib/widget-lib.service';
 import { WidgetTextComponent } from './widget-lib/widget/widget-text/widget-text.component';
 import { WidgetComponent } from './widget-lib/widget/widget.component';
 import { WidgetImgComponent } from './widget-lib/widget/widget-img/widget-img.component';
 import { PageSettingComponent } from './page-setting.component';
-import { ZoomBoxComponent } from './zoom-box/zoom-box.component';
+import { ZoomBoxComponent } from './component/zoom-box/zoom-box.component';
 import { WidgetSettingComponent } from './widget-setting/widget-setting.component';
 import { WidgetGeneralSettingComponent } from './widget-setting/widget-general-setting/widget-general-setting.component';
 import { WidgetSettingItemComponent } from './widget-setting/widget-setting-item/widget-setting-item.component';
@@ -23,6 +23,8 @@ import { AppearanceSettingComponent } from './widget-setting/settings-lib/appear
 import { PageEventListenerComponent } from './event-listener/page-event-listener/page-event-listener.component';
 import { WidgetEventListenerComponent } from './event-listener/widget-event-listener/widget-event-listener.component';
 import { GraphicViewComponent } from './graphic-view.component';
+import { MenuComponent } from './component/menu/menu.component';
+import { EventPanelComponent } from './component/event-panel/event-panel.component';
 
 const WIDGET_COMPONENT = [
   WidgetComponent,
@@ -49,6 +51,8 @@ const WIDGET_SETTING_COMPONENT = [TextSettingComponent, ImgSettingComponent];
     PageEventListenerComponent,
     WidgetEventListenerComponent,
     GraphicViewComponent,
+    MenuComponent,
+    EventPanelComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   exports: [GraphicEditorComponent],
