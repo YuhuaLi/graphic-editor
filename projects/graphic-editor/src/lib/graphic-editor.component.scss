@@ -337,7 +337,7 @@
   .widget-wrapper {
     pointer-events: none !important;
 
-    * {
+    *:not(textarea) {
       pointer-events: none !important;
     }
   }
