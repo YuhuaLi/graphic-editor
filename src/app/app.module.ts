@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EditorComponent } from './editor/editor.component';
 import { TestComponent } from './test/test.component';
-import { GraphicEditorModule, WidgetCategory, WIDGET_LIST, WIDGET_SETTING_LIST } from 'graphic-editor';
+import { GraphicEditorModule, WidgetCategory, WIDGET_LIST, WIDGET_SETTING_LIST } from 'projects/graphic-editor/src/public-api';
 
 
 const arr = [
