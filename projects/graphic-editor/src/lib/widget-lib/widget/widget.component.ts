@@ -278,14 +278,15 @@ export class WidgetComponent
     event.stopPropagation();
     this.tempMousePos = { x: event.clientX, y: event.clientY };
     this.setSelected(event.ctrlKey);
+    this.renderer2.addClass(
+      document.body.querySelector('lib-graphic-editor'),
+      'operation'
+    );
     if (!this.isLocked) {
       this.timeoutId = setTimeout(() => {
         this.setStatus(WidgetStatus.Drag);
         this.renderer2.setStyle(document.body, 'cursor', 'move');
-        this.renderer2.addClass(
-          document.body.querySelector('lib-graphic-editor'),
-          'operation'
-        );
+
         document.addEventListener('mousemove', this.onMouseMove);
       }, CLICK_JUDGE_TIME);
     }
