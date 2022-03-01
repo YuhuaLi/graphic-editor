@@ -254,14 +254,22 @@ export class GraphicEditorComponent
     this.pages.push(page);
   }
 
-  selectPage(page: Page, event: MouseEvent): void {
+  deletePage(page: Page, event: MouseEvent): void {
+    event.stopPropagation();
+    const index = this.pages.findIndex((p) => p === page);
+    if (index > -1) {
+      this.pages.splice(index, 1);
+    }
+    if (page.selected) {
+      this.pages[0].selected = true;
+    }
+    this.selectPage(this.pages[0]);
+  }
+
+  selectPage(page: Page): void {
     this.currentPage.selected = false;
     page.selected = true;
-    if (event.ctrlKey) {
-      this.selectedPages.push(page);
-    } else {
-      this.selectedPages = [page];
-    }
+    this.selectedPages = [page];
     this.widgets = [];
     this.compAreaContainer.clear();
     for (const widgetItem of this.currentPage.widgets || []) {

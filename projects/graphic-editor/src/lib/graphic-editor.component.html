@@ -42,11 +42,17 @@
             [ngClass]="{
               active: page.selected
             }"
-            *ngFor="let page of pages; let i = index"
-            (click)="selectPage(page, $event)"
+            *ngFor="let page of pages"
+            (click)="selectPage(page)"
           >
             <i class="iconfont icon-yemian"></i>
-            <span class="page-name">{{ "页面" + (i + 1) }}</span>
+            <span class="page-name">{{ "页面" }}</span>
+            <span class="actions" *ngIf="pages.length > 1">
+              <i
+                class="iconfont action icon-delete"
+                (click)="deletePage(page, $event)"
+              ></i
+            ></span>
           </li>
         </ul>
       </div>
