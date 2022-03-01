@@ -1,0 +1,28 @@
+<div class="wrapper">
+  <div class="select" (click)="toggleExpand($event)">
+    <span>{{ selectedItem?.name || "请选择..." }}</span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="zoom-arrow"
+      viewBox="0 0 10 10"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M1.293 4.293a1 1 0 011.414 0L4.83 6.414l2.12-2.121a1 1 0 011.415 1.414L5.536 8.536a1 1 0 01-1.415 0L1.293 5.707a1 1 0 010-1.414z"
+      ></path>
+    </svg>
+  </div>
+  <ul
+    class="menu-content"
+    *ngIf="isExpand"
+    [ngStyle]="{ 'left.px': menuLeft, 'top.px': menuTop }"
+  >
+    <li class="menu-item" *ngFor="let item of items" (click)="selectItem(item)">
+      <span class="check-icon"
+        ><i *ngIf="item === selectedItem" class="iconfont icon-check"></i
+      ></span>
+      <span>{{ item.name }}</span>
+    </li>
+  </ul>
+</div>

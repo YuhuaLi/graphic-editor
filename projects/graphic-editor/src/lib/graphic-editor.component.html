@@ -51,6 +51,7 @@
             (click)="selectWidget($event, widget)"
             (mouseenter)="widget.instance.setHighlight(true)"
             (mouseleave)="widget.instance.setHighlight(false)"
+            (contextmenu)="onWidgetContextMenu($event, widget)"
           >
             <i class="iconfont {{ widget.instance.widget.icon }}"></i>
             <span class="widget-name">{{ widget.instance.widget.name }}</span>
@@ -206,3 +207,4 @@
 <div class="content" *ngIf="mode === OPERATION_MODE.Production">
   <lib-graphic-view [page]="currentPage"></lib-graphic-view>
 </div>
+<lib-menu #menu (selectItem)="onSelectMenuItem($event)"></lib-menu>

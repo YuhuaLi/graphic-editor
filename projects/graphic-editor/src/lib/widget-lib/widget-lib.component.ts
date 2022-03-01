@@ -80,14 +80,14 @@ export class WidgetLibComponent implements OnInit {
     event.dataTransfer?.setData('widgetType', widget.type);
     this.renderer2.addClass(
       document.body.querySelector('lib-graphic-editor'),
-      'operation'
+      'dragging'
     );
   }
 
   onWidgetDragEnd(event: DragEvent): void {
     this.renderer2.removeClass(
       document.body.querySelector('lib-graphic-editor'),
-      'operation'
+      'dragging'
     );
   }
 }

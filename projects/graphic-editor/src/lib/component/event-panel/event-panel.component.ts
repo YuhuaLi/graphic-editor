@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ACTION_TYPE_LIST,
   EVENT_TYPE_LIST,
@@ -14,6 +14,7 @@ import { EventListener, OpenUrlType } from '../../type';
 })
 export class EventPanelComponent implements OnInit {
   @Input() listener!: EventListener;
+  @Output() delete = new EventEmitter<any>();
 
   eventTypeList = EVENT_TYPE_LIST;
   actionTypeList = ACTION_TYPE_LIST;
@@ -38,5 +39,9 @@ export class EventPanelComponent implements OnInit {
     this.listener.actionData.jumpUrl = (
       event.target as HTMLTextAreaElement
     ).value;
+  }
+
+  deleteListener(): void {
+    this.delete.emit(this.listener);
   }
 }

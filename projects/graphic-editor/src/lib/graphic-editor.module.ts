@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GraphicEditorComponent } from './graphic-editor.component';
-import { Widget } from './type';
+import { Widget, WidgetSetting } from './type';
 import { RulerComponent } from './component/ruler/ruler.component';
 import { WidgetLibComponent } from './widget-lib/widget-lib.component';
 import { WidgetLibService } from './widget-lib/widget-lib.service';
@@ -17,14 +17,17 @@ import { WidgetSettingItemComponent } from './widget-setting/widget-setting-item
 import { TextSettingComponent } from './widget-setting/settings-lib/text-setting/text-setting.component';
 import { WidgetButtonComponent } from './widget-lib/widget/widget-button/widget-button.component';
 import { ImgSettingComponent } from './widget-setting/settings-lib/img-setting/img-setting.component';
-import { WIDGET_LIST } from './injection-token';
+import { WIDGET_LIST, WIDGET_SETTING_LIST } from './injection-token';
 import { WidgetSettingService } from './widget-setting/widget-setting.service';
 import { AppearanceSettingComponent } from './widget-setting/settings-lib/appearance-setting/appearance-setting.component';
 import { PageEventListenerComponent } from './event-listener/page-event-listener/page-event-listener.component';
 import { WidgetEventListenerComponent } from './event-listener/widget-event-listener/widget-event-listener.component';
 import { GraphicViewComponent } from './graphic-view.component';
-import { MenuComponent } from './component/menu/menu.component';
+import { SelectComponent } from './component/select/select.component';
 import { EventPanelComponent } from './component/event-panel/event-panel.component';
+import { WidgetLinkAreaComponent } from './widget-lib/widget/widget-link-area/widget-link-area.component';
+import { RouterModule } from '@angular/router';
+import { MenuComponent } from './component/menu/menu.component';
 
 const WIDGET_COMPONENT = [
   WidgetComponent,
@@ -51,17 +54,20 @@ const WIDGET_SETTING_COMPONENT = [TextSettingComponent, ImgSettingComponent];
     PageEventListenerComponent,
     WidgetEventListenerComponent,
     GraphicViewComponent,
-    MenuComponent,
+    SelectComponent,
     EventPanelComponent,
+    WidgetLinkAreaComponent,
+    MenuComponent,
   ],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   exports: [GraphicEditorComponent],
   // entryComponents: [...WIDGET_COMPONENT],
   providers: [WidgetLibService, WidgetSettingService],
 })
 export class GraphicEditorModule {
   static forRoot(
-    widgetList: Widget[]
+    widgetList: Widget[],
+    widgetSettingList: WidgetSetting[]
   ): ModuleWithProviders<GraphicEditorModule> {
     return {
       ngModule: GraphicEditorModule,
@@ -70,6 +76,7 @@ export class GraphicEditorModule {
           provide: WIDGET_LIST,
           useValue: widgetList,
         },
+        { provide: WIDGET_SETTING_LIST, useValue: widgetSettingList },
       ],
     };
   }

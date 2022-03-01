@@ -13,6 +13,7 @@ export class WidgetSettingComponent implements OnInit {
   navItems: NavButton[] = [
     { type: 'widget-settings', name: '属性', isActive: true },
     { type: 'widget-events', name: '事件' },
+    { type: 'widget-data', name: '数据' },
   ];
 
   navType = 'widget-settings';

@@ -1,0 +1,20 @@
+<div
+  class="wrapper"
+  [ngStyle]="{
+    'border-radius': (widgetData.setting?.radius || 0) + 'px',
+    background: !widgetData.setting?.background?.fill
+      ? 'none'
+      : widgetData.setting?.background?.color || '#005096',
+    'border-width.px': !widgetData.setting?.border?.fill
+      ? 'initial'
+      : widgetData.setting?.border?.width || 1,
+    'border-style': !widgetData.setting?.border?.fill
+      ? 'none'
+      : widgetData.setting.border?.style || 'solid',
+    'border-color': !widgetData.setting?.border?.fill
+      ? 'initial'
+      : widgetData.setting.border?.color || '#005096'
+  }"
+>
+  <router-outlet></router-outlet>
+</div>

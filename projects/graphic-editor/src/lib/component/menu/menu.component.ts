@@ -1,59 +1,61 @@
-import { Component, ElementRef, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
-import { AbstractValueAccessor } from '../abstractvalueaccessor';
+import { MenuItem } from '../../type';
 
 @Component({
   selector: 'lib-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => MenuComponent),
-      multi: true,
-    },
-  ],
 })
-export class MenuComponent
-  extends AbstractValueAccessor
-  implements OnInit, OnDestroy
-{
-  @Input() items: { name: string; value: any }[] = [];
+export class MenuComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() items: MenuItem[] = [];
+  @Output() selectItem = new EventEmitter<MenuItem>();
 
-  selectedItem?: { name: string; value: any };
   isExpand = false;
+  menuTop = 0;
+  menuLeft = 0;
   alive = true;
 
-  set value(val: any) {
-    this.value$ = val;
-    this.selectedItem = this.items.find((item) => item.value === val);
-    this.onChange(val);
-  }
+  constructor() {}
 
-  constructor(private elementRef: ElementRef) {
-    super();
-  }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     fromEvent(document, 'click')
       .pipe(takeWhile(() => this.alive))
-      .subscribe((event: Event) => {
-        if (!this.elementRef.nativeElement.contains(event.target)) {
-          this.isExpand = false;
-        }
-      });
+      .subscribe(() => (this.isExpand = false));
   }
 
-  toggleExpand(event: Event): void {
-    this.isExpand = !this.isExpand;
-  }
-
-  selectItem(item: { name: string; value: any }): void {
-    this.selectedItem = item;
+  selectMenuItem(event: Event, item: MenuItem): void {
+    event.preventDefault();
+    event.stopPropagation();
     this.isExpand = false;
-    this.value = item.value;
+    this.selectItem.emit(item);
+  }
+
+  show(x: number, y: number, options: MenuItem[]): void {
+    this.isExpand = true;
+    this.menuLeft =
+      window.innerWidth > x + 150 + 12 ? x : window.innerWidth - x - 150 - 12;
+    this.menuTop =
+      window.innerHeight > y + this.items.length * 26 + 12
+        ? y
+        : window.innerHeight - y - this.items.length * 26 - 12;
+    this.items = options;
+  }
+
+  hide(): void {
+    this.items = [];
+    this.isExpand = false;
   }
 
   ngOnDestroy(): void {

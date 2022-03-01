@@ -337,7 +337,22 @@
   .widget-wrapper {
     pointer-events: none !important;
 
-    *:not(textarea) {
+    &.dev:not(.selected):hover {
+      border: unset !important;
+      transform: unset !important;
+
+      *:not(textarea) {
+        pointer-events: none !important;
+      }
+    }
+  }
+}
+
+:host.dragging ::ng-deep {
+  .widget-wrapper {
+    pointer-events: none !important;
+
+    * {
       pointer-events: none !important;
     }
   }

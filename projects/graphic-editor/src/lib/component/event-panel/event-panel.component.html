@@ -1,33 +1,33 @@
 <div class="panel">
   <div class="header">
     <span class="title">事件</span>
-    <span><i class="iconfont icon-delete"></i></span>
+    <span class="action" (click)="deleteListener()"><i class="iconfont icon-delete"></i></span>
   </div>
   <div class="general-row">
     <span class="label">类型</span>
-    <lib-menu
+    <lib-select
       class="select"
       [items]="eventTypeList"
       [(ngModel)]="listener.type"
-    ></lib-menu>
+    ></lib-select>
   </div>
   <div class="general-row">
     <span class="label">行为</span>
-    <lib-menu
+    <lib-select
       class="select"
       [items]="actionTypeList"
       [(ngModel)]="listener.action"
       (ngModelChange)="onActionChange($event)"
-    ></lib-menu>
+    ></lib-select>
   </div>
   <ng-container *ngIf="listener.action === actionType.JumpUrl">
     <div class="general-row">
       <span class="label">目标位置</span>
-      <lib-menu
+      <lib-select
         class="select"
         [items]="openUrlTypeList"
         [(ngModel)]="listener.actionData.jumpTarget"
-      ></lib-menu>
+      ></lib-select>
     </div>
     <div class="general-row">
       <span class="label">地址</span>

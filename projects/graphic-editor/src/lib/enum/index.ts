@@ -7,3 +7,4 @@ export * from './widget-category.enum';
 export * from './keyboard-code.enum';
 export * from './event-type.enum';
 export * from './action-type.enum';
+export * from './menu-operation.enum';

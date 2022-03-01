@@ -9,6 +9,7 @@ export * from './widget-setting.type';
 export * from './widget-data.type';
 export * from './event-listener.type';
 export * from './open-url-type';
+export * from './menu-item.type';
 
 // interface
 export * from './widget-content.interface';

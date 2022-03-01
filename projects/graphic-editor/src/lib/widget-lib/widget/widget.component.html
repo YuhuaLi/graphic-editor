@@ -11,12 +11,12 @@
     'top.px': style.top,
     'left.px': style.left,
     'width.px': style.width,
-    'height.px': style.height,
-    'z-index': style.index
+    'height.px': style.height
   }"
   (mousedown)="onMouseDown($event)"
   (mouseenter)="isHover = true"
   (mouseleave)="isHover = false"
+  (contextmenu)="onContextMenu($event)"
 >
   <div class="widget">
     <ng-template></ng-template>

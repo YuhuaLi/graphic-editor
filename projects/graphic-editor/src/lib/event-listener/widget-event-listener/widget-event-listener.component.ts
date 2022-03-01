@@ -1,5 +1,6 @@
 import { Component, ComponentRef, Input, OnInit } from '@angular/core';
 import { EventType } from '../../enum';
+import { EventListener } from '../../type';
 import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 
 @Component({
@@ -19,6 +20,12 @@ export class WidgetEventListenerComponent implements OnInit {
         ...(this.ref.instance.widgetData.events || []),
         { type: EventType.Click, actionData: {} },
       ];
+    }
+  }
+
+  deleteEventListener(index: number): void {
+    if (this.ref.instance.widgetData) {
+      this.ref.instance.widgetData.events?.splice(index, 1);
     }
   }
 }

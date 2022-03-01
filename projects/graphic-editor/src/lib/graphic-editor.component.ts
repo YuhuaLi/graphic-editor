@@ -15,16 +15,14 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { WidgetLibComponent } from './widget-lib/widget-lib.component';
-import {
-  NavButton,
-  Page,
-  Coordinate,
-} from './type';
+import { NavButton, Page, Coordinate, MenuItem } from './type';
 import { WidgetLibService } from './widget-lib/widget-lib.service';
 import { WidgetComponent } from './widget-lib/widget/widget.component';
 import { takeWhile } from 'rxjs/operators';
-import { ZOOM_RANGE } from './const';
-import { KeyboardCode, OperationMode } from './enum';
+import { WIDGET_MENU, ZOOM_RANGE } from './const';
+import { KeyboardCode, MenuOperation, OperationMode } from './enum';
+import { MenuComponent } from './component/menu/menu.component';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'lib-graphic-editor',
@@ -44,6 +42,7 @@ export class GraphicEditorComponent
   @ViewChild('sectionArea', { read: ElementRef, static: true })
   selectionArea?: ElementRef;
   @ViewChild('compArea', { static: true }) compArea!: ElementRef;
+  @ViewChild('menu') menu!: MenuComponent;
 
   alive = true;
 
@@ -309,6 +308,7 @@ export class GraphicEditorComponent
    * 拖放新控件
    */
   onCompAreaDrop(event: DragEvent): void {
+    console.log(event.target);
     event.preventDefault();
     const widgetType = event.dataTransfer?.getData('widgetType');
     if (widgetType) {
@@ -350,7 +350,11 @@ export class GraphicEditorComponent
               widgetData,
             });
           });
-
+        comp.instance.contextMenu
+          .pipe(takeWhile(() => this.alive))
+          .subscribe((ev: MouseEvent) => {
+            this.onWidgetContextMenu(ev, comp);
+          });
         comp.instance.setSelected();
         comp.instance.setZoom(this.zoom);
         this.widgets.unshift(comp);
@@ -358,8 +362,30 @@ export class GraphicEditorComponent
     }
   }
 
+  onWidgetContextMenu(
+    event: MouseEvent,
+    comp: ComponentRef<WidgetComponent>
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+    comp.instance.setSelected(false);
+    this.showMenu(event.clientX, event.clientY, WIDGET_MENU);
+  }
+
   selectWidget(event: MouseEvent, ref: ComponentRef<WidgetComponent>): void {
     ref.instance.setSelected(event.ctrlKey);
+  }
+
+  showMenu(
+    x: number,
+    y: number,
+    options: { name: string; value: any }[]
+  ): void {
+    this.menu.show(x, y, options);
+  }
+
+  onSelectMenuItem(event: MenuItem): void {
+    this.triggerMenuOperation(event.value);
   }
 
   deleteWidget(...refs: ComponentRef<WidgetComponent>[]): void {
@@ -476,6 +502,85 @@ export class GraphicEditorComponent
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.initSelectionArea();
+  }
+
+  triggerMenuOperation(operation: MenuOperation): void {
+    let arr: any = Array.from({ length: this.widgets.length });
+    this.selectedWidgets.forEach(
+      (ref) => (arr[ref.instance.style.index - 1] = ref)
+    );
+    switch (operation) {
+      case MenuOperation.MoveUp:
+        while (arr[arr.length - 1] && arr.length) {
+          arr.pop();
+        }
+        arr = arr.filter((ref: any) => !!ref).reverse();
+        for (const ref of arr) {
+          const zIndex = ref.instance.style.index;
+          this.widgets
+            .find((item) => item.instance.style.index === zIndex + 1)
+            ?.instance.setZIndex(zIndex);
+          ref.instance.setZIndex(zIndex + 1);
+        }
+
+        break;
+      case MenuOperation.MoveDown:
+        while (arr[0] && arr.length) {
+          arr.shift();
+        }
+        arr = arr.filter((ref: any) => !!ref);
+        for (const ref of arr) {
+          const zIndex = ref.instance.style.index;
+          this.widgets
+            .find((item) => item.instance.style.index === zIndex - 1)
+            ?.instance.setZIndex(zIndex);
+          ref.instance.setZIndex(zIndex - 1);
+        }
+        break;
+      case MenuOperation.SetTop:
+        while (arr[arr.length - 1] && arr.length) {
+          arr.pop();
+        }
+        arr = arr
+          .map(
+            (ref: any, idx: number) =>
+              !ref &&
+              this.widgets.find((item) => item.instance.style.index === idx + 1)
+          )
+          .filter((item: any) => !!item);
+        arr.forEach((ref: any, idx: number) => {
+          ref.instance.setZIndex(idx + 1);
+        });
+        arr = this.selectedWidgets
+          .sort((ref) => ref.instance.style.index)
+          .reverse();
+        arr.forEach((ref: any, idx: number) => {
+          ref.instance.setZIndex(this.widgets.length - idx);
+        });
+        break;
+      case MenuOperation.SetBottom:
+        while (arr[0] && arr.length) {
+          arr.shift();
+        }
+        arr = arr
+          .map(
+            (ref: any, idx: number) =>
+              !ref &&
+              this.widgets.find((item) => item.instance.style.index === idx + 1)
+          )
+          .filter((item: any) => !!item);
+        arr.forEach((ref: any, idx: number) => {
+          ref.instance.setZIndex(idx + this.selectedWidgets.length + 1);
+        });
+        this.selectedWidgets
+          .sort((ref) => ref.instance.style.index)
+          .forEach((ref: any, idx: number) => {
+            ref.instance.setZIndex(idx + 1);
+          });
+        break;
+      default:
+        break;
+    }
   }
 
   ngOnDestroy(): void {

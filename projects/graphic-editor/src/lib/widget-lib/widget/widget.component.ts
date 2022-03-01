@@ -54,6 +54,7 @@ export class WidgetComponent
 
   @Output() selectWidget = new EventEmitter<any>();
   @Output() initialized = new EventEmitter<any>();
+  @Output() contextMenu = new EventEmitter<any>();
 
   widgetData?: WidgetData;
 
@@ -271,6 +272,12 @@ export class WidgetComponent
     }
   }
 
+  onContextMenu(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.contextMenu.emit(event);
+  }
+
   onMouseDown(event: MouseEvent): void {
     if (this.mode === OperationMode.Production) {
       return;
@@ -303,7 +310,7 @@ export class WidgetComponent
     }
 
     this.tempMousePos = { x: event.clientX, y: event.clientY };
-    this.selectWidget.emit(event); // 清除其他选中
+    this.setSelected(false); // 清除其他选中
     this.renderer2.addClass(
       document.body.querySelector('lib-graphic-editor'),
       'operation'
@@ -550,6 +557,10 @@ export class WidgetComponent
 
   setZoom(zoom: number): void {
     this.zoom = zoom;
+  }
+
+  setZIndex(index: number): void {
+    this.style.index = index;
   }
 
   ngOnDestroy(): void {
