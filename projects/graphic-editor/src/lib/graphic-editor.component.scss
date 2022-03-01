@@ -69,37 +69,54 @@
       user-select: none;
       position: relative;
       border-right: 1px solid #b8bcbf;
+      color: #f2f4f5;
+      font-size: 12px;
 
       .left-side-panel {
         width: 100%;
         flex: 1;
         border-bottom: 1px solid #363738;
-        max-height: 50%;
+        max-height: calc(50% - 1px);
 
         .panel-header {
           display: flex;
           -webkit-box-align: center;
           align-items: center;
+          justify-content: space-between;
           flex-shrink: 0;
           height: 32px;
           padding: 0px 8px;
           border-bottom: 1px solid #363738;
 
-          .header-title {
-            max-width: 130px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 12px;
-            font-weight: 500;
-            color: #f2f4f5;
-            user-select: none;
-          }
+          span {
+            display: flex;
+            align-items: center;
 
-          .nav-icon {
-            margin-right: 10px;
-            color: #999999;
-            fill: currentColor;
+            .header-title {
+              max-width: 130px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              font-size: 12px;
+              font-weight: 500;
+              color: #f2f4f5;
+              user-select: none;
+            }
+
+            .action {
+              cursor: pointer;
+              padding: 3px;
+
+              &:hover {
+                background-color: #454647;
+              }
+            }
+
+            .nav-icon {
+              margin-right: 10px;
+              color: #999999;
+              fill: currentColor;
+            }
           }
         }
 
@@ -107,10 +124,12 @@
           overflow-y: auto;
           height: calc(100% - 35px);
 
-          .widget-list {
+          .widget-list,
+          .page-list {
             list-style: none;
 
-            .widget-list-item {
+            .widget-list-item,
+            .page-list-item {
               display: flex;
               align-items: center;
               height: 32px;
@@ -119,7 +138,8 @@
               font-size: 12px;
               cursor: pointer;
 
-              .widget-name {
+              .widget-name,
+              .page-name {
                 padding-left: 6px;
                 overflow: hidden;
                 text-overflow: ellipsis;

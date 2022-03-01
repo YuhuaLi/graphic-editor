@@ -45,11 +45,11 @@ export class MenuComponent implements OnInit, AfterViewInit, OnDestroy {
   show(x: number, y: number, options: MenuItem[]): void {
     this.isExpand = true;
     this.menuLeft =
-      window.innerWidth > x + 150 + 12 ? x : window.innerWidth - x - 150 - 12;
+      window.innerWidth > x + 150 + 12 ? x : window.innerWidth - 150 - 12;
     this.menuTop =
       window.innerHeight > y + this.items.length * 26 + 12
         ? y
-        : window.innerHeight - y - this.items.length * 26 - 12;
+        : window.innerHeight - this.items.length * 26 - 12;
     this.items = options;
   }
 

@@ -16,6 +16,7 @@ export class WidgetTextComponent
   implements OnInit, OnDestroy
 {
   alive = true;
+  OPERATION_MODE = OperationMode;
   // contenteditable = false;
   // lines = [];
 

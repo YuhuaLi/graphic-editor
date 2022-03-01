@@ -25,19 +25,38 @@
   <div class="left-side" [ngStyle]="{ 'width.px': leftWidth }">
     <div class="left-side-panel">
       <div class="panel-header">
-        <i class="nav-icon iconfont icon-sucaiku"></i>
-        <div class="header-title">页面</div>
+        <span>
+          <i class="nav-icon iconfont icon-sucaiku"></i>
+          <div class="header-title">页面</div>
+        </span>
+        <span>
+          <span class="action" (click)="addPage()"
+            ><i class="iconfont icon-tianjia"></i
+          ></span>
+        </span>
       </div>
       <div class="panel-body">
         <ul class="page-list">
-          <li class="page-list-item"></li>
+          <li
+            class="page-list-item"
+            [ngClass]="{
+              active: page.selected
+            }"
+            *ngFor="let page of pages; let i = index"
+            (click)="selectPage(page, $event)"
+          >
+            <i class="iconfont icon-yemian"></i>
+            <span class="page-name">{{ "页面" + (i + 1) }}</span>
+          </li>
         </ul>
       </div>
     </div>
     <div class="left-side-panel">
       <div class="panel-header">
-        <i class="nav-icon iconfont icon-sucaiku"></i>
-        <div class="header-title">元素</div>
+        <span>
+          <i class="nav-icon iconfont icon-sucaiku"></i>
+          <div class="header-title">元素</div>
+        </span>
       </div>
       <div class="panel-body">
         <ul class="widget-list">

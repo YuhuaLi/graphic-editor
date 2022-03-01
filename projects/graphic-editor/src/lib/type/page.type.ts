@@ -5,4 +5,5 @@ export type Page = {
   widgets?: { type: string; style: WidgetStyle; widgetData?: WidgetData }[];
   // _widgetRefs?: ComponentRef<WidgetComponent>[];
   subPage?: Page[];
+  selected?: boolean;
 };

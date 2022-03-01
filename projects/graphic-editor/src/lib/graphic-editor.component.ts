@@ -1,3 +1,4 @@
+import { WidgetStyle } from './type/widget-style.type';
 import {
   AfterViewInit,
   Component,
@@ -15,7 +16,14 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { WidgetLibComponent } from './widget-lib/widget-lib.component';
-import { NavButton, Page, Coordinate, MenuItem } from './type';
+import {
+  NavButton,
+  Page,
+  Coordinate,
+  MenuItem,
+  Widget,
+  WidgetData,
+} from './type';
 import { WidgetLibService } from './widget-lib/widget-lib.service';
 import { WidgetComponent } from './widget-lib/widget/widget.component';
 import { takeWhile } from 'rxjs/operators';
@@ -70,7 +78,7 @@ export class GraphicEditorComponent
   pages: Page[] = [];
   /** 当前页面 */
   get currentPage(): Page {
-    return this.selectedPages[0];
+    return this.pages.find((page) => !!page.selected) || this.selectedPages[0];
   }
   /** 鼠标点击标志，用于绘制选中区域 */
   isMouseDown = false;
@@ -95,25 +103,33 @@ export class GraphicEditorComponent
       case KeyboardCode.ArrowLeft:
         event.preventDefault();
         this.selectedWidgets.forEach((ref) => {
-          ref.instance.style.left -= 1;
+          if (!ref.instance.isLocked) {
+            ref.instance.style.left -= 1;
+          }
         });
         break;
       case KeyboardCode.ArrowUp:
         event.preventDefault();
         this.selectedWidgets.forEach((ref) => {
-          ref.instance.style.top -= 1;
+          if (!ref.instance.isLocked) {
+            ref.instance.style.top -= 1;
+          }
         });
         break;
       case KeyboardCode.ArrowRight:
         event.preventDefault();
         this.selectedWidgets.forEach((ref) => {
-          ref.instance.style.left += 1;
+          if (!ref.instance.isLocked) {
+            ref.instance.style.left += 1;
+          }
         });
         break;
       case KeyboardCode.ArrowDown:
         event.preventDefault();
         this.selectedWidgets.forEach((ref) => {
-          ref.instance.style.top += 1;
+          if (!ref.instance.isLocked) {
+            ref.instance.style.top += 1;
+          }
         });
         break;
       case KeyboardCode.NumpadAdd:
@@ -207,6 +223,7 @@ export class GraphicEditorComponent
     const page = {
       style: { width: 1920, height: 1080 },
       widgets: [],
+      selected: true,
     };
     this.pages.push(page);
     this.selectedPages.unshift(page);
@@ -221,7 +238,47 @@ export class GraphicEditorComponent
     this.compAreaClientBoundingRect =
       this.compArea.nativeElement.getBoundingClientRect();
     this.initSelectionArea();
+    fromEvent(this.ref.nativeElement, 'contextmenu')
+      .pipe(takeWhile(() => this.alive))
+      .subscribe((event: any) => {
+        event.preventDefault();
+        event.stopPropagation();
+      });
   }
+
+  addPage(): void {
+    const page = {
+      style: { width: 1920, height: 1080 },
+      widgets: [],
+    };
+    this.pages.push(page);
+  }
+
+  selectPage(page: Page, event: MouseEvent): void {
+    this.currentPage.selected = false;
+    page.selected = true;
+    if (event.ctrlKey) {
+      this.selectedPages.push(page);
+    } else {
+      this.selectedPages = [page];
+    }
+    this.widgets = [];
+    this.compAreaContainer.clear();
+    for (const widgetItem of this.currentPage.widgets || []) {
+      const type = widgetItem.type;
+      const widget = this.widgetLibSrv.getWidgetByType(type);
+      if (widget) {
+        const comp = this.createWidget(
+          widget,
+          widgetItem.style,
+          widgetItem.widgetData
+        );
+        this.widgets.unshift(comp);
+      }
+    }
+  }
+
+  renderPage(page: Page): void {}
 
   initSelectionArea(): void {
     if (this.selectionArea) {
@@ -277,7 +334,6 @@ export class GraphicEditorComponent
 
   onResizeLeftSideStart(event: MouseEvent): void {
     this.tempMousePos = { x: event.pageX, y: event.pageY };
-    console.log(this.tempMousePos);
     event.preventDefault();
     event.stopPropagation();
     this.isResizeStart = true;
@@ -308,36 +364,23 @@ export class GraphicEditorComponent
    * 拖放新控件
    */
   onCompAreaDrop(event: DragEvent): void {
-    console.log(event.target);
     event.preventDefault();
     const widgetType = event.dataTransfer?.getData('widgetType');
     if (widgetType) {
       const widget = this.widgetLibSrv.getWidgetByType(widgetType);
       if (widget) {
-        const factory = this.cfr.resolveComponentFactory(WidgetComponent);
-        const comp = this.compAreaContainer.createComponent(factory);
         const width = widget.width || 100;
         const height = widget.height || 100;
         const left = event.offsetX - width / 2;
         const top = event.offsetY - height / 2;
         const index = this.widgets.length + 1;
-        comp.instance.widget = widget;
-        comp.instance.style = { left, top, width, height, index };
-        comp.instance.mode = this.mode;
-        comp.instance.selectWidget
-          .pipe(takeWhile(() => this.alive))
-          .subscribe(({ multi }) => {
-            if (multi && !this.selectedWidgets.includes(comp)) {
-              this.selectedWidgets.push(comp);
-            } else {
-              this.selectedWidgets.forEach((item) => {
-                if (item !== comp) {
-                  item.instance.resetStatus();
-                }
-              });
-              this.selectedWidgets.splice(0, this.selectedWidgets.length, comp);
-            }
-          });
+        const comp = this.createWidget(widget, {
+          left,
+          top,
+          width,
+          height,
+          index,
+        });
         comp.instance.initialized
           .pipe(takeWhile(() => this.alive))
           .subscribe(({ type, style, widgetData }) => {
@@ -350,16 +393,48 @@ export class GraphicEditorComponent
               widgetData,
             });
           });
-        comp.instance.contextMenu
-          .pipe(takeWhile(() => this.alive))
-          .subscribe((ev: MouseEvent) => {
-            this.onWidgetContextMenu(ev, comp);
-          });
         comp.instance.setSelected();
-        comp.instance.setZoom(this.zoom);
         this.widgets.unshift(comp);
       }
     }
+  }
+
+  createWidget(
+    widget: Widget,
+    widgetStyle: WidgetStyle,
+    widgetData?: WidgetData
+  ): ComponentRef<WidgetComponent> {
+    const factory = this.cfr.resolveComponentFactory(WidgetComponent);
+    const comp = this.compAreaContainer.createComponent(factory);
+    comp.instance.widget = widget;
+    comp.instance.style = widgetStyle;
+    if (widgetData) {
+      comp.instance.widgetData = widgetData;
+    }
+    comp.instance.mode = this.mode;
+    comp.instance.selectWidget
+      .pipe(takeWhile(() => this.alive))
+      .subscribe(({ multi }) => {
+        if (multi && !this.selectedWidgets.includes(comp)) {
+          this.selectedWidgets.push(comp);
+        } else {
+          this.selectedWidgets.forEach((item) => {
+            if (item !== comp) {
+              item.instance.resetStatus();
+            }
+          });
+          this.selectedWidgets.splice(0, this.selectedWidgets.length, comp);
+        }
+      });
+
+    comp.instance.contextMenu
+      .pipe(takeWhile(() => this.alive))
+      .subscribe((ev: MouseEvent) => {
+        this.onWidgetContextMenu(ev, comp);
+      });
+    comp.instance.setZoom(this.zoom);
+
+    return comp;
   }
 
   onWidgetContextMenu(
@@ -395,6 +470,11 @@ export class GraphicEditorComponent
       ref.destroy();
       index = this.widgets.findIndex((item) => item === ref);
       this.widgets.splice(index, 1);
+      this.currentPage.widgets?.splice(index, 1);
+    });
+    const arr = this.widgets.sort((widget) => widget.instance.style.index);
+    arr.forEach((widget, idx) => {
+      widget.instance.style.index = idx + 1;
     });
   }
 

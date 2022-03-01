@@ -23,5 +23,5 @@
   [ngModel]="widgetData.setting?.text"
   (ngModelChange)="onTextChange($event)"
   (mousedown)="!readonly && $event.stopPropagation()"
-  placeholder="双击编辑文本"
+  [placeholder]="mode === OPERATION_MODE.Production ? '' : '双击编辑文本'"
 ></textarea>
