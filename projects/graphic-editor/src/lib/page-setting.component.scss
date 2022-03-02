@@ -67,6 +67,7 @@
   }
 
   .general-panel {
+    border-top: 1px solid #4f5052;
     padding: 10px 10px;
   }
 
@@ -123,6 +124,34 @@
       input[type="number"] {
         -moz-appearance: textfield;
       }
+
+      &.color-picker {
+        padding: 0;
+        flex: 0 0 16px;
+        height: 16px;
+        margin-right: 12px;
+        cursor: default;
+
+        input[type="color"] {
+          cursor: pointer;
+          width: 16px;
+          height: 16px;
+          margin: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+          padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+          border: 0;
+        }
+      }
+    }
+
+    .opacity-range {
+      width: 80px;
+      margin-left: 20px;
     }
 
     label.checkbox {

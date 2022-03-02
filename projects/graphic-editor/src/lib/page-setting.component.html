@@ -25,6 +25,25 @@
 </div>
 <div class="general-panel">
   <div class="general-row">
+    <label class="general-input color-picker">
+      <input
+        type="color"
+        [ngModel]="color"
+        (ngModelChange)="onBackgroundColorChange($event)"
+      />
+    </label>
+    <span>背景颜色</span>
+    <input
+      class="opacity-range"
+      type="range"
+      [ngModel]="opacity"
+      (ngModelChange)="onOpacityChange($event)"
+      min="0"
+      max="1"
+      step="0.1"
+    />
+  </div>
+  <div class="general-row">
     <label class="checkbox">
       <input
         type="checkbox"

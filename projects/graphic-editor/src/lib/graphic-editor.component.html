@@ -141,7 +141,10 @@
         [attr.width]="currentPage.style.width"
         [attr.height]="currentPage.style.height"
         xmlns="http://www.w3.org/2000/svg"
-        [ngStyle]="{ transform: 'scale(' + zoom + ')' }"
+        [ngStyle]="{
+          transform: 'scale(' + zoom + ')',
+          'background-color': currentPage?.style.backgroundColor
+        }"
       >
         <defs>
           <pattern

@@ -1,9 +1,10 @@
 <div
-  style="transform-origin: 0 0;"
+  style="transform-origin: 0 0"
   [ngStyle]="{
     'width.px': page?.style?.width,
     'height.px': page?.style?.height,
-    transform: 'scale(' + zoomX + ',' + zoomY + ')'
+    transform: 'scale(' + zoomX + ',' + zoomY + ')',
+    'background-color': page?.style?.backgroundColor
   }"
 >
   <ng-template #container></ng-template>

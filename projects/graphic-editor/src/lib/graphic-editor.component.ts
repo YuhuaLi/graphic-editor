@@ -41,6 +41,7 @@ export class GraphicEditorComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   @Input() mode: OperationMode = OperationMode.Development;
+  @Input() pages: Page[] = [];
   @Output() save = new EventEmitter<Page[]>();
 
   @ViewChild('toolContainer', { read: ViewContainerRef, static: false })
@@ -74,8 +75,8 @@ export class GraphicEditorComponent
   widgets: ComponentRef<WidgetComponent>[] = [];
   /** 选中的页面 */
   selectedPages: Page[] = [];
-  /** 已有的页面 */
-  pages: Page[] = [];
+  // /** 已有的页面 */
+  // pages: Page[] = [];
   /** 当前页面 */
   get currentPage(): Page {
     return this.pages.find((page) => !!page.selected) || this.selectedPages[0];
@@ -219,17 +220,14 @@ export class GraphicEditorComponent
     private widgetLibSrv: WidgetLibService,
     private ref: ElementRef,
     private renderer2: Renderer2
-  ) {
-    const page = {
-      style: { width: 1920, height: 1080 },
-      widgets: [],
-      selected: true,
-    };
-    this.pages.push(page);
-    this.selectedPages.unshift(page);
-  }
+  ) {}
 
   ngOnInit(): void {
+    if (!this.pages.length) {
+      this.addPage();
+      this.pages[0].selected = true;
+    }
+    this.selectedPages.unshift(this.pages[0]);
     document.addEventListener('keydown', this.onKeydown);
   }
 
@@ -248,7 +246,7 @@ export class GraphicEditorComponent
 
   addPage(): void {
     const page = {
-      style: { width: 1920, height: 1080 },
+      style: { width: 1920, height: 1080, backgroundColor: '#ffffff' },
       widgets: [],
     };
     this.pages.push(page);
