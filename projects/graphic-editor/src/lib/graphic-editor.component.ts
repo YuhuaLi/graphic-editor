@@ -1,6 +1,8 @@
 import { WidgetStyle } from './type/widget-style.type';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ComponentFactoryResolver,
   ComponentRef,
@@ -31,6 +33,7 @@ import { WIDGET_MENU, ZOOM_RANGE } from './const';
 import { KeyboardCode, MenuOperation, OperationMode } from './enum';
 import { MenuComponent } from './component/menu/menu.component';
 import { fromEvent } from 'rxjs';
+import { GraphicEditorService } from './graphic-editor.service';
 
 @Component({
   selector: 'lib-graphic-editor',
@@ -41,7 +44,6 @@ export class GraphicEditorComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   @Input() mode: OperationMode = OperationMode.Development;
-  @Input() pages: Page[] = [];
   @Output() save = new EventEmitter<Page[]>();
 
   @ViewChild('toolContainer', { read: ViewContainerRef, static: false })
@@ -73,13 +75,11 @@ export class GraphicEditorComponent
   selectedWidgets: ComponentRef<WidgetComponent>[] = [];
   /** 已创建的部件实例 */
   widgets: ComponentRef<WidgetComponent>[] = [];
-  /** 选中的页面 */
-  selectedPages: Page[] = [];
   // /** 已有的页面 */
-  // pages: Page[] = [];
+  pages: Page[] = [];
   /** 当前页面 */
   get currentPage(): Page {
-    return this.pages.find((page) => !!page.selected) || this.selectedPages[0];
+    return this.pages.find((page) => !!page.selected) || this.pages[0];
   }
   /** 鼠标点击标志，用于绘制选中区域 */
   isMouseDown = false;
@@ -164,7 +164,10 @@ export class GraphicEditorComponent
       const width = Math.abs(offsetX - this.tempMousePos.x);
       const height = Math.abs(offsetY - this.tempMousePos.y);
       for (const widget of this.widgets) {
-        if (this.isWidgetInRect(widget.instance, x, y, width, height)) {
+        if (
+          this.isWidgetInRect(widget.instance, x, y, width, height) &&
+          !widget.instance.isHidden
+        ) {
           widget.instance.setSelected(true);
         }
       }
@@ -187,10 +190,12 @@ export class GraphicEditorComponent
     if (this.isMouseDown && !this.isTicking) {
       let x = event.offsetX;
       let y = event.offsetY;
+      console.log(x, y);
+      console.log(this.scrollLeft);
       if (event.target !== this.compArea.nativeElement) {
         const { left, top } = this.compAreaClientBoundingRect;
-        x = event.clientX - left + this.scrollLeft;
-        y = event.clientY - top + this.scrollTop;
+        x = (event.clientX - left + this.scrollLeft) / this.zoom;
+        y = (event.clientY - top + this.scrollTop) / this.zoom;
       }
       requestAnimationFrame(() => {
         if (this.isMouseDown) {
@@ -219,23 +224,45 @@ export class GraphicEditorComponent
     private cfr: ComponentFactoryResolver,
     private widgetLibSrv: WidgetLibService,
     private ref: ElementRef,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private graphicEditorSrv: GraphicEditorService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    if (!this.pages.length) {
-      this.addPage();
-      this.pages[0].selected = true;
-    }
-    this.selectedPages.unshift(this.pages[0]);
+    // this.pages = [
+    //   {
+    //     id: 1,
+    //     style: { width: 1920, height: 1080, backgroundColor: '#ffffff' },
+    //     widgets: [],
+    //   },
+    // ];
     document.addEventListener('keydown', this.onKeydown);
   }
 
   ngAfterViewInit(): void {
+    this.graphicEditorSrv
+      .getAllPages()
+      .toPromise()
+      .then((pages) => {
+        if (!pages.length) {
+          return this.addPage();
+        } else {
+          this.pages = pages;
+        }
+        return this.pages;
+      })
+      .then((pages) => {
+        pages[0].selected = true;
+        console.log(this.pages);
+        this.initSelectionArea();
+        this.cdr.detectChanges();
+      });
     this.createComponent(this.toolBtns[0].component);
     this.compAreaClientBoundingRect =
       this.compArea.nativeElement.getBoundingClientRect();
-    this.initSelectionArea();
+
+    // this.initSelectionArea();
     fromEvent(this.ref.nativeElement, 'contextmenu')
       .pipe(takeWhile(() => this.alive))
       .subscribe((event: any) => {
@@ -244,30 +271,43 @@ export class GraphicEditorComponent
       });
   }
 
-  addPage(): void {
-    const page = {
-      style: { width: 1920, height: 1080, backgroundColor: '#ffffff' },
-      widgets: [],
-    };
-    this.pages.push(page);
+  addPage(): Promise<Page[]> {
+    // const page = {
+    //   style: { width: 1920, height: 1080, backgroundColor: '#ffffff' },
+    //   widgets: [],
+    // };
+    // this.pages.push(page);
+    return this.graphicEditorSrv
+      .addPage()
+      .toPromise()
+      .then((page) => {
+        this.pages.push(page);
+        return this.pages;
+      });
   }
 
-  deletePage(page: Page, event: MouseEvent): void {
-    event.stopPropagation();
-    const index = this.pages.findIndex((p) => p === page);
-    if (index > -1) {
-      this.pages.splice(index, 1);
-    }
-    if (page.selected) {
-      this.pages[0].selected = true;
-    }
-    this.selectPage(this.pages[0]);
+  deletePage(page: Page): void {
+    this.graphicEditorSrv.deletePage(page).subscribe(() => {
+      const index = this.pages.findIndex((p) => p === page);
+      if (index > -1) {
+        this.pages.splice(index, 1);
+      }
+      if (page.selected) {
+        this.pages[0].selected = true;
+      }
+      this.selectPage(this.pages[0]);
+    });
   }
 
   selectPage(page: Page): void {
-    this.currentPage.selected = false;
+    if (this.currentPage) {
+      this.currentPage.selected = false;
+    }
     page.selected = true;
-    this.selectedPages = [page];
+    this.renderPage(page);
+  }
+
+  renderPage(page: Page): void {
     this.widgets = [];
     this.compAreaContainer.clear();
     for (const widgetItem of this.currentPage.widgets || []) {
@@ -284,14 +324,12 @@ export class GraphicEditorComponent
     }
   }
 
-  renderPage(page: Page): void {}
-
   initSelectionArea(): void {
-    if (this.selectionArea) {
+    if (this.selectionArea && this.currentPage) {
       this.selectionArea.nativeElement.width =
-        this.selectionArea.nativeElement.offsetWidth * this.zoom * this.dpr;
+        this.currentPage.style.width * this.zoom * this.dpr;
       this.selectionArea.nativeElement.height =
-        this.selectionArea.nativeElement.offsetHeight * this.zoom * this.dpr;
+        this.currentPage.style.height * this.zoom * this.dpr;
       this.selectionCtx = this.selectionArea.nativeElement.getContext('2d');
       this.selectionCtx.fillStyle = '#1684fc4d';
       this.selectionCtx.strokeStyle = '#1684fc';
@@ -390,7 +428,7 @@ export class GraphicEditorComponent
         comp.instance.initialized
           .pipe(takeWhile(() => this.alive))
           .subscribe(({ type, style, widgetData }) => {
-            if (!this.currentPage.widgets) {
+            if (!this.currentPage?.widgets) {
               this.currentPage.widgets = [];
             }
             this.currentPage.widgets.unshift({
@@ -436,25 +474,31 @@ export class GraphicEditorComponent
     comp.instance.contextMenu
       .pipe(takeWhile(() => this.alive))
       .subscribe((ev: MouseEvent) => {
-        this.onWidgetContextMenu(ev, comp);
+        this.onWidgetContextMenu({
+          x: ev.clientX,
+          y: ev.clientY,
+          widget: comp,
+        });
       });
     comp.instance.setZoom(this.zoom);
 
     return comp;
   }
 
-  onWidgetContextMenu(
-    event: MouseEvent,
-    comp: ComponentRef<WidgetComponent>
-  ): void {
-    event.preventDefault();
-    event.stopPropagation();
-    comp.instance.setSelected(false);
-    this.showMenu(event.clientX, event.clientY, WIDGET_MENU);
+  onWidgetContextMenu(event: {
+    x: number;
+    y: number;
+    widget: ComponentRef<WidgetComponent>;
+  }): void {
+    event.widget.instance.setSelected(false);
+    this.showMenu(event.x, event.y, WIDGET_MENU);
   }
 
-  selectWidget(event: MouseEvent, ref: ComponentRef<WidgetComponent>): void {
-    ref.instance.setSelected(event.ctrlKey);
+  selectWidget(event: {
+    multi: boolean;
+    widget: ComponentRef<WidgetComponent>;
+  }): void {
+    event.widget.instance.setSelected(event.multi);
   }
 
   showMenu(
@@ -482,20 +526,6 @@ export class GraphicEditorComponent
     arr.forEach((widget, idx) => {
       widget.instance.style.index = idx + 1;
     });
-  }
-
-  togleWidgetLocked(
-    event: MouseEvent,
-    ref: ComponentRef<WidgetComponent>
-  ): void {
-    ref.instance.toggleLocked();
-  }
-
-  toggleWidgetHidden(
-    event: MouseEvent,
-    ref: ComponentRef<WidgetComponent>
-  ): void {
-    ref.instance.toggleHidden();
   }
 
   onSelectRangeStart(event: MouseEvent): void {
@@ -566,6 +596,11 @@ export class GraphicEditorComponent
       },
     ]);
     console.log(this.pages);
+    this.graphicEditorSrv
+      .updatePage(
+        this.pages.map(({ id, style, widgets }) => ({ id, style, widgets }))
+      )
+      .subscribe();
     this.save.emit(this.pages);
   }
 
@@ -587,6 +622,7 @@ export class GraphicEditorComponent
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
+    console.log('resize');
     this.initSelectionArea();
   }
 

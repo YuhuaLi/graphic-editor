@@ -1,0 +1,61 @@
+:host {
+  .page-list {
+    list-style: none;
+
+    .page-list-item {
+      display: flex;
+      align-items: center;
+      height: 32px;
+      color: #f2f4f5;
+      padding: 0 4px 0 19px;
+      font-size: 12px;
+      cursor: pointer;
+
+      .page-name {
+        padding-left: 6px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+      }
+
+      &.active {
+        background-color: #1684fc40;
+      }
+
+      &:hover {
+        &:not(.active) {
+          background-color: #363738;
+        }
+      }
+
+      &:hover .actions {
+        display: flex;
+
+        .action {
+          visibility: visible;
+        }
+      }
+
+      .actions {
+        padding-left: 6px;
+        display: none;
+
+        &.show {
+          display: flex;
+        }
+
+        .action {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 20px;
+          height: 20px;
+          margin-right: 6px;
+          color: #b8bcbf;
+          visibility: hidden;
+        }
+      }
+    }
+  }
+}

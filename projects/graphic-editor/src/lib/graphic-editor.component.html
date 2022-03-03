@@ -36,25 +36,11 @@
         </span>
       </div>
       <div class="panel-body">
-        <ul class="page-list">
-          <li
-            class="page-list-item"
-            [ngClass]="{
-              active: page.selected
-            }"
-            *ngFor="let page of pages"
-            (click)="selectPage(page)"
-          >
-            <i class="iconfont icon-yemian"></i>
-            <span class="page-name">{{ "页面" }}</span>
-            <span class="actions" *ngIf="pages.length > 1">
-              <i
-                class="iconfont action icon-delete"
-                (click)="deletePage(page, $event)"
-              ></i
-            ></span>
-          </li>
-        </ul>
+        <lib-page-list
+          [pages]="pages"
+          (selectPage)="selectPage($event)"
+          (deletePage)="deletePage($event)"
+        ></lib-page-list>
       </div>
     </div>
     <div class="left-side-panel">
@@ -65,50 +51,12 @@
         </span>
       </div>
       <div class="panel-body">
-        <ul class="widget-list">
-          <li
-            [ngClass]="{
-              active: !!widget.instance.status,
-              'widget-hover': widget.instance.isHover
-            }"
-            class="widget-list-item"
-            *ngFor="let widget of widgets"
-            (click)="selectWidget($event, widget)"
-            (mouseenter)="widget.instance.setHighlight(true)"
-            (mouseleave)="widget.instance.setHighlight(false)"
-            (contextmenu)="onWidgetContextMenu($event, widget)"
-          >
-            <i class="iconfont {{ widget.instance.widget.icon }}"></i>
-            <span class="widget-name">{{ widget.instance.widget.name }}</span>
-            <span
-              class="actions"
-              [ngClass]="{
-                show: widget.instance.isLocked || widget.instance.isHidden
-              }"
-            >
-              <i
-                [ngClass]="{
-                  'icon-lock-fill': widget.instance.isLocked,
-                  'icon-unlock-fill': !widget.instance.isLocked
-                }"
-                class="iconfont action"
-                (click)="togleWidgetLocked($event, widget)"
-              ></i>
-              <i
-                [ngClass]="{
-                  'icon-eye1': widget.instance.isHidden,
-                  'icon-eye': !widget.instance.isHidden
-                }"
-                class="iconfont action"
-                (click)="toggleWidgetHidden($event, widget)"
-              ></i>
-              <i
-                class="iconfont icon-delete action"
-                (click)="deleteWidget(widget)"
-              ></i>
-            </span>
-          </li>
-        </ul>
+        <lib-widget-list
+          [widgets]="widgets"
+          (contextMenu)="onWidgetContextMenu($event)"
+          (deleteWidget)="deleteWidget($event)"
+          (selectWidget)="selectWidget($event)"
+        ></lib-widget-list>
       </div>
     </div>
     <div
@@ -138,12 +86,12 @@
       (wheel)="onWheel($event)"
     >
       <svg
-        [attr.width]="currentPage.style.width"
-        [attr.height]="currentPage.style.height"
+        [attr.width]="currentPage?.style?.width || 0"
+        [attr.height]="currentPage?.style?.height || 0"
         xmlns="http://www.w3.org/2000/svg"
         [ngStyle]="{
           transform: 'scale(' + zoom + ')',
-          'background-color': currentPage?.style.backgroundColor
+          'background-color': currentPage?.style?.backgroundColor
         }"
       >
         <defs>
@@ -182,8 +130,8 @@
         id="comp-area"
         class="comp-area"
         [ngStyle]="{
-          'width.px': currentPage.style.width,
-          'height.px': currentPage.style.height,
+          'width.px': currentPage?.style?.width || 0,
+          'height.px': currentPage?.style?.height || 0,
           transform: 'scale(' + zoom + ')'
         }"
         (mousedown)="onSelectRangeStart($event)"
@@ -194,8 +142,8 @@
       </div>
       <canvas
         [ngStyle]="{
-          'width.px': currentPage.style.width,
-          'height.px': currentPage.style.height,
+          'width.px': currentPage?.style?.width || 0,
+          'height.px': currentPage?.style?.height || 0,
           transform: 'scale(' + zoom + ')'
         }"
         class="sectionArea"
@@ -232,7 +180,7 @@
     </div>
   </div>
 </div>
-<div class="content" *ngIf="mode === OPERATION_MODE.Production">
+<div class="content" *ngIf="currentPage && mode === OPERATION_MODE.Production">
   <lib-graphic-view [page]="currentPage"></lib-graphic-view>
 </div>
 <lib-menu #menu (selectItem)="onSelectMenuItem($event)"></lib-menu>

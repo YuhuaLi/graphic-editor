@@ -11,47 +11,49 @@
     </li>
   </ol>
 </div>
-<div class="general-panel">
-  <div class="general-row">
-    <label class="general-input">
-      <span>W</span>
-      <input type="number" [(ngModel)]="page.style.width" />
-    </label>
-    <label class="general-input">
-      <span>H</span>
-      <input type="number" [(ngModel)]="page.style.height" />
-    </label>
+<ng-container *ngIf="page">
+  <div class="general-panel">
+    <div class="general-row">
+      <label class="general-input">
+        <span>W</span>
+        <input type="number" [(ngModel)]="page.style.width" />
+      </label>
+      <label class="general-input">
+        <span>H</span>
+        <input type="number" [(ngModel)]="page.style.height" />
+      </label>
+    </div>
   </div>
-</div>
-<div class="general-panel">
-  <div class="general-row">
-    <label class="general-input color-picker">
+  <div class="general-panel">
+    <div class="general-row">
+      <label class="general-input color-picker">
+        <input
+          type="color"
+          [ngModel]="color"
+          (ngModelChange)="onBackgroundColorChange($event)"
+        />
+      </label>
+      <span>背景颜色</span>
       <input
-        type="color"
-        [ngModel]="color"
-        (ngModelChange)="onBackgroundColorChange($event)"
+        class="opacity-range"
+        type="range"
+        [ngModel]="opacity"
+        (ngModelChange)="onOpacityChange($event)"
+        min="0"
+        max="1"
+        step="0.1"
       />
-    </label>
-    <span>背景颜色</span>
-    <input
-      class="opacity-range"
-      type="range"
-      [ngModel]="opacity"
-      (ngModelChange)="onOpacityChange($event)"
-      min="0"
-      max="1"
-      step="0.1"
-    />
+    </div>
+    <div class="general-row">
+      <label class="checkbox">
+        <input
+          type="checkbox"
+          [ngModel]="page.style.adaptive"
+          (change)="changePageAdaptive($event)"
+        />
+        <span></span>
+      </label>
+      <span>自适应</span>
+    </div>
   </div>
-  <div class="general-row">
-    <label class="checkbox">
-      <input
-        type="checkbox"
-        [ngModel]="page.style.adaptive"
-        (change)="changePageAdaptive($event)"
-      />
-      <span></span>
-    </label>
-    <span>自适应</span>
-  </div>
-</div>
+</ng-container>

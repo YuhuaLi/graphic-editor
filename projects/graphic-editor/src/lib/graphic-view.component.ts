@@ -19,7 +19,7 @@ import { WidgetComponent } from './widget-lib/widget/widget.component';
   styleUrls: ['./graphic-view.component.scss'],
 })
 export class GraphicViewComponent implements OnInit, AfterViewInit {
-  @Input() page: Page = { style: { width: 0, height: 0, backgroundColor: '#ffffff00' } };
+  @Input() page!: Page;
 
   @ViewChild('container', { static: false, read: ViewContainerRef })
   container!: ViewContainerRef;

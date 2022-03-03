@@ -28,6 +28,10 @@ import { EventPanelComponent } from './component/event-panel/event-panel.compone
 import { WidgetLinkAreaComponent } from './widget-lib/widget/widget-link-area/widget-link-area.component';
 import { RouterModule } from '@angular/router';
 import { MenuComponent } from './component/menu/menu.component';
+import { DataSettingComponent } from './data-setting/data-setting.component';
+import { GraphicEditorService } from './graphic-editor.service';
+import { PageListComponent } from './page-list/page-list.component';
+import { WidgetListComponent } from './widget-list/widget-list.component';
 
 const WIDGET_COMPONENT = [
   WidgetComponent,
@@ -58,11 +62,14 @@ const WIDGET_SETTING_COMPONENT = [TextSettingComponent, ImgSettingComponent];
     EventPanelComponent,
     WidgetLinkAreaComponent,
     MenuComponent,
+    DataSettingComponent,
+    PageListComponent,
+    WidgetListComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   exports: [GraphicEditorComponent],
   // entryComponents: [...WIDGET_COMPONENT],
-  providers: [WidgetLibService, WidgetSettingService],
+  providers: [WidgetLibService, WidgetSettingService, GraphicEditorService],
 })
 export class GraphicEditorModule {
   static forRoot(

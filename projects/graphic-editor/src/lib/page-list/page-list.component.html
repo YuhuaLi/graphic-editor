@@ -1,0 +1,20 @@
+<ul class="page-list">
+  <li
+    class="page-list-item"
+    [ngClass]="{
+      active: page.selected
+    }"
+    *ngFor="let page of pages"
+    (click)="onPageSelect(page)"
+  >
+    <i class="iconfont icon-yemian"></i>
+    <span class="page-name">{{ page.name || "页面" + page.id }}</span>
+    <span class="actions" *ngIf="pages.length > 1">
+      <i class="iconfont action icon-delete"></i>
+      <i
+        class="iconfont action icon-delete"
+        (click)="onPageDelete(page, $event)"
+      ></i
+    ></span>
+  </li>
+</ul>

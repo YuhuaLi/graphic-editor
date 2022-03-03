@@ -1,0 +1,44 @@
+<ul class="widget-list">
+  <li
+    [ngClass]="{
+      active: !!widget.instance.status,
+      'widget-hover': widget.instance.isHover
+    }"
+    class="widget-list-item"
+    *ngFor="let widget of widgets"
+    (click)="onWidgetSelect($event, widget)"
+    (mouseenter)="widget.instance.setHighlight(true)"
+    (mouseleave)="widget.instance.setHighlight(false)"
+    (contextmenu)="onWidgetContextMenu($event, widget)"
+  >
+    <i class="iconfont {{ widget.instance.widget.icon }}"></i>
+    <span class="widget-name">{{ widget.instance.widget.name }}</span>
+    <span
+      class="actions"
+      [ngClass]="{
+        show: widget.instance.isLocked || widget.instance.isHidden
+      }"
+    >
+      <i
+        [ngClass]="{
+          'icon-lock-fill': widget.instance.isLocked,
+          'icon-unlock-fill': !widget.instance.isLocked
+        }"
+        class="iconfont action"
+        (click)="togleWidgetLocked(widget)"
+      ></i>
+      <i
+        [ngClass]="{
+          'icon-eye1': widget.instance.isHidden,
+          'icon-eye': !widget.instance.isHidden
+        }"
+        class="iconfont action"
+        (click)="toggleWidgetHidden(widget)"
+      ></i>
+      <i
+        class="iconfont icon-delete action"
+        (click)="onWidgetDelete(widget)"
+      ></i>
+    </span>
+  </li>
+</ul>

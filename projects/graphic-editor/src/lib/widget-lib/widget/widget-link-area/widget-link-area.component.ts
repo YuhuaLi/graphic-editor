@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WidgetData } from '../../../type';
+import { Page, WidgetData } from '../../../type';
 import { AppearanceSetting } from '../../../widget-setting/settings-lib/appearance-setting/appearance-setting.component';
 
 export type LinkAreaWidgetData = WidgetData<AppearanceSetting>;
@@ -10,6 +10,8 @@ export type LinkAreaWidgetData = WidgetData<AppearanceSetting>;
   styleUrls: ['./widget-link-area.component.scss'],
 })
 export class WidgetLinkAreaComponent implements OnInit {
+  page!: Page;
+
   widgetData: LinkAreaWidgetData = {
     setting: {
       background: { fill: true, color: '#efefef' },

@@ -17,6 +17,7 @@ export class PageSettingComponent implements OnInit, OnChanges {
 
   navItems: NavButton[] = [
     { type: 'page-settings', name: '页面设置', isActive: true },
+    { type: 'widget-data', name: '数据' },
   ];
 
   // get color(): string {
@@ -44,21 +45,27 @@ export class PageSettingComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.color = /^#([0-9a-f]{6})|([0-9a-f]{8})$/i.test(
-      changes.page.currentValue.style.backgroundColor
-    )
-      ? changes.page.currentValue.style.backgroundColor.substring(0, 7)
-      : '#ffffff';
-    this.opacity = /^#([0-9a-f]{8})$/i.test(
-      changes.page.currentValue.style.backgroundColor
-    )
-      ? +(
-          parseInt(
-            changes.page.currentValue.style.backgroundColor.substring(7, 9),
-            16
-          ) / 255
-        ).toFixed(1)
-      : 1;
+    if (
+      changes.page &&
+      changes.page.currentValue &&
+      !changes.page.firstChange
+    ) {
+      this.color = /^#([0-9a-f]{6})|([0-9a-f]{8})$/i.test(
+        changes.page.currentValue.style.backgroundColor
+      )
+        ? changes.page.currentValue.style.backgroundColor.substring(0, 7)
+        : '#ffffff';
+      this.opacity = /^#([0-9a-f]{8})$/i.test(
+        changes.page.currentValue.style.backgroundColor
+      )
+        ? +(
+            parseInt(
+              changes.page.currentValue.style.backgroundColor.substring(7, 9),
+              16
+            ) / 255
+          ).toFixed(1)
+        : 1;
+    }
   }
 
   onNavItemClick(navItem: NavButton): void {
