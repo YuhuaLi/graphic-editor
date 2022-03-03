@@ -237,10 +237,6 @@ export class GraphicEditorComponent
     //     widgets: [],
     //   },
     // ];
-    document.addEventListener('keydown', this.onKeydown);
-  }
-
-  ngAfterViewInit(): void {
     this.graphicEditorSrv
       .getAllPages()
       .toPromise()
@@ -254,10 +250,14 @@ export class GraphicEditorComponent
       })
       .then((pages) => {
         pages[0].selected = true;
-        console.log(this.pages);
+        this.selectPage(this.pages[0]);
         this.initSelectionArea();
         this.cdr.detectChanges();
       });
+    document.addEventListener('keydown', this.onKeydown);
+  }
+
+  ngAfterViewInit(): void {
     this.createComponent(this.toolBtns[0].component);
     this.compAreaClientBoundingRect =
       this.compArea.nativeElement.getBoundingClientRect();
@@ -294,8 +294,8 @@ export class GraphicEditorComponent
       }
       if (page.selected) {
         this.pages[0].selected = true;
+        this.selectPage(this.pages[0]);
       }
-      this.selectPage(this.pages[0]);
     });
   }
 
