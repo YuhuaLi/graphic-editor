@@ -14,7 +14,7 @@ import { EventListener, OpenUrlType } from '../../type';
 })
 export class EventPanelComponent implements OnInit {
   @Input() listener!: EventListener;
-  @Output() delete = new EventEmitter<any>();
+  @Output() delete = new EventEmitter<EventListener>();
 
   eventTypeList = EVENT_TYPE_LIST;
   actionTypeList = ACTION_TYPE_LIST;

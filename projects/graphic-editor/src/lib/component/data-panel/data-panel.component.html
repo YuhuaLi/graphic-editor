@@ -1,0 +1,79 @@
+<div class="panel">
+  <div class="header">
+    <input
+      class="title"
+      type="text"
+      [attr.readonly]="titleReadonly || null"
+      [(ngModel)]="dataSetting.name"
+      (dblclick)="titleReadonly = false"
+      (blur)="titleReadonly = true"
+    />
+    <span class="action" (click)="deleteDataSetting()"
+      ><i class="iconfont icon-delete"></i
+    ></span>
+  </div>
+  <div class="general-row">
+    <span class="label">类型</span>
+    <lib-select
+      class="select"
+      [items]="dataTypeList"
+      [(ngModel)]="dataSetting.type"
+    ></lib-select>
+  </div>
+  <ng-container *ngIf="dataSetting.type === dataType.Api">
+    <div class="general-row">
+      <span class="label">地址</span>
+    </div>
+    <div class="general-row">
+      <textarea
+        class="urlInput"
+        rows="4"
+        placeholder="输入http或https协议地址或绝对地址"
+        [(ngModel)]="dataSetting.apiUrl"
+      ></textarea>
+    </div>
+    <div class="general-row">
+      <label class="checkbox">
+        <input type="checkbox" [(ngModel)]="dataSetting.polling" />
+        <span></span>
+      </label>
+      <span>轮询</span>
+      <input
+        class="interval"
+        type="number"
+        min="0"
+        [(ngModel)]="dataSetting.interval"
+      />
+    </div>
+  </ng-container>
+  <!-- <div class="general-row">
+    <span class="label">行为</span>
+    <lib-select
+      class="select"
+      [items]="actionTypeList"
+      [(ngModel)]="listener.action"
+      (ngModelChange)="onActionChange($event)"
+    ></lib-select>
+  </div>
+  <ng-container *ngIf="listener.action === actionType.JumpUrl">
+    <div class="general-row">
+      <span class="label">目标位置</span>
+      <lib-select
+        class="select"
+        [items]="openUrlTypeList"
+        [(ngModel)]="listener.actionData.jumpTarget"
+      ></lib-select>
+    </div>
+    <div class="general-row">
+      <span class="label">地址</span>
+    </div>
+    <div class="general-row">
+      <textarea
+        class="input"
+        rows="4"
+        placeholder="输入http或https协议地址或相对地址"
+        [(ngModel)]="listener.actionData.jumpUrl"
+      ></textarea>
+    </div>
+  </ng-container> -->
+</div>

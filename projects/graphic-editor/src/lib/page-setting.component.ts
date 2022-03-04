@@ -17,7 +17,7 @@ export class PageSettingComponent implements OnInit, OnChanges {
 
   navItems: NavButton[] = [
     { type: 'page-settings', name: '页面设置', isActive: true },
-    { type: 'widget-data', name: '数据' },
+    { type: 'page-data', name: '数据' },
   ];
 
   // get color(): string {
@@ -39,6 +39,7 @@ export class PageSettingComponent implements OnInit, OnChanges {
   // }
   opacity = 1;
   color = '#ffffff';
+  navType = 'page-settings';
 
   constructor() {}
 
@@ -70,6 +71,7 @@ export class PageSettingComponent implements OnInit, OnChanges {
 
   onNavItemClick(navItem: NavButton): void {
     this.navItems.forEach((item) => (item.isActive = item === navItem));
+    this.navType = navItem.type;
   }
 
   changePageAdaptive(event: Event): void {

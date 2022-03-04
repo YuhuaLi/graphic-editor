@@ -28,10 +28,12 @@ import { EventPanelComponent } from './component/event-panel/event-panel.compone
 import { WidgetLinkAreaComponent } from './widget-lib/widget/widget-link-area/widget-link-area.component';
 import { RouterModule } from '@angular/router';
 import { MenuComponent } from './component/menu/menu.component';
-import { DataSettingComponent } from './data-setting/data-setting.component';
 import { GraphicEditorService } from './graphic-editor.service';
 import { PageListComponent } from './page-list/page-list.component';
 import { WidgetListComponent } from './widget-list/widget-list.component';
+import { PageDataSettingComponent } from './data-setting/page-data-setting/page-data-setting.component';
+import { WidgetDataSettingComponent } from './data-setting/widget-data-setting/widget-data-setting.component';
+import { DataPanelComponent } from './component/data-panel/data-panel.component';
 
 const WIDGET_COMPONENT = [
   WidgetComponent,
@@ -62,9 +64,11 @@ const WIDGET_SETTING_COMPONENT = [TextSettingComponent, ImgSettingComponent];
     EventPanelComponent,
     WidgetLinkAreaComponent,
     MenuComponent,
-    DataSettingComponent,
     PageListComponent,
     WidgetListComponent,
+    PageDataSettingComponent,
+    WidgetDataSettingComponent,
+    DataPanelComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   exports: [GraphicEditorComponent],

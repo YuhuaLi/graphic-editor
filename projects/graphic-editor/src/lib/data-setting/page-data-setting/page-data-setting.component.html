@@ -1,0 +1,15 @@
+<div class="btn-wrapper">
+  <a class="create-btn" (click)="addDataSetting($event)">
+    <span>添加数据</span>
+  </a>
+</div>
+<div class="data-list">
+  <ng-container
+    *ngFor="let dataSetting of page?.dataSetting; let i = index"
+  >
+    <lib-data-panel
+      [dataSetting]="dataSetting"
+      (delete)="deleteDataSetting(i)"
+    ></lib-data-panel>
+  </ng-container>
+</div>

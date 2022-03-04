@@ -1,4 +1,5 @@
 import { PageStyle, Widget, WidgetData, WidgetStyle } from '.';
+import { DataSetting } from './data-setting.type';
 
 export type Page = {
   id: number;
@@ -9,4 +10,5 @@ export type Page = {
   subPage?: Page[];
   selected?: boolean;
   _modified?: boolean;
+  dataSetting?: DataSetting[];
 };

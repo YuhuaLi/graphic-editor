@@ -593,6 +593,7 @@ export class GraphicEditorComponent
           type: widget.instance.widget.type,
           widgetData: widget.instance.widgetData,
         })),
+        dataSetting: this.currentPage.dataSetting,
       },
     ]);
     console.log(this.pages);

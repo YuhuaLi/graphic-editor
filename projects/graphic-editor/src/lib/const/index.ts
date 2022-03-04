@@ -8,3 +8,4 @@ export * from './event-type-list.const';
 export * from './action-type-list.const';
 export * from './open-url-type-list.const';
 export * from './widget-menu.const';
+export * from './data-type-list.const';
