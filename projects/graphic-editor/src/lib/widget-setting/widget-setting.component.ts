@@ -20,8 +20,7 @@ export class WidgetSettingComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onNavItemClick(navItem: NavButton): void {
     this.navItems.forEach((item) => (item.isActive = item === navItem));

@@ -1,4 +1,5 @@
 export enum DataType {
-  Const,
+  Const = 1,
   Api,
+  PageData,
 }

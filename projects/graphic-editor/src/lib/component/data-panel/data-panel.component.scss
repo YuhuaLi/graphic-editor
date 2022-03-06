@@ -93,14 +93,15 @@
       }
 
       .interval {
-        width: 30px;
+        width: 40px;
         background: none;
         outline: none;
         border: #4f5052 solid 1px;
         color: #fff;
         padding: 0 5px 0 7px;
         margin-left: 10px;
-        height: 26px;
+        height: 18px;
+        font-size: 12px;
 
         &:focus-within {
           border-color: #1684fc;

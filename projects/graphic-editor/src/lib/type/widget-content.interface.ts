@@ -1,7 +1,8 @@
 import { WidgetData } from '.';
+import { OperationMode } from '../enum';
 
 export interface IWidgetContent {
   widgetData: WidgetData;
-
-  setWidgetData(widgetData: WidgetData): void;
+  OperationMode?: OperationMode;
+  data?: any;
 }

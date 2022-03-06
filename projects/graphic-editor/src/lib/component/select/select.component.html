@@ -24,5 +24,8 @@
       ></span>
       <span>{{ item.name }}</span>
     </li>
+    <li class="menu-item" *ngIf="!items.length">
+      <span style="text-align: center; width: 100%">无数据</span>
+    </li>
   </ul>
 </div>

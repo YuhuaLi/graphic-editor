@@ -1,3 +1,4 @@
+import { DataSetting } from './data-setting.type';
 import { WidgetSetting } from '.';
 import { WidgetCategory } from '../enum';
 

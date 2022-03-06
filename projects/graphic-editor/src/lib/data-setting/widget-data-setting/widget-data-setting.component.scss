@@ -1,0 +1,35 @@
+:host {
+    .btn-wrapper {
+      display: flex;
+      padding: 12px;
+      font-size: 12px;
+      background-color: #252626;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+  
+      .create-btn {
+        height: 24px;
+        flex: 1 1 0%;
+        display: flex;
+        border-radius: 2px;
+        color: #ffffff;
+        background: #1684fc;
+        cursor: pointer;
+  
+        span {
+          flex: 1 1 0%;
+          text-align: center;
+          line-height: 24px;
+        }
+      }
+    }
+  
+    .data-list {
+      position: relative;
+      display: flex;
+      padding: 10px;
+      flex-direction: column;
+    }
+  }
+  

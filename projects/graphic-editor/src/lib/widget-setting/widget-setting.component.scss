@@ -1,4 +1,7 @@
 :host {
+  color: #f2f4f5;
+  font-size: 12px;
+
   .header {
     display: flex;
     flex-shrink: 0;
@@ -61,7 +64,7 @@
   .name-body {
     padding: 10px 14px;
     width: 230px;
-    color: rgb(242, 244, 245);
+    color: #f2f4f5;
     font-weight: 600;
     border-bottom: 1px solid rgb(79, 80, 82);
     white-space: nowrap;

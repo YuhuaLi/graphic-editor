@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { WidgetStatus } from '../../enum';
-import { WidgetData } from '../../type';
 
 @Injectable()
 export class WidgetService {
 
   statusSubject$ = new Subject<WidgetStatus>();
 
-  dataSubject$ = new Subject<WidgetData>();
+  dataSubject$ = new Subject<void>();
 
   constructor() { }
 
@@ -20,11 +19,11 @@ export class WidgetService {
     this.statusSubject$.next(status);
   }
 
-  // onDataChange(): Observable<WidgetData> {
-  //   return this.dataSubject$.asObservable();
-  // }
+  onDataChange(): Observable<void> {
+    return this.dataSubject$.asObservable();
+  }
 
-  // changeData(data: WidgetData): void {
-  //   this.dataSubject$.next(data);
-  // }
+  changeData(): void {
+    this.dataSubject$.next();
+  }
 }

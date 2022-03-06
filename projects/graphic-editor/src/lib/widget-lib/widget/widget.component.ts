@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -22,10 +23,18 @@ import {
 import { fromEvent } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { CLICK_JUDGE_TIME } from '../../const';
-import { ActionType, Direction, OperationMode, WidgetStatus } from '../../enum';
+import {
+  ActionType,
+  DataType,
+  Direction,
+  OperationMode,
+  WidgetStatus,
+} from '../../enum';
 import {
   Coordinate,
+  DataSetting,
   OpenUrlType,
+  Page,
   Widget,
   WidgetData,
   WidgetStyle,
@@ -51,12 +60,17 @@ export class WidgetComponent
   @Input() style!: WidgetStyle;
   @Input() widget!: Widget;
   @Input() zoom = 1;
+  @Input() page!: Page;
 
   @Output() selectWidget = new EventEmitter<any>();
   @Output() initialized = new EventEmitter<any>();
   @Output() contextMenu = new EventEmitter<any>();
 
   widgetData?: WidgetData;
+
+  data?: any;
+
+  apiTimeout: any;
 
   @HostBinding('style.z-index') get zIndex(): number {
     return this.isSelected ? 999 : this.style?.index;
@@ -112,7 +126,7 @@ export class WidgetComponent
   status = WidgetStatus.None;
   /** 临时鼠标坐标位置，用于拖拽缩放 */
   tempMousePos: Coordinate = { x: 0, y: 0 };
-
+  /** 判断点击或拖拽的setTimeout */
   timeoutId: any;
   DIRECTION = Direction;
   OPERATION_MODE = OperationMode;
@@ -185,7 +199,8 @@ export class WidgetComponent
     private cdr: ChangeDetectorRef,
     private elementRef: ElementRef,
     private renderer2: Renderer2,
-    private widgetSrv: WidgetService
+    private widgetSrv: WidgetService,
+    private httpClient: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -197,7 +212,84 @@ export class WidgetComponent
     //   });
   }
 
+  getData(): void {
+    if (this.widgetData?.dataSetting?.length) {
+      this.data = [];
+      for (const setting of this.widgetData.dataSetting) {
+        let data: any = { id: setting.id };
+        if (setting.type === DataType.Api) {
+          this.getApiData(setting);
+        } else if (setting.type === DataType.Const && setting.const) {
+          try {
+            data.value = JSON.parse(setting.const);
+          } catch {
+            console.error(`${setting.name}解析错误`);
+          }
+        } else if (setting.type === DataType.PageData) {
+          const pageData = this.page.data?.find(
+            (item) => item.id === setting.parent
+          );
+          if (pageData) {
+            data = new Proxy(pageData, {
+              get: (target, prop) => {
+                if (prop === 'value') {
+                  return target[prop];
+                } else if (prop === 'id') {
+                  return setting.id;
+                }
+                return;
+              },
+            });
+            pageData.emitter
+              ?.pipe(takeWhile(() => this.alive))
+              .subscribe(() => this.widgetSrv.changeData());
+          }
+        }
+        this.data.push(data);
+      }
+      this.widgetSrv.changeData();
+    }
+  }
+
+  getApiData(setting: DataSetting): void {
+    if (this.apiTimeout) {
+      clearTimeout(this.apiTimeout);
+      this.apiTimeout = null;
+    }
+    if (setting.apiUrl) {
+      this.httpClient
+        .get(setting.apiUrl)
+        .pipe(takeWhile(() => this.alive))
+        .subscribe(
+          (res) => {
+            const data = this.data?.find((item: any) => item.id === setting.id);
+            if (data) {
+              data.value = res;
+              this.widgetSrv.changeData();
+            }
+            if (setting.polling && setting.interval) {
+              this.apiTimeout = setTimeout(
+                () => this.getApiData(setting),
+                setting.interval * 1000
+              );
+            }
+          },
+          () => {
+            if (setting.polling && setting.interval) {
+              this.apiTimeout = setTimeout(
+                () => this.getApiData(setting),
+                setting.interval * 1000
+              );
+            }
+          }
+        );
+    }
+  }
+
   ngAfterViewInit(): void {
+    if (this.mode === OperationMode.Production) {
+      this.getData();
+    }
     this.createContentComponent();
     this.initializeEvents();
     this.initialized.emit({
@@ -236,10 +328,11 @@ export class WidgetComponent
     component.instance.mode = this.mode;
     this.contentRef = component;
     if (this.widgetData) {
-      component.instance.setWidgetData(this.widgetData);
+      component.instance.widgetData = this.widgetData;
     } else {
       this.widgetData = component.instance.widgetData;
     }
+    component.instance.data = this.data;
   }
 
   initializeEvents(): void {
@@ -569,6 +662,11 @@ export class WidgetComponent
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
+    }
+
+    if (this.apiTimeout) {
+      clearTimeout(this.apiTimeout);
+      this.apiTimeout = null;
     }
   }
 }

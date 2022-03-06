@@ -1,4 +1,4 @@
-import { PageStyle, Widget, WidgetData, WidgetStyle } from '.';
+import { PageStyle, WidgetData, WidgetStyle } from '.';
 import { DataSetting } from './data-setting.type';
 
 export type Page = {
@@ -11,4 +11,5 @@ export type Page = {
   selected?: boolean;
   _modified?: boolean;
   dataSetting?: DataSetting[];
+  data?: any[];
 };

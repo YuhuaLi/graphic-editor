@@ -71,7 +71,7 @@ const WIDGET_SETTING_COMPONENT = [TextSettingComponent, ImgSettingComponent];
     DataPanelComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
-  exports: [GraphicEditorComponent],
+  exports: [GraphicEditorComponent, SelectComponent],
   // entryComponents: [...WIDGET_COMPONENT],
   providers: [WidgetLibService, WidgetSettingService, GraphicEditorService],
 })
@@ -83,6 +83,9 @@ export class GraphicEditorModule {
     return {
       ngModule: GraphicEditorModule,
       providers: [
+        WidgetLibService,
+        WidgetSettingService,
+        GraphicEditorService,
         {
           provide: WIDGET_LIST,
           useValue: widgetList,

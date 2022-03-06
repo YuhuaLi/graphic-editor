@@ -17,7 +17,8 @@
     <lib-select
       class="select"
       [items]="dataTypeList"
-      [(ngModel)]="dataSetting.type"
+      [ngModel]="dataSetting.type"
+      (ngModelChange)="onSettingTypeChange($event)"
     ></lib-select>
   </div>
   <ng-container *ngIf="dataSetting.type === dataType.Api">
@@ -34,7 +35,10 @@
     </div>
     <div class="general-row">
       <label class="checkbox">
-        <input type="checkbox" [(ngModel)]="dataSetting.polling" />
+        <input
+          type="checkbox"
+          [(ngModel)]="dataSetting.polling"
+        />
         <span></span>
       </label>
       <span>轮询</span>
@@ -42,38 +46,30 @@
         class="interval"
         type="number"
         min="0"
+        placeholder="间隔(s)"
         [(ngModel)]="dataSetting.interval"
       />
     </div>
   </ng-container>
-  <!-- <div class="general-row">
-    <span class="label">行为</span>
-    <lib-select
-      class="select"
-      [items]="actionTypeList"
-      [(ngModel)]="listener.action"
-      (ngModelChange)="onActionChange($event)"
-    ></lib-select>
-  </div>
-  <ng-container *ngIf="listener.action === actionType.JumpUrl">
+  <ng-container *ngIf="dataSetting.type === dataType.PageData">
     <div class="general-row">
-      <span class="label">目标位置</span>
+      <span class="label">数据源</span>
       <lib-select
         class="select"
-        [items]="openUrlTypeList"
-        [(ngModel)]="listener.actionData.jumpTarget"
+        [items]="pageDataList"
+        [ngModel]="dataSetting.parent"
+        (ngModelChange)="onPageSettingChange($event)"
       ></lib-select>
     </div>
-    <div class="general-row">
-      <span class="label">地址</span>
-    </div>
+  </ng-container>
+  <ng-container *ngIf="dataSetting.type === dataType.Const">
     <div class="general-row">
       <textarea
-        class="input"
-        rows="4"
-        placeholder="输入http或https协议地址或相对地址"
-        [(ngModel)]="listener.actionData.jumpUrl"
+        class="urlInput"
+        rows="8"
+        placeholder="输入json字符串"
+        [(ngModel)]="dataSetting.const"
       ></textarea>
     </div>
-  </ng-container> -->
+  </ng-container>
 </div>

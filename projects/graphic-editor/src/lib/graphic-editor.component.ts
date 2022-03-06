@@ -190,8 +190,6 @@ export class GraphicEditorComponent
     if (this.isMouseDown && !this.isTicking) {
       let x = event.offsetX;
       let y = event.offsetY;
-      console.log(x, y);
-      console.log(this.scrollLeft);
       if (event.target !== this.compArea.nativeElement) {
         const { left, top } = this.compAreaClientBoundingRect;
         x = (event.clientX - left + this.scrollLeft) / this.zoom;
@@ -268,6 +266,7 @@ export class GraphicEditorComponent
       .subscribe((event: any) => {
         event.preventDefault();
         event.stopPropagation();
+        document.getSelection()?.removeAllRanges();
       });
   }
 
@@ -452,6 +451,7 @@ export class GraphicEditorComponent
     const comp = this.compAreaContainer.createComponent(factory);
     comp.instance.widget = widget;
     comp.instance.style = widgetStyle;
+    comp.instance.page = this.currentPage;
     if (widgetData) {
       comp.instance.widgetData = widgetData;
     }
@@ -530,6 +530,7 @@ export class GraphicEditorComponent
 
   onSelectRangeStart(event: MouseEvent): void {
     event.preventDefault();
+    document.getSelection()?.removeAllRanges();
     this.isMouseDown = true;
     this.tempMousePos.x = event.offsetX;
     this.tempMousePos.y = event.offsetY;
@@ -586,22 +587,14 @@ export class GraphicEditorComponent
   }
 
   saveProject(): void {
-    console.log([
-      {
-        style: this.currentPage.style,
-        widgets: this.widgets.map((widget) => ({
-          type: widget.instance.widget.type,
-          widgetData: widget.instance.widgetData,
-        })),
-        dataSetting: this.currentPage.dataSetting,
-      },
-    ]);
     console.log(this.pages);
-    this.graphicEditorSrv
-      .updatePage(
-        this.pages.map(({ id, style, widgets }) => ({ id, style, widgets }))
-      )
-      .subscribe();
+    const pages = this.pages.map(({ id, style, widgets, dataSetting }) => ({
+      id,
+      style,
+      widgets,
+      dataSetting,
+    }));
+    this.graphicEditorSrv.updatePage(pages).subscribe();
     this.save.emit(this.pages);
   }
 

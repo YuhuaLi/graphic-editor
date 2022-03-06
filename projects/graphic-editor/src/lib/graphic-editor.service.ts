@@ -1,3 +1,4 @@
+import { DataSetting } from './type/data-setting.type';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Page } from './type';
@@ -9,19 +10,20 @@ import { Page } from './type';
 export class GraphicEditorService {
   DB_NAME = 'ExampleDB';
   PAGE_TABLE = 'page';
+  DATA_TABLE = 'data';
 
   constructor() {}
 
   addPage(): Observable<Page> {
     return new Observable((observer) => {
       this.openDB().then((db) => {
-        const store = this.getObjectStore(db, this.PAGE_TABLE, 'readwrite');
-        const request = store.add({
+        const pageStore = this.getObjectStore(db, this.PAGE_TABLE, 'readwrite');
+        const request = pageStore.add({
           style: { width: 1920, height: 1080, backgroundColor: '#ffffff' },
           widgets: [],
         });
         request.onsuccess = (ev: any) => {
-          const req = store.get(ev.target.result);
+          const req = pageStore.get(ev.target.result);
           req.onsuccess = (e: any) => {
             observer.next(req.result);
             observer.complete();
@@ -51,15 +53,15 @@ export class GraphicEditorService {
   updatePage(pages: Page[]): Observable<void> {
     return new Observable((observer) => {
       this.openDB().then((db) => {
-        const store = this.getObjectStore(db, this.PAGE_TABLE, 'readwrite');
+        const pageStore = this.getObjectStore(db, this.PAGE_TABLE, 'readwrite');
         for (const page of pages) {
-          store.put(page);
+          pageStore.put(page);
         }
-        store.transaction.oncomplete = (event: any) => {
+        pageStore.transaction.oncomplete = (event: any) => {
           observer.next();
           observer.complete();
         };
-        store.transaction.onerror = (event: any) => {
+        pageStore.transaction.onerror = (event: any) => {
           observer.error(event);
           observer.complete();
         };
@@ -70,8 +72,8 @@ export class GraphicEditorService {
   deletePage(page: Page): Observable<void> {
     return new Observable((observer) => {
       this.openDB().then((db) => {
-        const store = this.getObjectStore(db, this.PAGE_TABLE, 'readwrite');
-        const request = store.delete(page.id);
+        const pageStore = this.getObjectStore(db, this.PAGE_TABLE, 'readwrite');
+        const request = pageStore.delete(page.id);
         request.onsuccess = (ev: any) => {
           observer.next();
           observer.complete();

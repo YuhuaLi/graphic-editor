@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   HostListener,
@@ -17,7 +18,9 @@ import { Placement } from '../../enum';
   templateUrl: './ruler.component.html',
   styleUrls: ['./ruler.component.scss'],
 })
-export class RulerComponent implements OnInit, OnChanges, OnDestroy {
+export class RulerComponent
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy
+{
   @Input() placement: 'horizontal' | 'vertical' = Placement.Horizontal;
   @Input() offset = 0;
   @Input() zoom = 1;
@@ -31,7 +34,9 @@ export class RulerComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
     this.initCanvas();
     this.draw();
     this.resizeObserver = new ResizeObserver((entries: any) => {
@@ -39,7 +44,6 @@ export class RulerComponent implements OnInit, OnChanges, OnDestroy {
       this.initCanvas();
       this.draw();
     });
-
     this.resizeObserver.observe(this.canvas.nativeElement);
   }
 

@@ -1,1 +1,18 @@
-<p>widget-data-setting works!</p>
+<div class="btn-wrapper">
+    <a class="create-btn" (click)="addDataSetting($event)">
+      <span>添加数据</span>
+    </a>
+  </div>
+  <div class="data-list">
+    <ng-container
+      *ngFor="let dataSetting of ref.instance.widgetData?.dataSetting; let i = index"
+    >
+      <lib-data-panel
+        [ref]="ref"
+        [dataSetting]="dataSetting"
+        (delete)="deleteDataSetting(i)"
+        (settingChange)="onSettingChange($event, i)"
+      ></lib-data-panel>
+    </ng-container>
+  </div>
+  

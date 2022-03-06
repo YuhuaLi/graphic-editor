@@ -176,3 +176,9 @@
   //   background-color: #1684fc4d;
   // }
 }
+
+:host ::ng-deep {
+  .widget  * {
+    box-sizing: border-box;
+  }
+}

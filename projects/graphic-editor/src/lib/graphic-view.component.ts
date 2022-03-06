@@ -1,14 +1,19 @@
+import { DataSetting } from './type/data-setting.type';
+import { takeWhile } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
   ComponentFactoryResolver,
   ElementRef,
+  EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { OperationMode } from './enum';
+import { DataType, OperationMode } from './enum';
 import { Page, WidgetData, WidgetStyle } from './type';
 import { WidgetLibService } from './widget-lib/widget-lib.service';
 import { WidgetComponent } from './widget-lib/widget/widget.component';
@@ -18,7 +23,7 @@ import { WidgetComponent } from './widget-lib/widget/widget.component';
   templateUrl: './graphic-view.component.html',
   styleUrls: ['./graphic-view.component.scss'],
 })
-export class GraphicViewComponent implements OnInit, AfterViewInit {
+export class GraphicViewComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() page!: Page;
 
   @ViewChild('container', { static: false, read: ViewContainerRef })
@@ -26,11 +31,14 @@ export class GraphicViewComponent implements OnInit, AfterViewInit {
 
   zoomX = 1;
   zoomY = 1;
+  alive = true;
+  apiTimeout: any;
 
   constructor(
     private cfr: ComponentFactoryResolver,
     private widgetLibSrv: WidgetLibService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private httpClient: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +47,62 @@ export class GraphicViewComponent implements OnInit, AfterViewInit {
         this.elementRef.nativeElement.offsetWidth / this.page.style.width;
       this.zoomY =
         this.elementRef.nativeElement.offsetHeight / this.page.style.height;
+    }
+    this.getData();
+  }
+
+  getData(): void {
+    if (this.page.dataSetting?.length) {
+      this.page.data = [];
+      for (const setting of this.page.dataSetting) {
+        const data: any = { id: setting.id };
+        this.page.data.push(data);
+        if (setting.type === DataType.Api) {
+          data.emitter = new EventEmitter<any>();
+          this.getApiData(setting);
+        } else if (setting.type === DataType.Const && setting.const) {
+          try {
+            data.value = JSON.parse(setting.const);
+          } catch {
+            console.error(`${setting.name}解析错误`);
+          }
+        }
+      }
+    }
+  }
+
+  getApiData(setting: DataSetting): void {
+    if (this.apiTimeout) {
+      clearTimeout(this.apiTimeout);
+      this.apiTimeout = null;
+    }
+    if (setting.apiUrl) {
+      this.httpClient
+        .get(setting.apiUrl)
+        .pipe(takeWhile(() => this.alive))
+        .subscribe(
+          (res) => {
+            const data = this.page.data?.find((item) => item.id === setting.id);
+            if (data) {
+              data.value = res;
+              data.emitter.emit();
+            }
+            if (setting.polling && setting.interval) {
+              this.apiTimeout = setTimeout(
+                () => this.getApiData(setting),
+                setting.interval * 1000
+              );
+            }
+          },
+          () => {
+            if (setting.polling && setting.interval) {
+              this.apiTimeout = setTimeout(
+                () => this.getApiData(setting),
+                setting.interval * 1000
+              );
+            }
+          }
+        );
     }
   }
 
@@ -61,9 +125,20 @@ export class GraphicViewComponent implements OnInit, AfterViewInit {
       const comp = this.container.createComponent(factory);
       comp.instance.widget = widget;
       comp.instance.style = style;
+      comp.instance.page = this.page;
       comp.instance.mode = OperationMode.Production;
-      comp.instance.widgetData = widgetData;
+      if (widgetData) {
+        comp.instance.widgetData = widgetData;
+      }
       comp.changeDetectorRef.detectChanges();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.alive = false;
+    if (this.apiTimeout) {
+      clearTimeout(this.apiTimeout);
+      this.apiTimeout = null;
     }
   }
 }

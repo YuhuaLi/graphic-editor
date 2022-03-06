@@ -75,14 +75,17 @@ export class SelectComponent
           : window.innerHeight -
             boundingRect.y -
             boundingRect.height -
-            this.items.length * 26 - 12;
+            this.items.length * 26 -
+            12;
     }
   }
 
   selectItem(item: { name: string; value: any }): void {
-    this.selectedItem = item;
-    this.isExpand = false;
-    this.value = item.value;
+    if (this.selectedItem !== item) {
+      this.selectedItem = item;
+      this.isExpand = false;
+      this.value = item.value;
+    }
   }
 
   ngOnDestroy(): void {
