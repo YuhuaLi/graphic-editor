@@ -588,12 +588,15 @@ export class GraphicEditorComponent
 
   saveProject(): void {
     console.log(this.pages);
-    const pages = this.pages.map(({ id, style, widgets, dataSetting }) => ({
-      id,
-      style,
-      widgets,
-      dataSetting,
-    }));
+    const pages = this.pages.map(
+      ({ id, name, style, widgets, dataSetting }) => ({
+        id,
+        name,
+        style,
+        widgets,
+        dataSetting,
+      })
+    );
     this.graphicEditorSrv.updatePage(pages).subscribe();
     this.save.emit(this.pages);
   }

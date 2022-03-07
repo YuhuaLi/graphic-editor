@@ -29,11 +29,14 @@
         }
       }
 
-      &:hover .actions {
-        display: flex;
+      &:hover,
+      &.editing {
+        .actions {
+          display: flex;
 
-        .action {
-          visibility: visible;
+          .action {
+            visibility: visible;
+          }
         }
       }
 
@@ -55,6 +58,19 @@
           color: #b8bcbf;
           visibility: hidden;
         }
+      }
+      .editing-input {
+        border-color: #454647;
+        outline: #1684fc solid 1px;
+        outline-offset: -2px;
+        display: flex;
+        align-items: center;
+        padding: 0px 3px 0px 5px;
+        color: #f2f4f5;
+        font-size: 12px;
+        height: 26px;
+        width: calc(100% - 20px);
+        background: none;
       }
     }
   }

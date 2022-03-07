@@ -2,16 +2,31 @@
   <li
     class="page-list-item"
     [ngClass]="{
-      active: page.selected
+      active: page.selected,
+      editing: editingPage === page
     }"
     *ngFor="let page of pages"
     (click)="onPageSelect(page)"
   >
     <i class="iconfont icon-yemian"></i>
-    <span class="page-name">{{ page.name || "页面" + page.id }}</span>
-    <span class="actions" *ngIf="pages.length > 1">
-      <i class="iconfont action icon-delete"></i>
+    <span *ngIf="page !== editingPage" class="page-name">{{
+      page.name || "页面" + page.id
+    }}</span>
+    <span class="page-name" *ngIf="page === editingPage">
+      <input
+        class="editing-input"
+        type="text"
+        [ngModel]="page.name || '页面' + page.id"
+        (ngModelChange)="onPageNameChange(page, $event)"
+      />
+    </span>
+    <span class="actions">
       <i
+        class="iconfont action icon-edit"
+        (click)="onPageNameEdit(page, $event)"
+      ></i>
+      <i
+        *ngIf="pages.length > 1"
         class="iconfont action icon-delete"
         (click)="onPageDelete(page, $event)"
       ></i

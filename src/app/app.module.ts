@@ -20,7 +20,7 @@ const arr = [
   {
     category: WidgetCategory.Advanced,
     name: '图表',
-    icon: 'icon-sucaiku',
+    icon: 'icon-chart',
     type: 'chart',
     width: 100,
     height: 100,
