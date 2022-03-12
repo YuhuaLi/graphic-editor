@@ -74,7 +74,7 @@ export class WidgetComponent
   apiTimeout: any;
 
   @HostBinding('style.z-index') get zIndex(): number {
-    return this.isSelected ? 999 : this.style?.index;
+    return this.isSelected || this.isRotating ? 999 : this.style?.index;
   }
 
   /** 部件是否选中 */
@@ -445,6 +445,10 @@ export class WidgetComponent
     this.tempMousePos = { x: event.clientX, y: event.clientY };
 
     this.status = WidgetStatus.Rotate;
+    this.renderer2.addClass(
+      document.body.querySelector('lib-graphic-editor'),
+      'operation'
+    );
     this.renderer2.setStyle(
       document.body,
       'cursor',
