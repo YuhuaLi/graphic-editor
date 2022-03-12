@@ -81,6 +81,10 @@ export class WidgetComponent
     return this.status === WidgetStatus.Select;
   }
 
+  get isRotating(): boolean {
+    return this.status === WidgetStatus.Rotate;
+  }
+
   get x(): number {
     return this.style.left;
   }
@@ -109,6 +113,14 @@ export class WidgetComponent
     this.style.height = val;
   }
 
+  get rotate(): number {
+    return this.style.rotate;
+  }
+
+  set rotate(val: number) {
+    this.style.rotate = val;
+  }
+
   alive = true;
   /** 是否鼠标hover部件 */
   isHover = false;
@@ -126,6 +138,8 @@ export class WidgetComponent
   status = WidgetStatus.None;
   /** 临时鼠标坐标位置，用于拖拽缩放 */
   tempMousePos: Coordinate = { x: 0, y: 0 };
+  /** 中心位置 */
+  tempOrigin: Coordinate = { x: 0, y: 0 };
   /** 判断点击或拖拽的setTimeout */
   timeoutId: any;
   DIRECTION = Direction;
@@ -144,23 +158,33 @@ export class WidgetComponent
     ) {
       return;
     }
-    if (!this.isTicking) {
-      this.rafId = window.requestAnimationFrame(() => {
-        const dx = (event.clientX - this.tempMousePos.x) / this.zoom;
-        const dy = (event.clientY - this.tempMousePos.y) / this.zoom;
-        this.tempMousePos.x = event.clientX;
-        this.tempMousePos.y = event.clientY;
-        if (this.status === WidgetStatus.Drag) {
-          this.x = Math.round((this.x || 0) + dx);
-          this.y = Math.round((this.y || 0) + dy);
-        } else {
-          this.resize(dx, dy);
-        }
-        this.isTicking = false;
-        // this.cdr.detectChanges();
-      });
+    if (this.status === WidgetStatus.Rotate) {
+      this.rotate =
+        (Math.atan2(
+          event.clientY - this.tempOrigin.y,
+          event.clientX - this.tempOrigin.x
+        ) *
+          180) /
+        Math.PI - 90;
+    } else {
+      if (!this.isTicking) {
+        this.rafId = window.requestAnimationFrame(() => {
+          const dx = (event.clientX - this.tempMousePos.x) / this.zoom;
+          const dy = (event.clientY - this.tempMousePos.y) / this.zoom;
+          this.tempMousePos.x = event.clientX;
+          this.tempMousePos.y = event.clientY;
+          if (this.status === WidgetStatus.Drag) {
+            this.x = Math.round((this.x || 0) + dx);
+            this.y = Math.round((this.y || 0) + dy);
+          } else {
+            this.resize(dx, dy);
+          }
+          this.isTicking = false;
+          // this.cdr.detectChanges();
+        });
+      }
+      this.isTicking = true;
     }
-    this.isTicking = true;
   };
 
   onMouseUp = (event: MouseEvent): void => {
@@ -172,11 +196,7 @@ export class WidgetComponent
       if (this.timeoutId) {
         clearTimeout(this.timeoutId);
       }
-    } else if (this.status === WidgetStatus.Drag) {
-      document.removeEventListener('mousemove', this.onMouseMove);
-      this.setStatus(WidgetStatus.Select);
     } else {
-      // 缩放
       document.removeEventListener('mousemove', this.onMouseMove);
       this.setStatus(WidgetStatus.Select);
     }
@@ -390,6 +410,25 @@ export class WidgetComponent
         document.addEventListener('mousemove', this.onMouseMove);
       }, CLICK_JUDGE_TIME);
     }
+    document.addEventListener('mouseup', this.onMouseUp);
+  }
+
+  onRotateStart(event: MouseEvent): void {
+    if (this.mode === OperationMode.Production) {
+      return;
+    }
+    event.stopPropagation();
+    if (this.isLocked) {
+      return;
+    }
+    // console.log(event.offsetX, event.offsetY);
+    const x = event.clientX - event.offsetX + 8;
+    const y = event.clientY - event.offsetY - 36 - this.y / 2;
+    this.tempOrigin = { x, y };
+
+    this.status = WidgetStatus.Rotate;
+    this.renderer2.setStyle(document.body, 'cursor', 'grabbing');
+    document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseUp);
   }
 

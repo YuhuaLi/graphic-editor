@@ -416,12 +416,14 @@ export class GraphicEditorComponent
         const height = widget.height || 100;
         const left = event.offsetX - width / 2;
         const top = event.offsetY - height / 2;
+        const rotate = 0;
         const index = this.widgets.length + 1;
         const comp = this.createWidget(widget, {
           left,
           top,
           width,
           height,
+          rotate,
           index,
         });
         comp.instance.initialized

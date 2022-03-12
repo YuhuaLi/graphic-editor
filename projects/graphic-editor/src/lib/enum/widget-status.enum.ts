@@ -10,4 +10,5 @@ export enum WidgetStatus {
   ResizeTopRight,
   ResizeBottomLeft,
   ResizeBottomRight,
+  Rotate,
 }

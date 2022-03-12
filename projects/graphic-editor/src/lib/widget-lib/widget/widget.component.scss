@@ -23,6 +23,7 @@
         pointer-events: none;
 
         .resize-handler,
+        .rotate-handler,
         .resize-line {
           pointer-events: none;
         }
@@ -38,6 +39,7 @@
         }
 
         .resize-line,
+        .rotate-handler,
         .resize-handler {
           pointer-events: none !important;
         }
@@ -59,9 +61,15 @@
         visibility: visible;
 
         .resize-line,
+        .rotate-handler,
         .resize-handler {
           pointer-events: auto;
           position: absolute;
+        }
+
+        .rotate-handler {
+          left: calc((50% - 8px));
+          top: -30px;
         }
 
         .resize-line {
@@ -178,7 +186,7 @@
 }
 
 :host ::ng-deep {
-  .widget  * {
+  .widget * {
     box-sizing: border-box;
   }
 }

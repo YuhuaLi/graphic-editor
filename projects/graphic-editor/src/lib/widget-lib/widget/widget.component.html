@@ -11,7 +11,8 @@
     'top.px': style.top,
     'left.px': style.left,
     'width.px': style.width,
-    'height.px': style.height
+    'height.px': style.height,
+    transform: 'rotate(' + style.rotate + 'deg)'
   }"
   (mousedown)="onMouseDown($event)"
   (mouseenter)="isHover = true"
@@ -70,6 +71,11 @@
         class="bottom-right resize-handler"
         (mousedown)="onResizeStart($event, DIRECTION.BottomRight)"
       ></div>
+    </ng-container>
+    <ng-container *ngIf="isSelected || isRotating">
+      <span class="rotate-handler" (mousedown)="onRotateStart($event)">
+        <i class="iconfont icon-sucaiku"></i>
+      </span>
     </ng-container>
   </div>
 </div>
