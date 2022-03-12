@@ -37,6 +37,9 @@
           // background-color: #bbbbbb !important;
           border-color: #bbbbbb !important;
         }
+        .rotate-handler {
+          color: #bbbbbb !important;
+        }
 
         .resize-line,
         .rotate-handler,
@@ -70,6 +73,10 @@
         .rotate-handler {
           left: calc((50% - 8px));
           top: -30px;
+          color: #1684fc;
+          .iconfont {
+            font-size: 24px;
+          }
         }
 
         .resize-line {

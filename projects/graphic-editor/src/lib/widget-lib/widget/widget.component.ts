@@ -15,6 +15,7 @@ import {
   OnInit,
   Output,
   Renderer2,
+  RendererStyleFlags2,
   SimpleChanges,
   TemplateRef,
   ViewChild,
@@ -114,7 +115,7 @@ export class WidgetComponent
   }
 
   get rotate(): number {
-    return this.style.rotate;
+    return this.style.rotate || 0;
   }
 
   set rotate(val: number) {
@@ -154,18 +155,27 @@ export class WidgetComponent
     event.preventDefault();
     if (
       this.status === WidgetStatus.Select ||
-      this.status === WidgetStatus.None
+      this.status === WidgetStatus.None ||
+      (event.clientX === this.tempMousePos.x &&
+        event.clientY === this.tempMousePos.y)
     ) {
       return;
     }
     if (this.status === WidgetStatus.Rotate) {
+      console.log(
+        event.clientX,
+        event.clientY,
+        this.tempOrigin.x,
+        this.tempOrigin.y
+      );
       this.rotate =
         (Math.atan2(
           event.clientY - this.tempOrigin.y,
           event.clientX - this.tempOrigin.x
         ) *
           180) /
-        Math.PI - 90;
+          Math.PI +
+        90;
     } else {
       if (!this.isTicking) {
         this.rafId = window.requestAnimationFrame(() => {
@@ -417,17 +427,30 @@ export class WidgetComponent
     if (this.mode === OperationMode.Production) {
       return;
     }
+    event.preventDefault();
     event.stopPropagation();
     if (this.isLocked) {
       return;
     }
     // console.log(event.offsetX, event.offsetY);
-    const x = event.clientX - event.offsetX + 8;
-    const y = event.clientY - event.offsetY - 36 - this.y / 2;
+    const x =
+      event.clientX +
+      (8 - event.offsetX) * Math.cos((this.rotate * Math.PI) / 180) -
+      (22 + this.height / 2) * Math.sin((this.rotate * Math.PI) / 180);
+    const y =
+      event.clientY +
+      (8 - event.offsetY) * Math.cos((this.rotate * Math.PI) / 180) +
+      (22 + this.height / 2) * Math.cos((this.rotate * Math.PI) / 180);
     this.tempOrigin = { x, y };
+    this.tempMousePos = { x: event.clientX, y: event.clientY };
 
     this.status = WidgetStatus.Rotate;
-    this.renderer2.setStyle(document.body, 'cursor', 'grabbing');
+    this.renderer2.setStyle(
+      document.body,
+      'cursor',
+      'grabbing',
+      RendererStyleFlags2.Important
+    );
     document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseUp);
   }
