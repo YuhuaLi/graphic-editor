@@ -287,7 +287,7 @@
 
     &.dev:not(.selected):hover {
       border: unset !important;
-      transform: translate(0, 0) !important;
+      translate: 0 0 !important;
 
       *:not(textarea) {
         pointer-events: none !important;
