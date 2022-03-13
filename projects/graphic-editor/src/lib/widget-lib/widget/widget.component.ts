@@ -74,7 +74,7 @@ export class WidgetComponent
   apiTimeout: any;
 
   @HostBinding('style.z-index') get zIndex(): number {
-    return this.isSelected || this.isRotating ? 999 : this.style?.index;
+    return this.isSelected || this.isRotating || this.isDragging ? 999 : this.style?.index;
   }
 
   /** 部件是否选中 */
@@ -84,6 +84,10 @@ export class WidgetComponent
 
   get isRotating(): boolean {
     return this.status === WidgetStatus.Rotate;
+  }
+
+  get isDragging(): boolean {
+    return this.status === WidgetStatus.Drag;
   }
 
   get x(): number {
