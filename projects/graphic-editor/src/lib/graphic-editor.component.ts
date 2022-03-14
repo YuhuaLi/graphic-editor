@@ -533,6 +533,7 @@ export class GraphicEditorComponent
   onSelectRangeStart(event: MouseEvent): void {
     event.preventDefault();
     document.getSelection()?.removeAllRanges();
+    (document.activeElement as HTMLElement).blur();
     this.isMouseDown = true;
     this.tempMousePos.x = event.offsetX;
     this.tempMousePos.y = event.offsetY;
