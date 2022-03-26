@@ -17,7 +17,7 @@
   }"
 >
   <!-- <router-outlet></router-outlet> -->
-  <ng-container *ngIf="widgetData.page && mode === OPERATION_MODE.Production">
-    <lib-graphic-view [page]="widgetData.page"></lib-graphic-view>
+  <ng-container *ngIf="page && mode === OPERATION_MODE.Production">
+    <lib-graphic-view [page]="page"></lib-graphic-view>
   </ng-container>
 </div>

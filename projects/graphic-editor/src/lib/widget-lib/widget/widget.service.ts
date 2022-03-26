@@ -4,12 +4,11 @@ import { WidgetStatus } from '../../enum';
 
 @Injectable()
 export class WidgetService {
-
   statusSubject$ = new Subject<WidgetStatus>();
 
   dataSubject$ = new Subject<void>();
 
-  constructor() { }
+  constructor() {}
 
   onStatusChange(): Observable<WidgetStatus> {
     return this.statusSubject$.asObservable();

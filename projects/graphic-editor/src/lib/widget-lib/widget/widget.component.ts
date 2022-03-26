@@ -1,3 +1,4 @@
+import { GraphicEvent } from './../../type/graphic-event.type';
 import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
@@ -43,7 +44,10 @@ import {
   WidgetStyle,
 } from '../../type';
 import { BaseWidgetContent } from './base-widget-content';
-import { LinkAreaWidgetData } from './widget-link-area/widget-link-area.component';
+import {
+  LinkAreaWidgetData,
+  WidgetLinkAreaComponent,
+} from './widget-link-area/widget-link-area.component';
 import { WidgetService } from './widget.service';
 
 @Component({
@@ -71,6 +75,7 @@ export class WidgetComponent
   @Output() selectWidget = new EventEmitter<any>();
   @Output() initialized = new EventEmitter<any>();
   @Output() contextMenu = new EventEmitter<any>();
+  @Output() widgetEvent = new EventEmitter<GraphicEvent>();
 
   widgetData?: WidgetData;
   contentComponentRef?: ComponentRef<BaseWidgetContent>;
@@ -174,12 +179,6 @@ export class WidgetComponent
       return;
     }
     if (this.status === WidgetStatus.Rotate) {
-      console.log(
-        event.clientX,
-        event.clientY,
-        this.tempOrigin.x,
-        this.tempOrigin.y
-      );
       this.rotate =
         (Math.atan2(
           event.clientY - this.tempOrigin.y,
@@ -415,6 +414,73 @@ export class WidgetComponent
                 (compRef) => compRef.instance.widgetData?.id === linkWidgetId
               );
               if (widgetRef && pageId) {
+                if (this.pages.length) {
+                  const page = this.pages.find((p) => (p.id === pageId));
+                  if (page) {
+                    fromEvent(
+                      this.elementRef.nativeElement.firstElementChild,
+                      listener.type as string
+                    )
+                      .pipe(takeWhile(() => this.alive))
+                      .subscribe((event) => {
+                        const ref = this.widgets.find(
+                          (item) =>
+                            item.instance.widgetData?.id === linkWidgetId
+                        );
+                        if (ref?.instance.contentComponentRef) {
+                          (
+                            ref.instance
+                              .contentComponentRef as ComponentRef<WidgetLinkAreaComponent>
+                          ).instance.renderPage(page);
+                          console.log(this.pages);
+                        }
+                      });
+                  }
+                } else {
+                  fromEvent(
+                    this.elementRef.nativeElement.firstElementChild,
+                    listener.type as string
+                  )
+                    .pipe(takeWhile(() => this.alive))
+                    .subscribe((event) => {
+                      this.graphicEditorSrv
+                        .getPageById(pageId)
+                        .pipe(takeWhile(() => this.alive))
+                        .subscribe((page) => {
+                          if (!page) {
+                            return;
+                          }
+                          const ref = this.widgets.find(
+                            (item) =>
+                              item.instance.widgetData?.id === linkWidgetId
+                          );
+                          if (ref?.instance.contentComponentRef) {
+                            (
+                              ref.instance
+                                .contentComponentRef as ComponentRef<WidgetLinkAreaComponent>
+                            ).instance.renderPage(page);
+                          }
+                        });
+                    });
+                }
+              }
+            } else if (target === OpenPageType.CurrentPage) {
+              if (this.pages.length) {
+                const page = this.pages.find((p) => (p.id === pageId));
+                if (page) {
+                  fromEvent(
+                    this.elementRef.nativeElement.firstElementChild,
+                    listener.type as string
+                  )
+                    .pipe(takeWhile(() => this.alive))
+                    .subscribe((event) => {
+                      this.widgetEvent.emit({
+                        type: ActionType.JumpPage,
+                        data: page,
+                      });
+                    });
+                }
+              } else {
                 fromEvent(
                   this.elementRef.nativeElement.firstElementChild,
                   listener.type as string
@@ -425,18 +491,11 @@ export class WidgetComponent
                       .getPageById(pageId)
                       .pipe(takeWhile(() => this.alive))
                       .subscribe((page) => {
-                        const ref = this.widgets.find(
-                          (item) =>
-                            item.instance.widgetData?.id === linkWidgetId
-                        );
-                        if (ref) {
-                          const widgetData =
-                            ref.instance.contentComponentRef?.instance
-                              .widgetData;
-                          if (widgetData) {
-                            (widgetData as LinkAreaWidgetData).page = page;
-                            ref.instance.cdr.detectChanges();
-                          }
+                        if (page) {
+                          this.widgetEvent.emit({
+                            type: ActionType.JumpPage,
+                            data: page,
+                          });
                         }
                       });
                   });

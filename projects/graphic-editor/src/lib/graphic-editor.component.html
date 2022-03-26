@@ -181,6 +181,6 @@
   </div>
 </div>
 <div class="content" *ngIf="currentPage && mode === OPERATION_MODE.Production">
-  <lib-graphic-view [page]="currentPage"></lib-graphic-view>
+  <lib-graphic-view [page]="currentPage" [pages]="pages"></lib-graphic-view>
 </div>
 <lib-menu #menu (selectItem)="onSelectMenuItem($event)"></lib-menu>

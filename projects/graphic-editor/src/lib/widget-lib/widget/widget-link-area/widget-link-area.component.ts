@@ -15,7 +15,7 @@ export type LinkAreaWidgetData = WidgetData<AppearanceSetting> & {
 })
 export class WidgetLinkAreaComponent
   extends BaseWidgetContent
-  implements OnInit, OnChanges
+  implements OnInit
 {
   page!: Page;
 
@@ -38,9 +38,9 @@ export class WidgetLinkAreaComponent
     super();
   }
 
-  ngOnInit(): void {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+  renderPage(page: Page): void {
+    this.page = page;
   }
+
+  ngOnInit(): void {}
 }

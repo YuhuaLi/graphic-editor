@@ -50,7 +50,9 @@
         class="select"
         [items]="pageList"
         [(ngModel)]="listener.actionData.jumpPage"
-      ></lib-select>
+        (expand)="getPageList()"
+      >
+      </lib-select>
     </div>
     <div class="general-row">
       <span class="label">目标位置</span>
@@ -58,6 +60,7 @@
         class="select"
         [items]="openPageTypeList"
         [(ngModel)]="listener.actionData.jumpTarget"
+        (ngModelChange)="onJumTargetChange($event)"
       ></lib-select>
     </div>
     <div
@@ -69,7 +72,7 @@
         class="select"
         [items]="linkWidgetList"
         [(ngModel)]="listener.actionData.linkWidget"
-        (ngModelChange)="onLinkWidgetChange($event)"
+        (expand)="getLinkWidgetList()"
       ></lib-select>
     </div>
   </ng-container>

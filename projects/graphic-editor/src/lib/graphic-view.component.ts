@@ -1,3 +1,4 @@
+import { GraphicEvent } from './type/graphic-event.type';
 import { DataSetting } from './type/data-setting.type';
 import { takeWhile } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -9,12 +10,14 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { DataType, OperationMode } from './enum';
+import { ActionType, DataType, OperationMode } from './enum';
 import { Page, WidgetData, WidgetStyle } from './type';
 import { WidgetLibService } from './widget-lib/widget-lib.service';
 import { WidgetComponent } from './widget-lib/widget/widget.component';
@@ -24,8 +27,11 @@ import { WidgetComponent } from './widget-lib/widget/widget.component';
   templateUrl: './graphic-view.component.html',
   styleUrls: ['./graphic-view.component.scss'],
 })
-export class GraphicViewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GraphicViewComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+{
   @Input() page!: Page;
+  @Input() pages: Page[] = [];
 
   @ViewChild('container', { static: false, read: ViewContainerRef })
   container!: ViewContainerRef;
@@ -51,6 +57,19 @@ export class GraphicViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.elementRef.nativeElement.offsetHeight / this.page.style.height;
     }
     this.getData();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.page && !changes.page.firstChange) {
+      if (this.page.style.adaptive) {
+        this.zoomX =
+          this.elementRef.nativeElement.offsetWidth / this.page.style.width;
+        this.zoomY =
+          this.elementRef.nativeElement.offsetHeight / this.page.style.height;
+      }
+      this.getData();
+      this.renderPage();
+    }
   }
 
   getData(): void {
@@ -109,10 +128,28 @@ export class GraphicViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.renderPage();
+  }
+
+  renderPage(): void {
+    this.container.clear();
+    this.widgets = [];
     if (this.page?.widgets) {
       for (const widget of this.page.widgets) {
-        const comp = this.createWidget(widget.type, widget.style, widget.widgetData);
+        const comp = this.createWidget(
+          widget.type,
+          widget.style,
+          widget.widgetData
+        );
         if (comp) {
+          comp.instance.widgetEvent
+            .pipe(takeWhile(() => this.alive))
+            .subscribe((event: GraphicEvent) => {
+              if (event.type === ActionType.JumpPage) {
+                this.page = event.data;
+                this.renderPage();
+              }
+            });
           this.widgets.unshift(comp);
         }
       }
@@ -131,6 +168,7 @@ export class GraphicViewComponent implements OnInit, AfterViewInit, OnDestroy {
       comp.instance.widget = widget;
       comp.instance.style = style;
       comp.instance.page = this.page;
+      comp.instance.pages = this.pages;
       comp.instance.widgets = this.widgets;
       comp.instance.mode = OperationMode.Production;
       if (widgetData) {

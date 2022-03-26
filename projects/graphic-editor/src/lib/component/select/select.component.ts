@@ -1,11 +1,17 @@
 import {
   AfterViewInit,
   Component,
+  ContentChild,
   ElementRef,
+  EventEmitter,
   forwardRef,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
+  Output,
+  SimpleChanges,
+  TemplateRef,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent } from 'rxjs';
@@ -27,20 +33,30 @@ import { AbstractValueAccessor } from '../abstractvalueaccessor';
 })
 export class SelectComponent
   extends AbstractValueAccessor
-  implements OnInit, OnDestroy
+  implements OnInit, OnChanges, OnDestroy
 {
-  @Input() items: MenuItem[] = [];
+  @ContentChild('template') template?: TemplateRef<any>;
+  @Input() items: { [key: string]: any }[] = [];
+  @Input() options: { displayField?: string; valueField?: string } = {};
+  @Output() expand = new EventEmitter<any>();
+
+  currentOptions: { displayField: string; valueField: string } = {
+    displayField: 'name',
+    valueField: 'value',
+  };
 
   menuTop = 30;
   menuLeft = 0;
 
-  selectedItem?: MenuItem;
+  selectedItem?: { [key: string]: any };
   isExpand = false;
   alive = true;
 
   set value(val: any) {
     this.value$ = val;
-    this.selectedItem = this.items.find((item) => item.value === val);
+    this.selectedItem = this.items.find(
+      (item) => item[this.currentOptions.valueField] === val
+    );
     this.onChange(val);
   }
 
@@ -49,6 +65,7 @@ export class SelectComponent
   }
 
   ngOnInit(): void {
+    this.currentOptions = { ...this.currentOptions, ...(this.options || {}) };
     fromEvent(document, 'click')
       .pipe(takeWhile(() => this.alive))
       .subscribe((event: Event) => {
@@ -56,6 +73,12 @@ export class SelectComponent
           this.isExpand = false;
         }
       });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.items && !changes.items.firstChange) {
+      this.selectedItem = this.items.find((item) => item.value === this.value$);
+    }
   }
 
   toggleExpand(event: Event): void {
@@ -77,14 +100,15 @@ export class SelectComponent
             boundingRect.height -
             this.items.length * 26 -
             12;
+      this.expand.emit();
     }
   }
 
-  selectItem(item: { name: string; value: any }): void {
+  selectItem(item: { [key: string]: any }): void {
     if (this.selectedItem !== item) {
       this.selectedItem = item;
       this.isExpand = false;
-      this.value = item.value;
+      this.value = item[this.currentOptions.valueField];
     }
   }
 

@@ -18,11 +18,20 @@
     *ngIf="isExpand"
     [ngStyle]="{ 'left.px': menuLeft, 'top.px': menuTop }"
   >
-    <li class="menu-item" *ngFor="let item of items" (click)="selectItem(item)">
+    <li class="menu-item" *ngFor="let item of items; let index = index" (click)="selectItem(item)">
       <span class="check-icon"
         ><i *ngIf="item === selectedItem" class="iconfont icon-check"></i
       ></span>
-      <span>{{ item.name }}</span>
+      <span *ngIf="!template">{{ item[currentOptions.displayField] }}</span>
+      <ng-container
+        *ngIf="template"
+        [ngTemplateOutlet]="template"
+        [ngTemplateOutletContext]="{
+          $implicit: item,
+          index: index
+        }"
+      >
+      </ng-container>
     </li>
     <li class="menu-item" *ngIf="!items.length">
       <span style="text-align: center; width: 100%">无数据</span>

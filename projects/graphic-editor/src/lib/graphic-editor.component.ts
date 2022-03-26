@@ -303,6 +303,7 @@ export class GraphicEditorComponent
       this.currentPage.selected = false;
     }
     page.selected = true;
+    this.selectedWidgets.splice(0);
     this.renderPage(page);
   }
 

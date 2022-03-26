@@ -40,24 +40,34 @@ export class EventPanelComponent implements OnInit {
 
   constructor(private widgetLibSrv: WidgetLibService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getPageList();
+    this.getLinkWidgetList();
+  }
+
+  getPageList(): void {
+    this.pageList = this.ref.instance.pages
+      .map((page) => ({
+        name: page.name || `页面${page.id}`,
+        value: page.id,
+      }))
+      .filter((item) => item.value !== this.ref.instance.page.id);
+  }
+
+  getLinkWidgetList(): void {
+    this.linkWidgetList =
+      this.ref.instance.widgets
+        ?.filter((compRef) => compRef.instance.widget.type === 'link-area')
+        .map((compRef) => ({
+          name:
+            compRef.instance.widgetData?.name || compRef.instance.widget.name,
+          value: compRef.instance.widgetData?.id,
+        })) || [];
+  }
 
   onActionChange(action: ActionType): void {
     if (action === ActionType.JumpUrl) {
       this.listener.actionData.jumpTarget = OpenUrlType.NewWinow;
-    } else if (action === ActionType.JumpPage) {
-      this.pageList = this.ref.instance.pages.map((page) => ({
-        name: page.name || `页面${page.id}`,
-        value: page.id,
-      }));
-      this.linkWidgetList =
-        this.ref.instance.widgets
-          ?.filter((compRef) => compRef.instance.widget.type === 'link-area')
-          .map((compRef) => ({
-            name:
-              compRef.instance.widgetData?.name || compRef.instance.widget.name,
-            value: compRef.instance.widgetData?.id,
-          })) || [];
     }
   }
 
@@ -70,8 +80,10 @@ export class EventPanelComponent implements OnInit {
     ).value;
   }
 
-  onLinkWidgetChange(event: any): void {
-    console.log(event);
+  onJumTargetChange(event: OpenPageType): void {
+    if (event === OpenPageType.CurrentPage) {
+      this.listener.actionData.linkWidget = undefined;
+    }
   }
 
   deleteListener(): void {
