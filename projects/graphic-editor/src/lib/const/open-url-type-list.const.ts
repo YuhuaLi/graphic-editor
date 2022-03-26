@@ -1,4 +1,4 @@
-import { OpenUrlType } from '../type';
+import { OpenUrlType } from '../enum';
 
 export const OPEN_URL_TYPE_LIST = [
   {

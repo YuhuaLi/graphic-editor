@@ -6,7 +6,9 @@ import {
   ComponentRef,
   Injector,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -19,7 +21,9 @@ import { WidgetSettingService } from '../widget-setting.service';
   templateUrl: './widget-setting-item.component.html',
   styleUrls: ['./widget-setting-item.component.scss'],
 })
-export class WidgetSettingItemComponent implements OnInit, AfterViewInit {
+export class WidgetSettingItemComponent
+  implements OnInit, OnChanges, AfterViewInit
+{
   @Input() setting!: WidgetSetting;
   @Input() ref!: ComponentRef<WidgetComponent>;
 
@@ -42,6 +46,15 @@ export class WidgetSettingItemComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.renderSetting();
+  }
+
+  toggleCollapse(): void {
+    this.collapse = !this.collapse;
+  }
+
+  renderSetting(): void {
+    this.render.clear();
     const factroy = this.resolver.resolveComponentFactory(
       typeof this.setting === 'string'
         ? this.widgetSettingSrv.getWidgetByType(this.setting)?.component
@@ -59,7 +72,15 @@ export class WidgetSettingItemComponent implements OnInit, AfterViewInit {
     this.cdr.detectChanges();
   }
 
-  toggleCollapse(): void {
-    this.collapse = !this.collapse;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.setting && !changes.setting.firstChange) {
+      this.widgetSetting =
+        typeof this.setting === 'string'
+          ? this.widgetSettingSrv.getWidgetByType(this.setting)
+          : this.setting;
+    }
+    if (changes.ref && !changes.ref.firstChange) {
+      this.renderSetting();
+    }
   }
 }

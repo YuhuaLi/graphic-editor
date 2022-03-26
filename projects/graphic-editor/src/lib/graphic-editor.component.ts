@@ -453,6 +453,8 @@ export class GraphicEditorComponent
     const comp = this.compAreaContainer.createComponent(factory);
     comp.instance.widget = widget;
     comp.instance.style = widgetStyle;
+    comp.instance.widgets = this.widgets;
+    comp.instance.pages = this.pages;
     comp.instance.page = this.currentPage;
     if (widgetData) {
       comp.instance.widgetData = widgetData;

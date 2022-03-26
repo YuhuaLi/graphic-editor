@@ -138,4 +138,23 @@ export class GraphicEditorService {
   ): IDBObjectStore {
     return db.transaction(name, mode).objectStore(name);
   }
+
+  getPageById(id: number): Observable<Page> {
+    return new Observable((observer) => {
+      this.openDB().then((db) => {
+        const store = this.getObjectStore(db, this.PAGE_TABLE, 'readonly');
+        const request = store.get(id);
+        request.onsuccess = (ev: any) => {
+          observer.next(ev.target.result);
+          observer.complete();
+          db.close();
+        };
+        request.onerror = (ev: any) => {
+          observer.error(ev.target.result);
+          observer.complete();
+          db.close();
+        };
+      });
+    });
+  }
 }

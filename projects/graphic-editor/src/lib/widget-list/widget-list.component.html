@@ -12,7 +12,9 @@
     (contextmenu)="onWidgetContextMenu($event, widget)"
   >
     <i class="iconfont {{ widget.instance.widget.icon }}"></i>
-    <span class="widget-name">{{ widget.instance.widget.name }}</span>
+    <span class="widget-name">{{
+      widget.instance.widgetData.name || widget.instance.widget.name
+    }}</span>
     <span
       class="actions"
       [ngClass]="{

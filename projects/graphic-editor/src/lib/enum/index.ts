@@ -10,3 +10,5 @@ export * from './action-type.enum';
 export * from './menu-operation.enum';
 export * from './data-type.enum';
 export * from './http-method.enum';
+export * from './open-page.enum';
+export * from './open-url.enum';

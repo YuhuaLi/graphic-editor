@@ -43,4 +43,34 @@
       ></textarea>
     </div>
   </ng-container>
+  <ng-container *ngIf="listener.action === actionType.JumpPage">
+    <div class="general-row">
+      <span class="label">页面</span>
+      <lib-select
+        class="select"
+        [items]="pageList"
+        [(ngModel)]="listener.actionData.jumpPage"
+      ></lib-select>
+    </div>
+    <div class="general-row">
+      <span class="label">目标位置</span>
+      <lib-select
+        class="select"
+        [items]="openPageTypeList"
+        [(ngModel)]="listener.actionData.jumpTarget"
+      ></lib-select>
+    </div>
+    <div
+      *ngIf="listener.actionData.jumpTarget === openPageType.LinkArea"
+      class="general-row"
+    >
+      <span class="label">链接区域</span>
+      <lib-select
+        class="select"
+        [items]="linkWidgetList"
+        [(ngModel)]="listener.actionData.linkWidget"
+        (ngModelChange)="onLinkWidgetChange($event)"
+      ></lib-select>
+    </div>
+  </ng-container>
 </div>

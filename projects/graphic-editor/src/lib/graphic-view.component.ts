@@ -5,6 +5,7 @@ import {
   AfterViewInit,
   Component,
   ComponentFactoryResolver,
+  ComponentRef,
   ElementRef,
   EventEmitter,
   Input,
@@ -33,6 +34,7 @@ export class GraphicViewComponent implements OnInit, AfterViewInit, OnDestroy {
   zoomY = 1;
   alive = true;
   apiTimeout: any;
+  widgets: ComponentRef<WidgetComponent>[] = [];
 
   constructor(
     private cfr: ComponentFactoryResolver,
@@ -107,9 +109,12 @@ export class GraphicViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    if (this.page.widgets) {
+    if (this.page?.widgets) {
       for (const widget of this.page.widgets) {
-        this.createWidget(widget.type, widget.style, widget.widgetData);
+        const comp = this.createWidget(widget.type, widget.style, widget.widgetData);
+        if (comp) {
+          this.widgets.unshift(comp);
+        }
       }
     }
   }
@@ -118,7 +123,7 @@ export class GraphicViewComponent implements OnInit, AfterViewInit, OnDestroy {
     type: string,
     style: WidgetStyle,
     widgetData?: WidgetData
-  ): void {
+  ): ComponentRef<WidgetComponent> | null {
     const widget = this.widgetLibSrv.getWidgetByType(type);
     if (widget) {
       const factory = this.cfr.resolveComponentFactory(WidgetComponent);
@@ -126,12 +131,15 @@ export class GraphicViewComponent implements OnInit, AfterViewInit, OnDestroy {
       comp.instance.widget = widget;
       comp.instance.style = style;
       comp.instance.page = this.page;
+      comp.instance.widgets = this.widgets;
       comp.instance.mode = OperationMode.Production;
       if (widgetData) {
         comp.instance.widgetData = widgetData;
       }
       comp.changeDetectorRef.detectChanges();
+      return comp;
     }
+    return null;
   }
 
   ngOnDestroy(): void {

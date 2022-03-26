@@ -28,19 +28,22 @@ import {
   ActionType,
   DataType,
   Direction,
+  OpenPageType,
+  OpenUrlType,
   OperationMode,
   WidgetStatus,
 } from '../../enum';
+import { GraphicEditorService } from '../../graphic-editor.service';
 import {
   Coordinate,
   DataSetting,
-  OpenUrlType,
   Page,
   Widget,
   WidgetData,
   WidgetStyle,
 } from '../../type';
 import { BaseWidgetContent } from './base-widget-content';
+import { LinkAreaWidgetData } from './widget-link-area/widget-link-area.component';
 import { WidgetService } from './widget.service';
 
 @Component({
@@ -62,19 +65,24 @@ export class WidgetComponent
   @Input() widget!: Widget;
   @Input() zoom = 1;
   @Input() page!: Page;
+  @Input() pages!: Page[];
+  @Input() widgets!: ComponentRef<WidgetComponent>[];
 
   @Output() selectWidget = new EventEmitter<any>();
   @Output() initialized = new EventEmitter<any>();
   @Output() contextMenu = new EventEmitter<any>();
 
   widgetData?: WidgetData;
+  contentComponentRef?: ComponentRef<BaseWidgetContent>;
 
   data?: any;
 
   apiTimeout: any;
 
   @HostBinding('style.z-index') get zIndex(): number {
-    return this.isSelected || this.isRotating || this.isDragging ? 999 : this.style?.index;
+    return this.isSelected || this.isRotating || this.isDragging
+      ? 999
+      : this.style?.index;
   }
 
   /** 部件是否选中 */
@@ -123,7 +131,7 @@ export class WidgetComponent
   }
 
   set rotate(val: number) {
-    this.style.rotate = val;
+    this.style.rotate = +val.toFixed(1);
   }
 
   alive = true;
@@ -234,7 +242,8 @@ export class WidgetComponent
     private elementRef: ElementRef,
     private renderer2: Renderer2,
     private widgetSrv: WidgetService,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private graphicEditorSrv: GraphicEditorService
   ) {}
 
   ngOnInit(): void {
@@ -324,7 +333,7 @@ export class WidgetComponent
     if (this.mode === OperationMode.Production) {
       this.getData();
     }
-    this.createContentComponent();
+    this.contentComponentRef = this.createContentComponent();
     this.initializeEvents();
     this.initialized.emit({
       type: this.widget.type,
@@ -347,7 +356,7 @@ export class WidgetComponent
     }
   }
 
-  createContentComponent(): void {
+  createContentComponent(): ComponentRef<BaseWidgetContent> {
     const factory = this.resolver.resolveComponentFactory(
       this.widget.component
     );
@@ -364,9 +373,11 @@ export class WidgetComponent
     if (this.widgetData) {
       component.instance.widgetData = this.widgetData;
     } else {
+      component.instance.widgetData.id = new Date().getTime();
       this.widgetData = component.instance.widgetData;
     }
     component.instance.data = this.data;
+    return component;
   }
 
   initializeEvents(): void {
@@ -394,6 +405,44 @@ export class WidgetComponent
                   }
                 });
             }
+            break;
+          case ActionType.JumpPage:
+            const pageId = listener.actionData.jumpPage;
+            const linkWidgetId = listener.actionData.linkWidget;
+            const target = listener.actionData.jumpTarget;
+            if (target === OpenPageType.LinkArea) {
+              const widgetRef = this.widgets.find(
+                (compRef) => compRef.instance.widgetData?.id === linkWidgetId
+              );
+              if (widgetRef && pageId) {
+                fromEvent(
+                  this.elementRef.nativeElement.firstElementChild,
+                  listener.type as string
+                )
+                  .pipe(takeWhile(() => this.alive))
+                  .subscribe((event) => {
+                    this.graphicEditorSrv
+                      .getPageById(pageId)
+                      .pipe(takeWhile(() => this.alive))
+                      .subscribe((page) => {
+                        const ref = this.widgets.find(
+                          (item) =>
+                            item.instance.widgetData?.id === linkWidgetId
+                        );
+                        if (ref) {
+                          const widgetData =
+                            ref.instance.contentComponentRef?.instance
+                              .widgetData;
+                          if (widgetData) {
+                            (widgetData as LinkAreaWidgetData).page = page;
+                            ref.instance.cdr.detectChanges();
+                          }
+                        }
+                      });
+                  });
+              }
+            }
+            break;
         }
       }
     }

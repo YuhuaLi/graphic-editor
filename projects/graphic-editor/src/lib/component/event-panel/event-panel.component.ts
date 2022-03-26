@@ -1,11 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ComponentRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   ACTION_TYPE_LIST,
   EVENT_TYPE_LIST,
+  OPEN_PAGE_TYPE_LIST,
   OPEN_URL_TYPE_LIST,
 } from '../../const';
-import { ActionType } from '../../enum';
-import { EventListener, OpenUrlType } from '../../type';
+import { ActionType, OpenPageType, OpenUrlType } from '../../enum';
+import { EventListener, MenuItem } from '../../type';
+import { WidgetLibService } from '../../widget-lib/widget-lib.service';
+import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 
 @Component({
   selector: 'lib-event-panel',
@@ -13,22 +23,41 @@ import { EventListener, OpenUrlType } from '../../type';
   styleUrls: ['./event-panel.component.scss'],
 })
 export class EventPanelComponent implements OnInit {
+  @Input() ref!: ComponentRef<WidgetComponent>;
   @Input() listener!: EventListener;
   @Output() delete = new EventEmitter<EventListener>();
 
   eventTypeList = EVENT_TYPE_LIST;
   actionTypeList = ACTION_TYPE_LIST;
   openUrlTypeList = OPEN_URL_TYPE_LIST;
+  openPageTypeList = OPEN_PAGE_TYPE_LIST;
 
   actionType = ActionType;
+  openPageType = OpenPageType;
+  linkWidgetList: MenuItem[] = [];
 
-  constructor() {}
+  pageList: MenuItem[] = [];
+
+  constructor(private widgetLibSrv: WidgetLibService) {}
 
   ngOnInit(): void {}
 
   onActionChange(action: ActionType): void {
     if (action === ActionType.JumpUrl) {
       this.listener.actionData.jumpTarget = OpenUrlType.NewWinow;
+    } else if (action === ActionType.JumpPage) {
+      this.pageList = this.ref.instance.pages.map((page) => ({
+        name: page.name || `页面${page.id}`,
+        value: page.id,
+      }));
+      this.linkWidgetList =
+        this.ref.instance.widgets
+          ?.filter((compRef) => compRef.instance.widget.type === 'link-area')
+          .map((compRef) => ({
+            name:
+              compRef.instance.widgetData?.name || compRef.instance.widget.name,
+            value: compRef.instance.widgetData?.id,
+          })) || [];
     }
   }
 
@@ -39,6 +68,10 @@ export class EventPanelComponent implements OnInit {
     this.listener.actionData.jumpUrl = (
       event.target as HTMLTextAreaElement
     ).value;
+  }
+
+  onLinkWidgetChange(event: any): void {
+    console.log(event);
   }
 
   deleteListener(): void {
