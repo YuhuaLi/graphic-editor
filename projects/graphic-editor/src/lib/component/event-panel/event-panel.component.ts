@@ -34,7 +34,7 @@ export class EventPanelComponent implements OnInit {
 
   actionType = ActionType;
   openPageType = OpenPageType;
-  linkWidgetList: MenuItem[] = [];
+  linkWidgetList: { [key: string]: any }[] = [];
 
   pageList: MenuItem[] = [];
 
@@ -62,7 +62,16 @@ export class EventPanelComponent implements OnInit {
           name:
             compRef.instance.widgetData?.name || compRef.instance.widget.name,
           value: compRef.instance.widgetData?.id,
+          instance: compRef.instance,
         })) || [];
+  }
+
+  linkWidgetHighlight(item: any): void {
+    item.instance.setHighlight(true);
+  }
+
+  removeLinkWidgetHighlight(item: any): void {
+    item.instance.setHighlight(false);
   }
 
   onActionChange(action: ActionType): void {

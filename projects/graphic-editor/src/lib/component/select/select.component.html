@@ -18,7 +18,13 @@
     *ngIf="isExpand"
     [ngStyle]="{ 'left.px': menuLeft, 'top.px': menuTop }"
   >
-    <li class="menu-item" *ngFor="let item of items; let index = index" (click)="selectItem(item)">
+    <li
+      class="menu-item"
+      *ngFor="let item of items; let index = index"
+      (click)="selectItem(item)"
+      (mouseenter)="mouseenterItem.emit(item)"
+      (mouseleave)="mouseleaveItem.emit(item)"
+    >
       <span class="check-icon"
         ><i *ngIf="item === selectedItem" class="iconfont icon-check"></i
       ></span>

@@ -73,6 +73,8 @@
         [items]="linkWidgetList"
         [(ngModel)]="listener.actionData.linkWidget"
         (expand)="getLinkWidgetList()"
+        (mouseenterItem)="linkWidgetHighlight($event)"
+        (mouseleaveItem)="removeLinkWidgetHighlight($event)"
       ></lib-select>
     </div>
   </ng-container>

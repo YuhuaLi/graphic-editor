@@ -39,6 +39,8 @@ export class SelectComponent
   @Input() items: { [key: string]: any }[] = [];
   @Input() options: { displayField?: string; valueField?: string } = {};
   @Output() expand = new EventEmitter<any>();
+  @Output() mouseenterItem = new EventEmitter<any>();
+  @Output() mouseleaveItem = new EventEmitter<any>();
 
   currentOptions: { displayField: string; valueField: string } = {
     displayField: 'name',
