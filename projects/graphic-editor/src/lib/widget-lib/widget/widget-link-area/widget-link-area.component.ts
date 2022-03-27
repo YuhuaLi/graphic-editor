@@ -18,7 +18,7 @@ export class WidgetLinkAreaComponent
   implements OnInit
 {
   page?: Page;
-  pages?: Page[];
+  pages: Page[] = [];
 
   widgetData: LinkAreaWidgetData = {
     setting: {
