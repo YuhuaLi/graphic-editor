@@ -138,6 +138,7 @@ export class GraphicViewComponent
       for (const widget of this.page.widgets) {
         this.createWidget(widget.type, widget.style, widget.widgetData);
       }
+      this.widgets.forEach(widget => widget.changeDetectorRef.detectChanges());
     }
   }
 
@@ -168,7 +169,6 @@ export class GraphicViewComponent
           }
         });
       this.widgets.unshift(comp);
-      // comp.changeDetectorRef.detectChanges();
       return comp;
     }
     return null;
