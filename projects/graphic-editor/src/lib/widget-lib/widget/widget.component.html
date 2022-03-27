@@ -24,6 +24,7 @@
   </div>
 
   <div
+    *ngIf="mode === OPERATION_MODE.Development"
     class="selection-border"
     [ngStyle]="{
       'width.px': style.width,
