@@ -431,7 +431,7 @@ export class WidgetComponent
                           (
                             ref.instance
                               .contentComponentRef as ComponentRef<WidgetLinkAreaComponent>
-                          ).instance.renderPage(page);
+                          ).instance.renderPage(page, this.pages);
                           console.log(this.pages);
                         }
                       });

@@ -17,7 +17,8 @@ export class WidgetLinkAreaComponent
   extends BaseWidgetContent
   implements OnInit
 {
-  page!: Page;
+  page?: Page;
+  pages?: Page[];
 
   widgetData: LinkAreaWidgetData = {
     setting: {
@@ -38,9 +39,10 @@ export class WidgetLinkAreaComponent
     super();
   }
 
-  renderPage(page: Page): void {
+  renderPage(page: Page, pages: Page[] = []): void {
     console.log('render', page);
     this.page = page;
+    this.pages = pages;
   }
 
   ngOnInit(): void {}
