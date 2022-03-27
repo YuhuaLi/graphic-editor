@@ -136,22 +136,7 @@ export class GraphicViewComponent
     this.widgets = [];
     if (this.page?.widgets) {
       for (const widget of this.page.widgets) {
-        const comp = this.createWidget(
-          widget.type,
-          widget.style,
-          widget.widgetData
-        );
-        if (comp) {
-          comp.instance.widgetEvent
-            .pipe(takeWhile(() => this.alive))
-            .subscribe((event: GraphicEvent) => {
-              if (event.type === ActionType.JumpPage) {
-                this.page = event.data;
-                this.renderPage();
-              }
-            });
-          this.widgets.unshift(comp);
-        }
+        this.createWidget(widget.type, widget.style, widget.widgetData);
       }
     }
   }
@@ -174,7 +159,16 @@ export class GraphicViewComponent
       if (widgetData) {
         comp.instance.widgetData = widgetData;
       }
-      comp.changeDetectorRef.detectChanges();
+      comp.instance.widgetEvent
+        .pipe(takeWhile(() => this.alive))
+        .subscribe((event: GraphicEvent) => {
+          if (event.type === ActionType.JumpPage) {
+            this.page = event.data;
+            this.renderPage();
+          }
+        });
+      this.widgets.unshift(comp);
+      // comp.changeDetectorRef.detectChanges();
       return comp;
     }
     return null;

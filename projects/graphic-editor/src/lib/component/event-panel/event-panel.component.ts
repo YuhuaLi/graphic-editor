@@ -74,6 +74,12 @@ export class EventPanelComponent implements OnInit {
     item.instance.setHighlight(false);
   }
 
+  onLinkWidgetChange(id: any): void {
+    this.ref.instance.widgets
+      ?.find((compRef) => compRef.instance.widgetData?.id === id)
+      ?.instance.setHighlight(false);
+  }
+
   onActionChange(action: ActionType): void {
     if (action === ActionType.JumpUrl) {
       this.listener.actionData.jumpTarget = OpenUrlType.NewWinow;

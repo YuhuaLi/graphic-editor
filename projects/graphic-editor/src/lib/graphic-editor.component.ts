@@ -281,6 +281,7 @@ export class GraphicEditorComponent
       .toPromise()
       .then((page) => {
         this.pages.push(page);
+        this.selectPage(page);
         return this.pages;
       });
   }

@@ -454,6 +454,7 @@ export class WidgetComponent
                             (item) =>
                               item.instance.widgetData?.id === linkWidgetId
                           );
+                          console.log(ref);
                           if (ref?.instance.contentComponentRef) {
                             (
                               ref.instance

@@ -39,6 +39,7 @@ export class WidgetLinkAreaComponent
   }
 
   renderPage(page: Page): void {
+    console.log('render', page);
     this.page = page;
   }
 

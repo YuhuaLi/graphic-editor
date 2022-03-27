@@ -75,6 +75,7 @@
         (expand)="getLinkWidgetList()"
         (mouseenterItem)="linkWidgetHighlight($event)"
         (mouseleaveItem)="removeLinkWidgetHighlight($event)"
+        (ngModelChange)="onLinkWidgetChange($event)"
       ></lib-select>
     </div>
   </ng-container>
