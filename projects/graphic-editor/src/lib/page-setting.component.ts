@@ -8,7 +8,7 @@ import {
 import { NavButton, Page } from './type';
 
 @Component({
-  selector: 'lib-page-setting',
+  selector: 'ng-page-setting',
   templateUrl: './page-setting.component.html',
   styleUrls: ['./page-setting.component.scss'],
 })

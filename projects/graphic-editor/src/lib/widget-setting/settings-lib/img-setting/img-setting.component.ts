@@ -7,7 +7,7 @@ export type ImgSetting = {
 };
 
 @Component({
-  selector: 'lib-img-setting',
+  selector: 'ng-img-setting',
   templateUrl: './img-setting.component.html',
   styleUrls: ['./img-setting.component.scss'],
 })

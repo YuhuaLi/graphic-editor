@@ -14,12 +14,12 @@
   </div>
   <div class="general-row">
     <span class="label">类型</span>
-    <lib-select
+    <ng-select
       class="select"
       [items]="dataTypeList"
       [ngModel]="dataSetting.type"
       (ngModelChange)="onSettingTypeChange($event)"
-    ></lib-select>
+    ></ng-select>
   </div>
   <ng-container *ngIf="dataSetting.type === dataType.Api">
     <div class="general-row">
@@ -54,12 +54,12 @@
   <ng-container *ngIf="dataSetting.type === dataType.PageData">
     <div class="general-row">
       <span class="label">数据源</span>
-      <lib-select
+      <ng-select
         class="select"
         [items]="pageDataList"
         [ngModel]="dataSetting.parent"
         (ngModelChange)="onPageSettingChange($event)"
-      ></lib-select>
+      ></ng-select>
     </div>
   </ng-container>
   <ng-container *ngIf="dataSetting.type === dataType.Const">

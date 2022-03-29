@@ -34,6 +34,7 @@ import { WidgetListComponent } from './widget-list/widget-list.component';
 import { PageDataSettingComponent } from './data-setting/page-data-setting/page-data-setting.component';
 import { WidgetDataSettingComponent } from './data-setting/widget-data-setting/widget-data-setting.component';
 import { DataPanelComponent } from './component/data-panel/data-panel.component';
+import { WidgetService } from './widget-lib/widget/widget.service';
 
 const WIDGET_COMPONENT = [
   WidgetComponent,
@@ -43,46 +44,55 @@ const WIDGET_COMPONENT = [
 
 const WIDGET_SETTING_COMPONENT = [TextSettingComponent, ImgSettingComponent];
 
+const COMPONENTS = [
+  GraphicEditorComponent,
+  RulerComponent,
+  WidgetLibComponent,
+  PageSettingComponent,
+  WidgetSettingComponent,
+  WidgetGeneralSettingComponent,
+  WidgetSettingItemComponent,
+  ZoomBoxComponent,
+  ...WIDGET_COMPONENT,
+  ...WIDGET_SETTING_COMPONENT,
+  WidgetButtonComponent,
+  AppearanceSettingComponent,
+  PageEventListenerComponent,
+  WidgetEventListenerComponent,
+  GraphicViewComponent,
+  SelectComponent,
+  EventPanelComponent,
+  WidgetLinkAreaComponent,
+  MenuComponent,
+  PageListComponent,
+  WidgetListComponent,
+  PageDataSettingComponent,
+  WidgetDataSettingComponent,
+  DataPanelComponent,
+];
+
 @NgModule({
-  declarations: [
-    GraphicEditorComponent,
-    RulerComponent,
-    WidgetLibComponent,
-    PageSettingComponent,
-    WidgetSettingComponent,
-    WidgetGeneralSettingComponent,
-    WidgetSettingItemComponent,
-    ZoomBoxComponent,
-    ...WIDGET_COMPONENT,
-    ...WIDGET_SETTING_COMPONENT,
-    WidgetButtonComponent,
-    AppearanceSettingComponent,
-    PageEventListenerComponent,
-    WidgetEventListenerComponent,
-    GraphicViewComponent,
-    SelectComponent,
-    EventPanelComponent,
-    WidgetLinkAreaComponent,
-    MenuComponent,
-    PageListComponent,
-    WidgetListComponent,
-    PageDataSettingComponent,
-    WidgetDataSettingComponent,
-    DataPanelComponent,
-  ],
+  declarations: [...COMPONENTS],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
-  exports: [GraphicEditorComponent, SelectComponent],
+  exports: [GraphicEditorComponent, GraphicViewComponent, SelectComponent],
+  // exports: [...COMPONENTS],
   // entryComponents: [...WIDGET_COMPONENT],
-  providers: [WidgetLibService, WidgetSettingService, GraphicEditorService],
+  providers: [
+    WidgetService,
+    WidgetLibService,
+    WidgetSettingService,
+    GraphicEditorService,
+  ],
 })
 export class GraphicEditorModule {
   static forRoot(
-    widgetList: Widget[],
-    widgetSettingList: WidgetSetting[]
+    widgetList?: Widget[],
+    widgetSettingList?: WidgetSetting[]
   ): ModuleWithProviders<GraphicEditorModule> {
     return {
       ngModule: GraphicEditorModule,
       providers: [
+        WidgetService,
         WidgetLibService,
         WidgetSettingService,
         GraphicEditorService,

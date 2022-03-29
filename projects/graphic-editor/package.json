@@ -1,5 +1,5 @@
 {
-  "name": "graphic-editor",
+  "name": "ng-graphic-editor",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^11.0.9",

@@ -18,7 +18,7 @@ import { WidgetLibService } from '../../widget-lib/widget-lib.service';
 import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 
 @Component({
-  selector: 'lib-event-panel',
+  selector: 'ng-event-panel',
   templateUrl: './event-panel.component.html',
   styleUrls: ['./event-panel.component.scss'],
 })

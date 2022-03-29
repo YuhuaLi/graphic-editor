@@ -12,7 +12,7 @@ import { takeWhile } from 'rxjs/operators';
 import { MenuItem } from '../../type';
 
 @Component({
-  selector: 'lib-menu',
+  selector: 'ng-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })

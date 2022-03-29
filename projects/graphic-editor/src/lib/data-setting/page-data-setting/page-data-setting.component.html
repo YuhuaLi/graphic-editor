@@ -7,9 +7,9 @@
   <ng-container
     *ngFor="let dataSetting of page?.dataSetting; let i = index"
   >
-    <lib-data-panel
+    <ng-data-panel
       [dataSetting]="dataSetting"
       (delete)="deleteDataSetting($event, i)"
-    ></lib-data-panel>
+    ></ng-data-panel>
   </ng-container>
 </div>

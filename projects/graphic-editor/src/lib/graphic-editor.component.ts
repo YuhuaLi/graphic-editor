@@ -36,7 +36,7 @@ import { fromEvent } from 'rxjs';
 import { GraphicEditorService } from './graphic-editor.service';
 
 @Component({
-  selector: 'lib-graphic-editor',
+  selector: 'ng-graphic-editor',
   templateUrl: 'graphic-editor.component.html',
   styleUrls: [`./graphic-editor.component.scss`],
 })

@@ -20,7 +20,7 @@ import { MenuItem } from '../../type';
 import { AbstractValueAccessor } from '../abstractvalueaccessor';
 
 @Component({
-  selector: 'lib-select',
+  selector: 'ng-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
   providers: [

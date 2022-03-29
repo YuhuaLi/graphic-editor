@@ -6,7 +6,7 @@ import { Widget, NavButton } from '../type';
 import { WidgetLibService } from './widget-lib.service';
 
 @Component({
-  selector: 'lib-widget-lib',
+  selector: 'ng-widget-lib',
   templateUrl: './widget-lib.component.html',
   styleUrls: ['./widget-lib.component.scss'],
 })
@@ -79,14 +79,14 @@ export class WidgetLibComponent implements OnInit {
   onWidgetDragStart(event: DragEvent, widget: Widget): void {
     event.dataTransfer?.setData('widgetType', widget.type);
     this.renderer2.addClass(
-      document.body.querySelector('lib-graphic-editor'),
+      document.body.querySelector('ng-graphic-editor'),
       'dragging'
     );
   }
 
   onWidgetDragEnd(event: DragEvent): void {
     this.renderer2.removeClass(
-      document.body.querySelector('lib-graphic-editor'),
+      document.body.querySelector('ng-graphic-editor'),
       'dragging'
     );
   }

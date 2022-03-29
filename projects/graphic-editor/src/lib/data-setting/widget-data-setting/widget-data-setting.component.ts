@@ -3,7 +3,7 @@ import { DataSetting } from '../../type/data-setting.type';
 import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 
 @Component({
-  selector: 'lib-widget-data-setting',
+  selector: 'ng-widget-data-setting',
   templateUrl: './widget-data-setting.component.html',
   styleUrls: ['./widget-data-setting.component.scss'],
 })

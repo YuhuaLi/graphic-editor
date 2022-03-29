@@ -1,4 +1,3 @@
-import { DataSetting } from './../../../projects/graphic-editor/src/lib/type/data-setting.type';
 import {
   Component,
   OnInit,
@@ -9,15 +8,9 @@ import {
 } from '@angular/core';
 import ResizeObserver from 'resize-observer-polyfill';
 import * as echarts from 'echarts';
-import {
-  BaseWidgetContent,
-  WidgetComponent,
-  WidgetData,
-  WidgetService,
-} from 'projects/graphic-editor/src/public-api';
 import { HttpClient } from '@angular/common/http';
 import { ChartType } from './chart-setting.component';
-import { AppearanceSetting } from 'projects/graphic-editor/src/lib/widget-setting/settings-lib/appearance-setting/appearance-setting.component';
+import { BaseWidgetContent, WidgetData, WidgetService, AppearanceSetting } from 'ng-graphic-editor';
 
 export type ChartWidgetData = WidgetData<
   {
@@ -53,8 +46,7 @@ export class ChartComponent
   chart: any;
 
   constructor(
-    private widgetSrv: WidgetService,
-    private httpClient: HttpClient
+    private widgetSrv: WidgetService
   ) {
     super();
   }

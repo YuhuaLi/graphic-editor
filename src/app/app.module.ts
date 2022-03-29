@@ -6,15 +6,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EditorComponent } from './editor/editor.component';
 import { TestComponent } from './test/test.component';
+// import {
+//   GraphicEditorModule,
+//   WidgetCategory,
+//   WIDGET_LIST,
+//   WIDGET_SETTING_LIST,
+// } from 'projects/graphic-editor/src/public-api';
+import { ChartComponent } from './chart/chart.component';
+import { ChartSettingComponent } from './chart/chart-setting.component';
+import { CustomHttpInterceptor } from './custom-http-Interceptor';
 import {
   GraphicEditorModule,
   WidgetCategory,
   WIDGET_LIST,
   WIDGET_SETTING_LIST,
-} from 'projects/graphic-editor/src/public-api';
-import { ChartComponent } from './chart/chart.component';
-import { ChartSettingComponent } from './chart/chart-setting.component';
-import { CustomHttpInterceptor } from './custom-http-Interceptor';
+} from 'ng-graphic-editor';
+import { CommonModule } from '@angular/common';
 
 const arr = [
   {
@@ -48,11 +55,12 @@ const arr1 = [
     ChartSettingComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    GraphicEditorModule,
+    GraphicEditorModule.forRoot(),
     HttpClientModule,
   ],
   providers: [

@@ -3,7 +3,7 @@ import { Page } from '../../type';
 import { DataSetting } from '../../type/data-setting.type';
 
 @Component({
-  selector: 'lib-page-data-setting',
+  selector: 'ng-page-data-setting',
   templateUrl: './page-data-setting.component.html',
   styleUrls: ['./page-data-setting.component.scss'],
 })

@@ -5,6 +5,6 @@
 </div>
 <div class="listener-list">
   <ng-container *ngFor="let listener of ref.instance.widgetData?.events;let i = index">
-    <lib-event-panel [ref]="ref" [listener]="listener" (delete)="deleteEventListener(i)"></lib-event-panel>
+    <ng-event-panel [ref]="ref" [listener]="listener" (delete)="deleteEventListener(i)"></ng-event-panel>
   </ng-container>
 </div>

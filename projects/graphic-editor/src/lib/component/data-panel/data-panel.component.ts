@@ -14,7 +14,7 @@ import { DataSetting } from '../../type';
 import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 
 @Component({
-  selector: 'lib-data-panel',
+  selector: 'ng-data-panel',
   templateUrl: './data-panel.component.html',
   styleUrls: ['./data-panel.component.scss'],
 })

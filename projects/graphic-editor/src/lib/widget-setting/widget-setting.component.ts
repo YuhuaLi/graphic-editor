@@ -3,7 +3,7 @@ import { NavButton } from '../type';
 import { WidgetComponent } from '../widget-lib/widget/widget.component';
 
 @Component({
-  selector: 'lib-widget-setting',
+  selector: 'ng-widget-setting',
   templateUrl: './widget-setting.component.html',
   styleUrls: ['./widget-setting.component.scss'],
 })

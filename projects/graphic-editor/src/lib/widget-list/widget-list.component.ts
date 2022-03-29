@@ -9,7 +9,7 @@ import {
 import { WidgetComponent } from '../widget-lib/widget/widget.component';
 
 @Component({
-  selector: 'lib-widget-list',
+  selector: 'ng-widget-list',
   templateUrl: './widget-list.component.html',
   styleUrls: ['./widget-list.component.scss'],
 })

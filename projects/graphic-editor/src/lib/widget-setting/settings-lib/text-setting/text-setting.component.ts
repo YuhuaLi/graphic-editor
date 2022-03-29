@@ -19,7 +19,7 @@ export type TextSetting = {
 };
 
 @Component({
-  selector: 'lib-text-setting',
+  selector: 'ng-text-setting',
   templateUrl: './text-setting.component.html',
   styleUrls: ['./text-setting.component.scss'],
 })

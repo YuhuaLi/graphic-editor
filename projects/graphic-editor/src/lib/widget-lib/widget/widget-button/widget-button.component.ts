@@ -7,7 +7,7 @@ import { BaseWidgetContent } from '../base-widget-content';
 export type ButtonWidgetData = WidgetData<TextSetting & AppearanceSetting>;
 
 @Component({
-  selector: 'lib-widget-button',
+  selector: 'ng-widget-button',
   templateUrl: './widget-button.component.html',
   styleUrls: ['./widget-button.component.scss'],
 })

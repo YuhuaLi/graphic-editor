@@ -1,5 +1,5 @@
 import { Component, ComponentRef, OnInit } from '@angular/core';
-import { WidgetComponent } from 'projects/graphic-editor/src/lib/widget-lib/widget/widget.component';
+import { WidgetComponent } from 'ng-graphic-editor';
 
 export enum ChartType {
   Bar = 'bar',
@@ -18,7 +18,7 @@ export class ChartSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.sourceList =
-      this.ref.instance.widgetData?.dataSetting?.map((item) => ({
+      this.ref.instance.widgetData?.dataSetting?.map((item: any) => ({
         name: item.name,
         value: item.id,
       })) || [];

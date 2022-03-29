@@ -13,7 +13,7 @@ export type AppearanceSetting = {
 };
 
 @Component({
-  selector: 'lib-appearance-setting',
+  selector: 'ng-appearance-setting',
   templateUrl: './appearance-setting.component.html',
   styleUrls: ['./appearance-setting.component.scss'],
 })

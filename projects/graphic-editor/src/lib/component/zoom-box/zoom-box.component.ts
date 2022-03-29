@@ -5,7 +5,7 @@ import { ZOOM_RANGE } from '../../const';
 import { AbstractValueAccessor } from '../abstractvalueaccessor';
 
 @Component({
-  selector: 'lib-zoom-box',
+  selector: 'ng-zoom-box',
   templateUrl: './zoom-box.component.html',
   styleUrls: ['./zoom-box.component.scss'],
   providers: [

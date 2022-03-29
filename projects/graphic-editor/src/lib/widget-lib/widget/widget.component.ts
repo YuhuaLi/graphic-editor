@@ -51,7 +51,7 @@ import {
 import { WidgetService } from './widget.service';
 
 @Component({
-  selector: 'lib-widget',
+  selector: 'ng-widget',
   templateUrl: './widget.component.html',
   styleUrls: ['./widget.component.scss'],
   providers: [WidgetService],
@@ -229,7 +229,7 @@ export class WidgetComponent
     this.timeoutId = null;
     this.renderer2.removeStyle(document.body, 'cursor');
     this.renderer2.removeClass(
-      document.body.querySelector('lib-graphic-editor'),
+      document.body.querySelector('ng-graphic-editor'),
       'operation'
     );
     document.removeEventListener('mouseup', this.onMouseUp);
@@ -522,7 +522,7 @@ export class WidgetComponent
     this.tempMousePos = { x: event.clientX, y: event.clientY };
     this.setSelected(event.ctrlKey);
     this.renderer2.addClass(
-      document.body.querySelector('lib-graphic-editor'),
+      document.body.querySelector('ng-graphic-editor'),
       'operation'
     );
     if (!this.isLocked) {
@@ -559,7 +559,7 @@ export class WidgetComponent
 
     this.status = WidgetStatus.Rotate;
     this.renderer2.addClass(
-      document.body.querySelector('lib-graphic-editor'),
+      document.body.querySelector('ng-graphic-editor'),
       'operation'
     );
     this.renderer2.setStyle(
@@ -584,7 +584,7 @@ export class WidgetComponent
     this.tempMousePos = { x: event.clientX, y: event.clientY };
     this.setSelected(false); // 清除其他选中
     this.renderer2.addClass(
-      document.body.querySelector('lib-graphic-editor'),
+      document.body.querySelector('ng-graphic-editor'),
       'operation'
     );
     switch (direction) {

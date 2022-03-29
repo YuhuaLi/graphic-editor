@@ -9,7 +9,7 @@ export type LinkAreaWidgetData = WidgetData<AppearanceSetting> & {
 };
 
 @Component({
-  selector: 'lib-widget-link-area',
+  selector: 'ng-widget-link-area',
   templateUrl: './widget-link-area.component.html',
   styleUrls: ['./widget-link-area.component.scss'],
 })

@@ -20,9 +20,9 @@
       "dom"
     ],
     "paths": {
-      "graphic-editor": [
-        "dist/graphic-editor/graphic-editor",
-        "dist/graphic-editor"
+      "ng-graphic-editor": [
+        "dist/ng-graphic-editor/ng-graphic-editor",
+        "dist/ng-graphic-editor"
       ]
     }
   },

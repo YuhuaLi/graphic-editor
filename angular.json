@@ -126,11 +126,11 @@
         }
       }
     },
-    "graphic-editor": {
+    "ng-graphic-editor": {
       "projectType": "library",
       "root": "projects/graphic-editor",
       "sourceRoot": "projects/graphic-editor/src",
-      "prefix": "lib",
+      "prefix": "ng",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

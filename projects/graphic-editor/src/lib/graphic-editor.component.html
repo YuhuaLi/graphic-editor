@@ -12,10 +12,10 @@
     <span class="toolbar-action" (click)="saveProject()"
       ><i class="iconfont icon-save"></i
     ></span>
-    <lib-zoom-box
+    <ng-zoom-box
       [ngModel]="zoom"
       (ngModelChange)="zoomPage($event)"
-    ></lib-zoom-box>
+    ></ng-zoom-box>
   </div>
 </div>
 <div
@@ -36,11 +36,11 @@
         </span>
       </div>
       <div class="panel-body">
-        <lib-page-list
+        <ng-page-list
           [pages]="pages"
           (selectPage)="selectPage($event)"
           (deletePage)="deletePage($event)"
-        ></lib-page-list>
+        ></ng-page-list>
       </div>
     </div>
     <div class="left-side-panel">
@@ -51,12 +51,12 @@
         </span>
       </div>
       <div class="panel-body">
-        <lib-widget-list
+        <ng-widget-list
           [widgets]="widgets"
           (contextMenu)="onWidgetContextMenu($event)"
           (deleteWidget)="deleteWidget($event)"
           (selectWidget)="selectWidget($event)"
-        ></lib-widget-list>
+        ></ng-widget-list>
       </div>
     </div>
     <div
@@ -67,18 +67,18 @@
 
   <div class="viewport">
     <span class="back-origin"></span>
-    <lib-ruler
+    <ng-ruler
       class="ruler h-ruler"
       [placement]="'horizontal'"
       [offset]="scrollLeft"
       [zoom]="zoom"
-    ></lib-ruler>
-    <lib-ruler
+    ></ng-ruler>
+    <ng-ruler
       class="ruler v-ruler"
       [placement]="'vertical'"
       [offset]="scrollTop"
       [zoom]="zoom"
-    ></lib-ruler>
+    ></ng-ruler>
     <div
       #grid
       class="main-viewport"
@@ -169,18 +169,18 @@
   </div>
   <div class="right-side">
     <div class="right-side-panel">
-      <lib-page-setting
+      <ng-page-setting
         [page]="currentPage"
         *ngIf="!selectedWidgets.length"
-      ></lib-page-setting>
-      <lib-widget-setting
+      ></ng-page-setting>
+      <ng-widget-setting
         [ref]="selectedWidgets[0]"
         *ngIf="selectedWidgets.length"
-      ></lib-widget-setting>
+      ></ng-widget-setting>
     </div>
   </div>
 </div>
 <div class="content" *ngIf="currentPage && mode === OPERATION_MODE.Production">
-  <lib-graphic-view [page]="currentPage" [pages]="pages"></lib-graphic-view>
+  <ng-graphic-view [page]="currentPage" [pages]="pages"></ng-graphic-view>
 </div>
-<lib-menu #menu (selectItem)="onSelectMenuItem($event)"></lib-menu>
+<ng-menu #menu (selectItem)="onSelectMenuItem($event)"></ng-menu>

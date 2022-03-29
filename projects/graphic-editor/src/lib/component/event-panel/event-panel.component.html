@@ -7,29 +7,29 @@
   </div>
   <div class="general-row">
     <span class="label">类型</span>
-    <lib-select
+    <ng-select
       class="select"
       [items]="eventTypeList"
       [(ngModel)]="listener.type"
-    ></lib-select>
+    ></ng-select>
   </div>
   <div class="general-row">
     <span class="label">行为</span>
-    <lib-select
+    <ng-select
       class="select"
       [items]="actionTypeList"
       [(ngModel)]="listener.action"
       (ngModelChange)="onActionChange($event)"
-    ></lib-select>
+    ></ng-select>
   </div>
   <ng-container *ngIf="listener.action === actionType.JumpUrl">
     <div class="general-row">
       <span class="label">目标位置</span>
-      <lib-select
+      <ng-select
         class="select"
         [items]="openUrlTypeList"
         [(ngModel)]="listener.actionData.jumpTarget"
-      ></lib-select>
+      ></ng-select>
     </div>
     <div class="general-row">
       <span class="label">地址</span>
@@ -46,29 +46,29 @@
   <ng-container *ngIf="listener.action === actionType.JumpPage">
     <div class="general-row">
       <span class="label">页面</span>
-      <lib-select
+      <ng-select
         class="select"
         [items]="pageList"
         [(ngModel)]="listener.actionData.jumpPage"
         (expand)="getPageList()"
       >
-      </lib-select>
+      </ng-select>
     </div>
     <div class="general-row">
       <span class="label">目标位置</span>
-      <lib-select
+      <ng-select
         class="select"
         [items]="openPageTypeList"
         [(ngModel)]="listener.actionData.jumpTarget"
         (ngModelChange)="onJumTargetChange($event)"
-      ></lib-select>
+      ></ng-select>
     </div>
     <div
       *ngIf="listener.actionData.jumpTarget === openPageType.LinkArea"
       class="general-row"
     >
       <span class="label">链接区域</span>
-      <lib-select
+      <ng-select
         class="select"
         [items]="linkWidgetList"
         [(ngModel)]="listener.actionData.linkWidget"
@@ -76,7 +76,7 @@
         (mouseenterItem)="linkWidgetHighlight($event)"
         (mouseleaveItem)="removeLinkWidgetHighlight($event)"
         (ngModelChange)="onLinkWidgetChange($event)"
-      ></lib-select>
+      ></ng-select>
     </div>
   </ng-container>
 </div>

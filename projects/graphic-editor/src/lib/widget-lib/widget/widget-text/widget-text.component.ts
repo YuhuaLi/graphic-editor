@@ -7,7 +7,7 @@ import { BaseWidgetContent } from '../base-widget-content';
 import { WidgetService } from '../widget.service';
 
 @Component({
-  selector: 'lib-widget-text',
+  selector: 'ng-widget-text',
   templateUrl: './widget-text.component.html',
   styleUrls: ['./widget-text.component.scss'],
 })

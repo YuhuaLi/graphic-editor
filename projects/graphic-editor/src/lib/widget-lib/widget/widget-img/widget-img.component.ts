@@ -4,7 +4,7 @@ import { ImgSetting } from '../../../widget-setting/settings-lib/img-setting/img
 import { BaseWidgetContent } from '../base-widget-content';
 
 @Component({
-  selector: 'lib-widget-img',
+  selector: 'ng-widget-img',
   templateUrl: './widget-img.component.html',
   styleUrls: ['./widget-img.component.scss'],
 })

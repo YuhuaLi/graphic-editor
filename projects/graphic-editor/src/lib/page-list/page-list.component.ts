@@ -12,7 +12,7 @@ import { takeWhile } from 'rxjs/operators';
 import { Page } from '../type';
 
 @Component({
-  selector: 'lib-page-list',
+  selector: 'ng-page-list',
   templateUrl: './page-list.component.html',
   styleUrls: ['./page-list.component.scss'],
 })

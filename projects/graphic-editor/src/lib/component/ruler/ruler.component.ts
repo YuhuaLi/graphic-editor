@@ -14,7 +14,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 import { Placement } from '../../enum';
 
 @Component({
-  selector: 'lib-ruler',
+  selector: 'ng-ruler',
   templateUrl: './ruler.component.html',
   styleUrls: ['./ruler.component.scss'],
 })

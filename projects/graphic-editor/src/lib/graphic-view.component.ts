@@ -23,7 +23,7 @@ import { WidgetLibService } from './widget-lib/widget-lib.service';
 import { WidgetComponent } from './widget-lib/widget/widget.component';
 
 @Component({
-  selector: 'lib-graphic-view',
+  selector: 'ng-graphic-view',
   templateUrl: './graphic-view.component.html',
   styleUrls: ['./graphic-view.component.scss'],
 })

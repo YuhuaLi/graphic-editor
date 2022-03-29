@@ -4,7 +4,7 @@ import { EventListener } from '../../type';
 import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 
 @Component({
-  selector: 'lib-widget-event-listener',
+  selector: 'ng-widget-event-listener',
   templateUrl: './widget-event-listener.component.html',
   styleUrls: ['./widget-event-listener.component.scss'],
 })

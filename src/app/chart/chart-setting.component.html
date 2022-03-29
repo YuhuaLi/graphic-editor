@@ -1,18 +1,18 @@
 <div class="general-row">
   <span class="label">类型</span>
-  <lib-select
+  <ng-select
     class="select"
     [items]="chartTypeList"
     [ngModel]="ref.instance.widgetData?.setting?.chartType"
     (ngModelChange)="onChartTypeChange($event)"
-  ></lib-select>
+  ></ng-select>
 </div>
 <div class="general-row">
   <span class="label">数据源</span>
-  <lib-select
+  <ng-select
     class="select"
     [items]="sourceList"
     [ngModel]="ref.instance.widgetData?.setting?.source"
     (ngModelChange)="onChartSourceChange($event)"
-  ></lib-select>
+  ></ng-select>
 </div>

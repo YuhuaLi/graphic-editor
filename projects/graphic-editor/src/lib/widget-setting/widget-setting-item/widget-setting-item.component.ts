@@ -17,7 +17,7 @@ import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 import { WidgetSettingService } from '../widget-setting.service';
 
 @Component({
-  selector: 'lib-widget-setting-item',
+  selector: 'ng-widget-setting-item',
   templateUrl: './widget-setting-item.component.html',
   styleUrls: ['./widget-setting-item.component.scss'],
 })

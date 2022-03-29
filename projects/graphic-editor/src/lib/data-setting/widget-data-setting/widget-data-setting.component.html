@@ -7,12 +7,12 @@
     <ng-container
       *ngFor="let dataSetting of ref.instance.widgetData?.dataSetting; let i = index"
     >
-      <lib-data-panel
+      <ng-data-panel
         [ref]="ref"
         [dataSetting]="dataSetting"
         (delete)="deleteDataSetting(i)"
         (settingChange)="onSettingChange($event, i)"
-      ></lib-data-panel>
+      ></ng-data-panel>
     </ng-container>
   </div>
   

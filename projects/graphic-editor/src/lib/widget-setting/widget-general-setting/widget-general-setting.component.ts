@@ -2,7 +2,7 @@ import { Component, ComponentRef, Input, OnInit } from '@angular/core';
 import { WidgetComponent } from '../../widget-lib/widget/widget.component';
 
 @Component({
-  selector: 'lib-widget-general-setting',
+  selector: 'ng-widget-general-setting',
   templateUrl: './widget-general-setting.component.html',
   styleUrls: ['./widget-general-setting.component.scss'],
 })
