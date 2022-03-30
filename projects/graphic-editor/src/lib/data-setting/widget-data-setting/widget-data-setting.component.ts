@@ -16,7 +16,7 @@ export class WidgetDataSettingComponent implements OnInit {
 
   addDataSetting(event: Event): void {
     if (this.ref.instance.widgetData) {
-      const id = this.ref.instance.widgetData.dataSetting
+      const id = this.ref.instance.widgetData.dataSetting?.length
         ? Math.max(
             ...this.ref.instance.widgetData.dataSetting.map((item) => item.id)
           ) + 1
@@ -29,17 +29,24 @@ export class WidgetDataSettingComponent implements OnInit {
         },
       ];
     }
+    this.emitChange();
   }
 
   onSettingChange(setting: DataSetting, index: number): void {
     if (this.ref.instance.widgetData) {
       this.ref.instance.widgetData.dataSetting?.splice(index, 1, setting);
     }
+    this.emitChange();
   }
 
   deleteDataSetting(index: number): void {
     if (this.ref.instance.widgetData) {
       this.ref.instance.widgetData.dataSetting?.splice(index, 1);
     }
+    this.emitChange();
+  }
+
+  emitChange(): void {
+    this.ref.instance.page._modified = true;
   }
 }

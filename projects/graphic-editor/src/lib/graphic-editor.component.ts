@@ -9,9 +9,12 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
+  Inject,
+  Injector,
   Input,
   OnDestroy,
   OnInit,
+  Optional,
   Output,
   Renderer2,
   ViewChild,
@@ -33,7 +36,8 @@ import { WIDGET_MENU, ZOOM_RANGE } from './const';
 import { KeyboardCode, MenuOperation, OperationMode } from './enum';
 import { MenuComponent } from './component/menu/menu.component';
 import { fromEvent } from 'rxjs';
-import { GraphicEditorService } from './graphic-editor.service';
+import { GraphicEditorService, IGraphicEditorService } from './graphic-editor.service';
+import { EDITOR_SERVICE } from './injection-token';
 
 @Component({
   selector: 'ng-graphic-editor',
@@ -44,6 +48,8 @@ export class GraphicEditorComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   @Input() mode: OperationMode = OperationMode.Development;
+  @Output() add = new EventEmitter<Page>();
+  @Output() del = new EventEmitter<Page>();
   @Output() save = new EventEmitter<Page[]>();
 
   @ViewChild('toolContainer', { read: ViewContainerRef, static: false })
@@ -223,9 +229,14 @@ export class GraphicEditorComponent
     private widgetLibSrv: WidgetLibService,
     private ref: ElementRef,
     private renderer2: Renderer2,
-    private graphicEditorSrv: GraphicEditorService,
+    private injector: Injector,
+    @Optional() @Inject(EDITOR_SERVICE) private graphicEditorSrv: IGraphicEditorService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    if (!this.graphicEditorSrv) {
+      this.graphicEditorSrv = this.injector.get(GraphicEditorService);
+    }
+  }
 
   ngOnInit(): void {
     // this.pages = [
@@ -281,7 +292,9 @@ export class GraphicEditorComponent
       .toPromise()
       .then((page) => {
         this.pages.push(page);
+        page._modified = true;
         this.selectPage(page);
+        this.add.emit(page);
         return this.pages;
       });
   }
@@ -296,6 +309,7 @@ export class GraphicEditorComponent
         this.pages[0].selected = true;
         this.selectPage(this.pages[0]);
       }
+      this.del.emit(page);
     });
   }
 
@@ -320,7 +334,7 @@ export class GraphicEditorComponent
           widgetItem.style,
           widgetItem.widgetData
         );
-        this.widgets.unshift(comp);
+        this.widgets.push(comp);
       }
     }
   }
@@ -443,6 +457,7 @@ export class GraphicEditorComponent
         comp.instance.setSelected();
         this.widgets.unshift(comp);
       }
+      this.emitPageChange();
     }
   }
 
@@ -532,6 +547,7 @@ export class GraphicEditorComponent
     arr.forEach((widget, idx) => {
       widget.instance.style.index = idx + 1;
     });
+    this.emitPageChange();
   }
 
   onSelectRangeStart(event: MouseEvent): void {
@@ -594,7 +610,8 @@ export class GraphicEditorComponent
   }
 
   saveProject(): void {
-    const pages = this.pages.map(
+    const updatePages = this.pages.filter((page) => page._modified);
+    const pages = updatePages.map(
       ({ id, name, style, widgets, dataSetting }) => ({
         id,
         name,
@@ -604,7 +621,9 @@ export class GraphicEditorComponent
       })
     );
     this.graphicEditorSrv.updatePage(pages).subscribe();
-    this.save.emit(this.pages);
+    this.save.emit(pages);
+    console.log(pages);
+    updatePages.forEach((page) => (page._modified = false));
   }
 
   // 通过两矩形中心距离判断是否相交
@@ -705,6 +724,10 @@ export class GraphicEditorComponent
       default:
         break;
     }
+  }
+
+  emitPageChange(): void {
+    this.currentPage._modified = true;
   }
 
   ngOnDestroy(): void {

@@ -78,30 +78,38 @@ export class EventPanelComponent implements OnInit {
     this.ref.instance.widgets
       ?.find((compRef) => compRef.instance.widgetData?.id === id)
       ?.instance.setHighlight(false);
+    this.emitChange();
   }
 
   onActionChange(action: ActionType): void {
     if (action === ActionType.JumpUrl) {
       this.listener.actionData.jumpTarget = OpenUrlType.NewWinow;
     }
+    this.emitChange();
   }
 
-  onJumpUrlChange(event: Event): void {
-    if (!this.listener.actionData) {
-      this.listener.actionData = {};
-    }
-    this.listener.actionData.jumpUrl = (
-      event.target as HTMLTextAreaElement
-    ).value;
-  }
+  // onJumpUrlChange(event: Event): void {
+  //   if (!this.listener.actionData) {
+  //     this.listener.actionData = {};
+  //   }
+  //   this.listener.actionData.jumpUrl = (
+  //     event.target as HTMLTextAreaElement
+  //   ).value;
+  //   this.emitChange();
+  // }
 
   onJumTargetChange(event: OpenPageType): void {
     if (event === OpenPageType.CurrentPage) {
       this.listener.actionData.linkWidget = undefined;
     }
+    this.emitChange();
   }
 
   deleteListener(): void {
     this.delete.emit(this.listener);
+  }
+
+  emitChange(): void {
+    this.ref.instance.page._modified = true;
   }
 }

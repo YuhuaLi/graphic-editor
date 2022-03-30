@@ -139,6 +139,14 @@ export class WidgetComponent
     this.style.rotate = +val.toFixed(1);
   }
 
+  get isHidden(): boolean {
+    return !!this.style.hidden;
+  }
+
+  set isHidden(hidden: boolean) {
+    this.style.hidden = hidden;
+  }
+
   alive = true;
   /** 是否鼠标hover部件 */
   isHover = false;
@@ -146,8 +154,6 @@ export class WidgetComponent
   isHighlight = false;
   /** 锁定 */
   isLocked = false;
-  /** 隐藏 */
-  isHidden = false;
   /** 锁定宽高比 */
   isLockedScale = false;
   /** 锁定宽高比时的比例 */
@@ -233,6 +239,7 @@ export class WidgetComponent
       'operation'
     );
     document.removeEventListener('mouseup', this.onMouseUp);
+    this.emitPageChange();
   };
 
   constructor(
@@ -831,6 +838,10 @@ export class WidgetComponent
 
   setZIndex(index: number): void {
     this.style.index = index;
+  }
+
+  emitPageChange(): void {
+    this.page._modified = true;
   }
 
   ngOnDestroy(): void {

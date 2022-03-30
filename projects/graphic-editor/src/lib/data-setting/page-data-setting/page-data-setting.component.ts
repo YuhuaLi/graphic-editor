@@ -14,13 +14,14 @@ export class PageDataSettingComponent implements OnInit {
   ngOnInit(): void {}
 
   addDataSetting(event: Event): void {
-    const id = this.page.dataSetting
+    const id = this.page.dataSetting?.length
       ? Math.max(...this.page.dataSetting.map((item) => Number(item.id))) + 1
       : 1;
     this.page.dataSetting = [
       ...(this.page.dataSetting || []),
       { id, name: `数据${(this.page.dataSetting || []).length + 1}` },
     ];
+    this.emitChange();
   }
 
   deleteDataSetting(setting: DataSetting, index: number): void {
@@ -37,5 +38,15 @@ export class PageDataSettingComponent implements OnInit {
         }
       });
     }
+    this.emitChange();
+  }
+
+  onSettingChange(setting: DataSetting, index: number): void {
+    this.page.dataSetting?.splice(index, 1, setting);
+    this.emitChange();
+  }
+
+  emitChange(): void {
+    this.page._modified = true;
   }
 }

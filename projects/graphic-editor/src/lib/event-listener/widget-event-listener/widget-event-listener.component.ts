@@ -21,11 +21,17 @@ export class WidgetEventListenerComponent implements OnInit {
         { type: EventType.Click, actionData: {} },
       ];
     }
+    this.emitChange();
   }
 
   deleteEventListener(index: number): void {
     if (this.ref.instance.widgetData) {
       this.ref.instance.widgetData.events?.splice(index, 1);
     }
+    this.emitChange();
+  }
+
+  emitChange(): void {
+    this.ref.instance.page._modified = true;
   }
 }

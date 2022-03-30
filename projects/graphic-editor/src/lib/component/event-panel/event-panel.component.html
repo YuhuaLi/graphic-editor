@@ -11,6 +11,7 @@
       class="select"
       [items]="eventTypeList"
       [(ngModel)]="listener.type"
+      (ngModelChange)="emitChange()"
     ></ng-select>
   </div>
   <div class="general-row">
@@ -29,6 +30,7 @@
         class="select"
         [items]="openUrlTypeList"
         [(ngModel)]="listener.actionData.jumpTarget"
+        (ngModelChange)="emitChange()"
       ></ng-select>
     </div>
     <div class="general-row">
@@ -40,6 +42,7 @@
         rows="4"
         placeholder="输入http或https协议地址"
         [(ngModel)]="listener.actionData.jumpUrl"
+        (ngModelChange)="emitChange()"
       ></textarea>
     </div>
   </ng-container>
@@ -50,6 +53,7 @@
         class="select"
         [items]="pageList"
         [(ngModel)]="listener.actionData.jumpPage"
+        (ngModelChange)="emitChange()"
         (expand)="getPageList()"
       >
       </ng-select>

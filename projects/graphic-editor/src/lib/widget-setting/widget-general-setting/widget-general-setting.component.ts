@@ -21,6 +21,7 @@ export class WidgetGeneralSettingComponent implements OnInit {
 
   toggleWidgetHidden(): void {
     this.ref.instance.toggleHidden();
+    this.emitChange();
   }
 
   toggleWidgetLockedScale(): void {
@@ -31,11 +32,17 @@ export class WidgetGeneralSettingComponent implements OnInit {
     if (this.ref.instance.isLockedScale) {
       this.ref.instance.height = width / this.ref.instance.lockedScale;
     }
+    this.emitChange();
   }
 
   onHeightChange(height: number): void {
     if (this.ref.instance.isLockedScale) {
       this.ref.instance.width = height / this.ref.instance.lockedScale;
     }
+    this.emitChange();
+  }
+
+  emitChange(): void {
+    this.ref.instance.page._modified = true;
   }
 }

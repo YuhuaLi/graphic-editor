@@ -38,6 +38,7 @@ export class ImgSettingComponent implements OnInit {
     fr.onload = () => {
       (this.ref.instance.widgetData as WidgetData<ImgSetting>).setting.imgSrc =
         fr.result as string;
+      this.emitChange();
     };
     fr.onerror = () => (this.uploadPath = '');
     fr.readAsDataURL(file);
@@ -47,5 +48,10 @@ export class ImgSettingComponent implements OnInit {
     this.uploadPath = '';
     (this.ref.instance.widgetData as WidgetData<ImgSetting>).setting.imgSrc =
       '';
+    this.emitChange();
+  }
+
+  emitChange(): void {
+    this.ref.instance.page._modified = true;
   }
 }

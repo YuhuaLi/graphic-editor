@@ -1,17 +1,11 @@
-import { DataSetting } from './type/data-setting.type';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Page } from './type';
 
-export interface IGraphicEditorService {
-  addPage(): Observable<Page>;
-  updatePage(pages: Page[]): Observable<any>;
-  deletePage(page: Page): Observable<any>;
-  getPageById(id: number): Observable<Page>;
-  getAllPages(): Observable<Page[]>;
-}
+import { Injectable } from '@angular/core';
+import { Page } from 'ng-graphic-editor';
+import { Observable } from 'rxjs';
+
+
 @Injectable()
-export class GraphicEditorService implements IGraphicEditorService {
+export class AppService {
   DB_NAME = 'ExampleDB';
   PAGE_TABLE = 'page';
   DATA_TABLE = 'data';
@@ -55,6 +49,7 @@ export class GraphicEditorService implements IGraphicEditorService {
   }
 
   updatePage(pages: Page[]): Observable<void> {
+    console.log('app.service');
     return new Observable((observer) => {
       this.openDB().then((db) => {
         const pageStore = this.getObjectStore(db, this.PAGE_TABLE, 'readwrite');

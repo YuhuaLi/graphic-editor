@@ -7,6 +7,7 @@
       [(ngModel)]="dataSetting.name"
       (dblclick)="titleReadonly = false"
       (blur)="titleReadonly = true"
+      (change)="emitChange()"
     />
     <span class="action" (click)="deleteDataSetting()"
       ><i class="iconfont icon-delete"></i
@@ -31,6 +32,7 @@
         rows="4"
         placeholder="输入http或https协议地址或绝对地址"
         [(ngModel)]="dataSetting.apiUrl"
+        (ngModelChange)="emitChange()"
       ></textarea>
     </div>
     <div class="general-row">
@@ -38,6 +40,7 @@
         <input
           type="checkbox"
           [(ngModel)]="dataSetting.polling"
+          (ngModelChange)="emitChange()"
         />
         <span></span>
       </label>
@@ -48,6 +51,7 @@
         min="0"
         placeholder="间隔(s)"
         [(ngModel)]="dataSetting.interval"
+        (ngModelChange)="emitChange()"
       />
     </div>
   </ng-container>
@@ -69,6 +73,7 @@
         rows="8"
         placeholder="输入json字符串"
         [(ngModel)]="dataSetting.const"
+        (ngModelChange)="emitChange()"
       ></textarea>
     </div>
   </ng-container>

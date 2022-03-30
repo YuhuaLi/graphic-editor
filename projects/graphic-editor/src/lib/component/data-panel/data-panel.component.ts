@@ -50,6 +50,7 @@ export class DataPanelComponent implements OnInit {
 
   onPageSettingChange(setting: number): void {
     this.dataSetting.parent = setting;
+    this.emitChange();
   }
 
   onSettingTypeChange(type: DataType): void {
@@ -75,6 +76,11 @@ export class DataPanelComponent implements OnInit {
       this.dataSetting.polling = undefined;
       this.dataSetting.const = undefined;
     }
+    this.emitChange();
+  }
+
+  emitChange(): void {
+    this.settingChange.emit(this.dataSetting);
   }
 
 }

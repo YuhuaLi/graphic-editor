@@ -26,11 +26,11 @@
   <div class="general-row">
     <label class="general-input">
       <span>X</span>
-      <input type="number" [(ngModel)]="ref.instance.x" />
+      <input type="number" [(ngModel)]="ref.instance.x" (ngModelChange)="emitChange()" />
     </label>
     <label class="general-input">
       <span>Y</span>
-      <input type="number" [(ngModel)]="ref.instance.y" />
+      <input type="number" [(ngModel)]="ref.instance.y" (ngModelChange)="emitChange()" />
     </label>
   </div>
   <div class="general-row">
@@ -55,7 +55,7 @@
   <div class="general-row">
     <label class="general-input">
       <span>R</span>
-      <input type="number" max="360" min="-360" [(ngModel)]="ref.instance.rotate" />°
+      <input type="number" max="360" min="-360" [(ngModel)]="ref.instance.rotate" (ngModelChange)="emitChange()" />°
     </label>
   </div>
 </div>

@@ -16,12 +16,14 @@ import { ChartComponent } from './chart/chart.component';
 import { ChartSettingComponent } from './chart/chart-setting.component';
 import { CustomHttpInterceptor } from './custom-http-Interceptor';
 import {
+  EDITOR_SERVICE,
   GraphicEditorModule,
   WidgetCategory,
   WIDGET_LIST,
   WIDGET_SETTING_LIST,
 } from 'ng-graphic-editor';
 import { CommonModule } from '@angular/common';
+import { AppService } from './app.service';
 
 const arr = [
   {
@@ -71,6 +73,7 @@ const arr1 = [
       useClass: CustomHttpInterceptor,
       multi: true,
     },
+    { provide: EDITOR_SERVICE, useFactory: () => new AppService() },
   ],
   entryComponents: [ChartComponent, ChartSettingComponent],
   bootstrap: [AppComponent],

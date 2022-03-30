@@ -47,6 +47,7 @@ export class AppearanceSettingComponent implements OnInit {
         { fill: (event.target as HTMLInputElement).checked }
       );
     }
+    this.emitChange();
   }
 
   cancelBorderColor(event: Event): void {
@@ -56,6 +57,7 @@ export class AppearanceSettingComponent implements OnInit {
         { fill: (event.target as HTMLInputElement).checked }
       );
     }
+    this.emitChange();
   }
 
   onRadiusChange(event: Event): void {
@@ -67,5 +69,10 @@ export class AppearanceSettingComponent implements OnInit {
         event.target as HTMLInputElement
       ).valueAsNumber;
     }
+    this.emitChange();
+  }
+
+  emitChange(): void {
+    this.ref.instance.page._modified = true;
   }
 }

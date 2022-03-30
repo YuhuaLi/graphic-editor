@@ -30,6 +30,7 @@ export class ChartSettingComponent implements OnInit {
         this.ref.instance.widgetData.setting || {};
       Object.assign(this.ref.instance.widgetData.setting, { chartType });
     }
+    this.emitChange();
   }
 
   onChartSourceChange(source: number): void {
@@ -38,5 +39,10 @@ export class ChartSettingComponent implements OnInit {
         this.ref.instance.widgetData.setting || {};
       Object.assign(this.ref.instance.widgetData.setting, { source });
     }
+    this.emitChange();
+  }
+
+  emitChange(): void {
+    this.ref.instance.page._modified = true;
   }
 }

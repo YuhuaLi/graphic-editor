@@ -33,6 +33,7 @@ export class TextSettingComponent implements OnInit {
       this.ref.instance.widgetData.setting =
         this.ref.instance.widgetData.setting || {};
       Object.assign(this.ref.instance.widgetData.setting, { text: event });
+      this.emitChange();
     }
   }
 
@@ -41,6 +42,7 @@ export class TextSettingComponent implements OnInit {
     const isValid = (event.target as HTMLInputElement).validity.valid;
     if (this.ref.instance.widgetData && !isNaN(fontSize) && isValid) {
       this.ref.instance.widgetData.setting.fontSize = fontSize;
+      this.emitChange();
     }
   }
 
@@ -48,17 +50,20 @@ export class TextSettingComponent implements OnInit {
     (this.ref.instance.widgetData as WidgetData<TextSetting>).setting.color = (
       event.target as HTMLInputElement
     ).value;
+    this.emitChange();
   }
 
   toggleBold(): void {
     (this.ref.instance.widgetData as WidgetData<TextSetting>).setting.bold = !(
       this.ref.instance.widgetData as WidgetData<TextSetting>
     ).setting.bold;
+    this.emitChange();
   }
 
   toggleItalic(): void {
     (this.ref.instance.widgetData as WidgetData<TextSetting>).setting.italic =
       !(this.ref.instance.widgetData as WidgetData<TextSetting>).setting.italic;
+    this.emitChange();
   }
 
   toggleUnderline(): void {
@@ -67,5 +72,10 @@ export class TextSettingComponent implements OnInit {
     ).setting.underline = !(
       this.ref.instance.widgetData as WidgetData<TextSetting>
     ).setting.underline;
+    this.emitChange();
+  }
+
+  emitChange(): void {
+    this.ref.instance.page._modified = true;
   }
 }

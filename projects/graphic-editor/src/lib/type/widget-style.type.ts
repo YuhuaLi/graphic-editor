@@ -5,4 +5,5 @@ export type WidgetStyle = {
   height: number;
   rotate: number;
   index: number;
+  hidden?: boolean;
 };

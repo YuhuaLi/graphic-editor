@@ -10,6 +10,7 @@
     <ng-data-panel
       [dataSetting]="dataSetting"
       (delete)="deleteDataSetting($event, i)"
+      (settingChange)="onSettingChange($event, i)"
     ></ng-data-panel>
   </ng-container>
 </div>
