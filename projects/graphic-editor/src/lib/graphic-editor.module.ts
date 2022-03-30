@@ -87,8 +87,8 @@ const COMPONENTS = [
 })
 export class GraphicEditorModule {
   static forRoot(
-    // widgetList?: Widget[],
-    // widgetSettingList?: WidgetSetting[]
+    widgetList?: Widget[],
+    widgetSettingList?: WidgetSetting[]
   ): ModuleWithProviders<GraphicEditorModule> {
     return {
       ngModule: GraphicEditorModule,
@@ -97,11 +97,11 @@ export class GraphicEditorModule {
         WidgetLibService,
         WidgetSettingService,
         GraphicEditorService,
-        // {
-        //   provide: WIDGET_LIST,
-        //   useValue: widgetList,
-        // },
-        // { provide: WIDGET_SETTING_LIST, useValue: widgetSettingList },
+        {
+          provide: WIDGET_LIST,
+          useValue: widgetList,
+        },
+        { provide: WIDGET_SETTING_LIST, useValue: widgetSettingList },
       ],
     };
   }
