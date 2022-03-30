@@ -171,7 +171,7 @@
     //    component: ImgSettingComponent,
     // },
 ```
-```
+``` javascript
     export type WidgetData<T = any> = {
         id?: number;
         // 后续用作组件命名，暂未使用
