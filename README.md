@@ -9,7 +9,7 @@
 ```
 
 ## import
-```
+``` javascript
     import: [
         ...,
         GraphicEditorModule.forRoot()
@@ -25,13 +25,13 @@
 ```
 
 ## html use
-```
+``` html
     // 编辑器
     <div>
         <ng-graphic-editor></ng-graphic-editor>
     </div>
 ```
-```
+``` html
     // 直接显示页面 Page
     <div>
         <ng-graphic-view [page]="page"></ng-graphic-view>
@@ -39,7 +39,7 @@
 ```
 
 ## how to create widget and use data
-``` 
+``` javascript
     export class ChartComponent
     extends BaseWidgetContent
     implements OnInit, AfterViewInit
@@ -78,7 +78,7 @@
 ```
 
 ## how to create widget setting
-``` 
+``` javascript
     export class ChartSettingComponent implements OnInit {
         // ref为组件实例，具体可取属性看WidgetComponent
         constructor(public ref: ComponentRef<WidgetComponent>) {}
@@ -91,7 +91,7 @@
 ```
 
 ## some type
-```
+``` javascript
     export interface IGraphicEditorService {
         addPage(): Observable<Page>;
         updatePage(pages: Page[]): Observable<any>;
@@ -100,7 +100,7 @@
         getAllPages(): Observable<Page[]>;
     }
 ```
-```
+``` javascript
     export type Page = {
         id: number;
         name?: string;
@@ -116,7 +116,7 @@
         adaptive?: boolean;
     };
 ```
-```
+``` javascript
     export type Widget = {
         /** 组件类别 */
         category: WidgetCategory | string;
@@ -155,7 +155,7 @@
     //   ],
     // },
 ```
-```
+``` javascript
     export type WidgetSetting =
          {
             type: string;
