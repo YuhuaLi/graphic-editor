@@ -622,7 +622,7 @@ export class GraphicEditorComponent
     );
     this.graphicEditorSrv.updatePage(pages).subscribe();
     this.save.emit(pages);
-    console.log(pages);
+    // console.log(pages);
     updatePages.forEach((page) => (page._modified = false));
   }
 
