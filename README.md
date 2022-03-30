@@ -38,7 +38,8 @@
     </div>
 ```
 
-``` how to create widget and use data
+## how to create widget and use data
+``` 
     export class ChartComponent
     extends BaseWidgetContent
     implements OnInit, AfterViewInit
@@ -76,7 +77,8 @@
         ...
 ```
 
-``` how to create widget setting
+## how to create widget setting
+``` 
     export class ChartSettingComponent implements OnInit {
         // ref为组件实例，具体可取属性看WidgetComponent
         constructor(public ref: ComponentRef<WidgetComponent>) {}
