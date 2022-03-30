@@ -170,8 +170,8 @@
         }
       }
 
-      ::ng-deep {
-        lib-widget-text > textarea {
+      & ::ng-deep {
+        ng-widget-text > textarea {
           pointer-events: auto;
         }
       }

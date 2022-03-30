@@ -63,7 +63,6 @@ export class ChartComponent
 
     this.draw();
     this.widgetSrv.onDataChange().subscribe(() => {
-      console.log('change');
       this.draw();
     });
     // 绘制图表

@@ -432,7 +432,6 @@ export class WidgetComponent
                             ref.instance
                               .contentComponentRef as ComponentRef<WidgetLinkAreaComponent>
                           ).instance.renderPage(page, this.pages);
-                          console.log(this.pages);
                         }
                       });
                   }
@@ -454,7 +453,6 @@ export class WidgetComponent
                             (item) =>
                               item.instance.widgetData?.id === linkWidgetId
                           );
-                          console.log(ref);
                           if (ref?.instance.contentComponentRef) {
                             (
                               ref.instance

@@ -5,6 +5,9 @@
     "declarationMap": false
   },
   "angularCompilerOptions": {
-    "enableIvy": false
+    "fullTemplateTypeCheck": true,
+    // "enableIvy": true,
+    // "compilationMode": "partial"
+    // "enableIvy": false
   }
 }

@@ -594,7 +594,6 @@ export class GraphicEditorComponent
   }
 
   saveProject(): void {
-    console.log(this.pages);
     const pages = this.pages.map(
       ({ id, name, style, widgets, dataSetting }) => ({
         id,
@@ -626,7 +625,6 @@ export class GraphicEditorComponent
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
-    console.log('resize');
     this.initSelectionArea();
   }
 
