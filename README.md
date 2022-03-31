@@ -3,7 +3,7 @@
 基于angular11实现一个拖拽组件实现界面的工具库，可外部注入组件和设置，并提供绑定数据源功能
 [Demo](https://yuhuali.github.io/graphic-editor)
 
-## install(即将发布)
+## install
 ```
     npm i ng-graphic-editor
 ```
