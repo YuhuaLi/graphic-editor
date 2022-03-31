@@ -24,6 +24,10 @@
     ]
 ```
 
+``` sass
+  @import '~ng-graphic-editor/src/iconfont/iconfont.scss'; 
+```
+
 ## html use
 ``` html
     // 编辑器
