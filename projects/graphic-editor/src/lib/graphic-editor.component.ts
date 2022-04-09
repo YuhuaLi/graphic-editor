@@ -51,6 +51,7 @@ export class GraphicEditorComponent
   @Output() add = new EventEmitter<Page>();
   @Output() del = new EventEmitter<Page>();
   @Output() save = new EventEmitter<Page[]>();
+  @Output() back = new EventEmitter<any>();
 
   @ViewChild('toolContainer', { read: ViewContainerRef, static: false })
   toolContainer!: ViewContainerRef;
@@ -603,9 +604,11 @@ export class GraphicEditorComponent
         : OperationMode.Development;
   }
 
-  back(): void {
+  goBack(): void {
     if (this.mode === OperationMode.Production) {
       this.mode = OperationMode.Development;
+    } else {
+      this.back.emit();
     }
   }
 
